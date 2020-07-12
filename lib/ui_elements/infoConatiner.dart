@@ -33,28 +33,26 @@ class InfoContainer extends StatelessWidget {
   }
 
   Widget _bottomButton() {
-    return Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 80.0,
-            height: 25.0,
-            decoration: BoxDecoration(
-              color: firstColor,
-              borderRadius: BorderRadius.circular(
-                10.0,
-              ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: 80.0,
+          height: 25.0,
+          decoration: BoxDecoration(
+            color: firstColor,
+            borderRadius: BorderRadius.circular(
+              10.0,
             ),
-            child: Center(
-              child: TextWidget(
-                text: 'Reset',
-                color: whiteColor.withOpacity(0.8),
-              ),
+          ),
+          child: Center(
+            child: TextWidget(
+              text: 'Reset',
+              color: whiteColor.withOpacity(0.8),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 
@@ -80,16 +78,17 @@ class InfoContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 5.0,
-          ),
-          _item('sets'),
-          _item('total words'),
-          _item('learning words'),
-          _bottomButton()
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _item('sets'),
+            _item('total words'),
+            _item('learning words'),
+            _bottomButton()
+          ],
+        ),
       ),
     );
   }

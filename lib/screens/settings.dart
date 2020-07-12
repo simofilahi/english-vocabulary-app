@@ -23,34 +23,43 @@ class _SettingState extends State<Setting> {
   ];
 
   Widget _item(var size, String iconName, String text) {
-    return Container(
-      height: 60.0,
-      width: size.width * .90,
-      decoration: BoxDecoration(
-        color: primaryColor,
-        border: Border(
-          top: BorderSide(
-            color: whiteColor,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Container(
+        height: 60.0,
+        width: size.width * .90,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(
+            15.0,
+          ),
+          border: Border(
+            top: BorderSide(
+              color: primaryColor,
+            ),
           ),
         ),
-      ),
-      child: Row(
-        children: <Widget>[
-          SvgPicture.asset(
-            iconName,
-            height: 20.0,
-            width: 20.0,
-            color: primaryGreyColor,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: <Widget>[
+              SvgPicture.asset(
+                iconName,
+                height: 20.0,
+                width: 20.0,
+                color: primaryGreyColor,
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              TextWidget(
+                text: text,
+                size: 18.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ],
           ),
-          SizedBox(
-            width: 10.0,
-          ),
-          TextWidget(
-            text: text,
-            size: 18.0,
-            fontWeight: FontWeight.w400,
-          ),
-        ],
+        ),
       ),
     );
   }

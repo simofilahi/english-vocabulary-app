@@ -10,6 +10,25 @@ import '../constants.dart';
 class HomeWidget extends StatelessWidget {
   const HomeWidget({Key key}) : super(key: key);
 
+  Widget _rowItem(var text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        TextWidget(
+          text: text,
+          color: whiteColor,
+        ),
+        SizedBox(
+          width: 30.0,
+        ),
+        TextWidget(
+          text: '5000',
+          color: whiteColor,
+        ),
+      ],
+    );
+  }
+
   Widget _progressCard(var size) {
     return Container(
       height: 250,
@@ -22,16 +41,22 @@ class HomeWidget extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RadialProgress(
-                height: 120,
-                width: 120,
-                color: whiteColor,
-                flag: true,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 10.0,
+              bottom: 10.0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RadialProgress(
+                  height: 100,
+                  width: 100,
+                  color: whiteColor,
+                  flag: true,
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 10.0,
@@ -39,15 +64,38 @@ class HomeWidget extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.blue[300].withOpacity(
+                color: Color(0XFF7491F0).withOpacity(
                   0.6,
                 ),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(leftRightTopValue),
                   topRight: Radius.circular(leftRightTopValue),
+                  bottomLeft: Radius.circular(15.0),
+                  bottomRight: Radius.circular(15.0),
                 ),
               ),
-              child: Center(),
+              child: Center(
+                child: FittedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _rowItem('Points'),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      _rowItem('Learing words'),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      _rowItem('Rest words'),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           )
         ],
@@ -75,18 +123,20 @@ class HomeWidget extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: 80.0,
                 color: Colors.transparent,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    RadialProgress(
-                      height: 50,
-                      width: 50,
-                      color: whiteColor,
-                      flag: false,
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RadialProgress(
+                        height: 50,
+                        width: 50,
+                        color: whiteColor,
+                        flag: false,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
@@ -113,12 +163,12 @@ class HomeWidget extends StatelessWidget {
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
       children: <Widget>[
-        _item(Colors.blue[400], Colors.blue[200], context),
         _item(Colors.deepOrange[400], Colors.deepOrange[200], context),
         _item(Colors.deepPurple[400], Colors.deepPurple[200], context),
         _item(Colors.green[400], Colors.green[200], context),
         _item(Colors.red[400], Colors.red[200], context),
         _item(Colors.pink[400], Colors.pink[200], context),
+        _item(Colors.grey[400], Colors.grey[200], context),
       ],
     );
   }
@@ -138,19 +188,23 @@ class HomeWidget extends StatelessWidget {
               text: 'Home',
               textSize: 18,
             ),
-            SizedBox(
-              height: 20.0,
-            ),
-            _progressCard(size),
-            SizedBox(
-              height: 10.0,
-            ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: _gridList(context),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    _progressCard(size),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _gridList(context),
+                  ],
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),

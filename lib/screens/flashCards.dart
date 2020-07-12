@@ -1,5 +1,6 @@
 import 'package:flutter/Material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
+import 'package:lenglish/widgets/topAppBar.dart';
 import '../constants.dart';
 
 class FlashCards extends StatefulWidget {
@@ -26,44 +27,45 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
           child: SafeArea(
             child: Column(
               children: <Widget>[
-                // TopAppBar(
-                //   backArrowIcon,
-                //   null,
-                //   false,
-                // ),
+                TopAppBar(
+                  icon_1: backArrowIcon,
+                  icon_2: null,
+                  text: '10/100',
+                  color: primaryGreyColor,
+                ),
                 SizedBox(
                   height: size.height * .10,
                 ),
-                TinderSwapCard(
-                  orientation: AmassOrientation.BOTTOM,
-                  totalNum: 6,
-                  stackNum: 3,
-                  swipeEdge: 4.0,
-                  maxWidth: MediaQuery.of(context).size.width * 0.9,
-                  maxHeight: MediaQuery.of(context).size.width * 0.9,
-                  minWidth: MediaQuery.of(context).size.width * 0.8,
-                  minHeight: MediaQuery.of(context).size.width * 0.8,
-                  cardBuilder: (context, index) => Card(
-                      child: Container(
-                    height: 200,
-                    width: 200,
-                    color: Colors.black,
-                  )),
-                  // cardController: controller = CardController(),
-                  swipeUpdateCallback:
-                      (DragUpdateDetails details, Alignment align) {
-                    /// Get swiping card's alignment
-                    if (align.x < 0) {
-                      //Card is LEFT swiping
-                    } else if (align.x > 0) {
-                      //Card is RIGHT swiping
-                    }
-                  },
-                  swipeCompleteCallback:
-                      (CardSwipeOrientation orientation, int index) {
-                    /// Get orientation & index of swiped card!
-                  },
-                ),
+                // TinderSwapCard(
+                //   orientation: AmassOrientation.BOTTOM,
+                //   totalNum: 6,
+                //   stackNum: 3,
+                //   swipeEdge: 4.0,
+                //   maxWidth: MediaQuery.of(context).size.width * 0.9,
+                //   maxHeight: MediaQuery.of(context).size.width * 0.9,
+                //   minWidth: MediaQuery.of(context).size.width * 0.8,
+                //   minHeight: MediaQuery.of(context).size.width * 0.8,
+                //   cardBuilder: (context, index) => Card(
+                //       child: Container(
+                //     height: 200,
+                //     width: 200,
+                //     color: Colors.black,
+                //   )),
+                //   // cardController: controller = CardController(),
+                //   swipeUpdateCallback:
+                //       (DragUpdateDetails details, Alignment align) {
+                //     /// Get swiping card's alignment
+                //     if (align.x < 0) {
+                //       //Card is LEFT swiping
+                //     } else if (align.x > 0) {
+                //       //Card is RIGHT swiping
+                //     }
+                //   },
+                //   swipeCompleteCallback:
+                //       (CardSwipeOrientation orientation, int index) {
+                //     /// Get orientation & index of swiped card!
+                //   },
+                // ),
               ],
             ),
           ),

@@ -54,8 +54,8 @@ class _RadialProgressState extends State<RadialProgress>
       return Column(children: <Widget>[
         SvgPicture.asset(
           rocketIcon,
-          height: 40.0,
-          width: 40.0,
+          height: 35.0,
+          width: 35.0,
         ),
         SizedBox(
           height: 10.0,
@@ -82,9 +82,9 @@ class _RadialProgressState extends State<RadialProgress>
               Text(
                 '$counter%',
                 style: TextStyle(
-                  fontSize: widget.flag == true ? 30.0 : 10.0,
+                  fontSize: widget.flag == true ? 15.0 : 10.0,
                   fontWeight: FontWeight.w500,
-                  color: widget.flag == true ? primaryBlueColor : whiteColor,
+                  color: whiteColor,
                 ),
               ),
             ],
