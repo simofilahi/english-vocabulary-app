@@ -28,23 +28,26 @@ class ShopCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextWidget(
-                      text: 'Premium account',
-                      size: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      height: 2.0,
-                    ),
-                    TextWidget(
-                      text: 'Remove ads',
-                      color: Colors.grey[700],
-                      size: 16.0,
-                    ),
-                  ],
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextWidget(
+                        text: 'Premium account',
+                        size: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: 2.0,
+                      ),
+                      TextWidget(
+                        text: 'Remove ads',
+                        color: Colors.grey[700],
+                        size: 16.0,
+                      ),
+                    ],
+                  ),
                 ),
                 CustomButton(
                   text: 'Buy',
@@ -54,18 +57,21 @@ class ShopCard extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              right: 30.0,
-            ),
-            margin: const EdgeInsets.only(
-              bottom: 20.0,
-            ),
-            child: SvgPicture.asset(
-              crownIcon,
-              height: 80.0,
-              width: 80.0,
-              color: primaryYellow,
+          Expanded(
+            flex: 2,
+            child: Container(
+              padding: const EdgeInsets.only(
+                right: 30.0,
+              ),
+              margin: const EdgeInsets.only(
+                bottom: 20.0,
+              ),
+              child: SvgPicture.asset(
+                crownIcon,
+                height: 80.0,
+                width: 80.0,
+                color: primaryYellow,
+              ),
             ),
           ),
         ],

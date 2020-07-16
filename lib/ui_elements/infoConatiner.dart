@@ -47,7 +47,7 @@ class InfoContainer extends StatelessWidget {
           ),
           child: Center(
             child: TextWidget(
-              text: 'Reset',
+              text: 'Unlock',
               color: whiteColor.withOpacity(0.8),
             ),
           ),
@@ -78,17 +78,31 @@ class InfoContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            _item('sets'),
-            _item('total words'),
-            _item('learning words'),
-            _bottomButton()
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 5.0,
+                bottom: 5.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _item('sets'),
+                  _item('total words'),
+                  _item('learning words'),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: _bottomButton(),
+          )
+        ],
       ),
     );
   }

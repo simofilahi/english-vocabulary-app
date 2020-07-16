@@ -19,6 +19,10 @@ const String backArrowIcon = 'assets/icons/arrows.svg';
 const String ballonIcon = 'assets/icons/balloon.svg';
 const String moreIcon = 'assets/icons/more.svg';
 const String crownIcon = 'assets/icons/crown.svg';
+const String hourIcon = 'assets/icons/hour.svg';
+const String closeIcon = 'assets/icons/close.svg';
+const String validateIcon = 'assets/icons/validate.svg';
+const String speakerIcon = 'assets/icons/speaker.svg';
 
 // radius
 

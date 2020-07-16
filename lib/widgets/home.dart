@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:lenglish/models/data.dart';
 import 'package:lenglish/screens/wordsList.dart';
 import 'package:lenglish/ui_elements/infoConatiner.dart';
 import 'package:lenglish/widgets/radialProgress.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
+import 'dart:convert';
 
 import '../constants.dart';
 
 class HomeWidget extends StatelessWidget {
   const HomeWidget({Key key}) : super(key: key);
 
-  Widget _rowItem(var text) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        TextWidget(
-          text: text,
-          color: whiteColor,
-        ),
-        SizedBox(
-          width: 30.0,
-        ),
-        TextWidget(
-          text: '5000',
-          color: whiteColor,
-        ),
-      ],
+  void _fun() {
+    words.map((f) => {print(f[0])}).toList();
+  }
+
+  Widget _rowItem(var text, var size) {
+    return Container(
+      width: size.width * .40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          TextWidget(
+            text: text,
+            color: whiteColor,
+          ),
+          TextWidget(
+            text: '5000',
+            color: whiteColor,
+          ),
+        ],
+      ),
     );
   }
 
@@ -80,15 +86,15 @@ class HomeWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _rowItem('Points'),
+                      _rowItem('Points', size),
                       SizedBox(
                         height: 15.0,
                       ),
-                      _rowItem('Learing words'),
+                      _rowItem('Learing words', size),
                       SizedBox(
                         height: 15.0,
                       ),
-                      _rowItem('Rest words'),
+                      _rowItem('Rest words', size),
                       SizedBox(
                         height: 15.0,
                       ),
@@ -106,11 +112,12 @@ class HomeWidget extends StatelessWidget {
   Widget _item(Color firstColor, Color secondColor, BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext ctx) => WordsList(),
-          ),
-        );
+        _fun();
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (BuildContext ctx) => WordsList(),
+        //   ),
+        // );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -119,13 +126,14 @@ class HomeWidget extends StatelessWidget {
             15.0,
           ),
         ),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(
                 color: Colors.transparent,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -139,14 +147,15 @@ class HomeWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                child: InfoContainer(
-                  firstColor: firstColor,
-                  secondColor: secondColor,
-                ),
-              )
-            ],
-          ),
+            ),
+            Expanded(
+              flex: 3,
+              child: InfoContainer(
+                firstColor: firstColor,
+                secondColor: secondColor,
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -186,7 +195,9 @@ class HomeWidget extends StatelessWidget {
               icon_1: crownIcon,
               icon_2: moreIcon,
               text: 'Home',
-              textSize: 18,
+              textSize: 18.9,
+              color: blackColor,
+              fontWeight: FontWeight.bold,
             ),
             Expanded(
               child: SingleChildScrollView(

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/playingBallonGame.dart';
 import 'package:lenglish/widgets/customButton.dart';
+import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 
 class BallonsGame extends StatefulWidget {
@@ -13,6 +15,147 @@ class BallonsGame extends StatefulWidget {
 }
 
 class _BallonsGameState extends State<BallonsGame> {
+  Widget _card(var size) {
+    return Container(
+      height: 160,
+      width: size.width * .90,
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.circular(
+          15.0,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextWidget(
+                        text: 'Balloons game',
+                        size: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: 2.0,
+                      ),
+                      TextWidget(
+                        text: 'Helps for memorazing',
+                        color: Colors.grey[700],
+                        size: 16.0,
+                      ),
+                    ],
+                  ),
+                  CustomButton(
+                    text: 'Start',
+                    screen: PlayingBallonGames(),
+                    buttonHeightSize: 40.0,
+                    buttonWidthSize: 150.0,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: const EdgeInsets.only(
+                right: 30.0,
+              ),
+              margin: const EdgeInsets.only(
+                bottom: 20.0,
+              ),
+              child: SvgPicture.asset(
+                ballonIcon,
+                height: 80.0,
+                width: 80.0,
+                color: Colors.red[500],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoItem(var size, String text, int wordsCount, double progress) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        right: 8.0,
+      ),
+      child: Container(
+        height: 150.0,
+        width: size.width * .25,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextWidget(
+                    text: wordsCount.toString(),
+                    size: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextWidget(
+                    text: text,
+                    size: 20.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 5.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.circular(
+                        30.0,
+                      ),
+                    ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: primaryBlueColor,
+                        borderRadius: BorderRadius.circular(
+                          30.0,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -22,7 +165,6 @@ class _BallonsGameState extends State<BallonsGame> {
       color: primaryColor,
       child: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TopAppBar(
               icon_1: null,
@@ -30,12 +172,74 @@ class _BallonsGameState extends State<BallonsGame> {
               text: 'Flying Balloons',
               textSize: 18,
             ),
-            CustomButton(
-              text: 'Start Game',
-              screen: PlayingBallonGames(),
-              navFlag: false,
+            SizedBox(
+              height: 50.0,
             ),
-            Container(),
+            _card(size),
+            SizedBox(
+              height: 20.0,
+            ),
+            Container(
+              height: 210,
+              width: size.width * .90,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(
+                  20.0,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 0.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 5.0,
+                        top: 10.0,
+                        bottom: 12.0,
+                      ),
+                      child: TextWidget(
+                        text: 'Latest round',
+                        size: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: _infoItem(
+                            size,
+                            'Familiar',
+                            10,
+                            10.0,
+                          ),
+                        ),
+                        Expanded(
+                          child: _infoItem(
+                            size,
+                            'Unknowns',
+                            50,
+                            50.0,
+                          ),
+                        ),
+                        Expanded(
+                          child: _infoItem(
+                            size,
+                            'Excelent',
+                            40,
+                            40.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
