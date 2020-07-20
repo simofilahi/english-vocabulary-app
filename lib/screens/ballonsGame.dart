@@ -8,13 +8,21 @@ import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 
 class BallonsGame extends StatefulWidget {
-  BallonsGame({Key key}) : super(key: key);
+  final List<dynamic> globalData;
+  final String lang;
+  BallonsGame({this.globalData, this.lang});
 
   @override
   _BallonsGameState createState() => _BallonsGameState();
 }
 
 class _BallonsGameState extends State<BallonsGame> {
+  @override
+  void initState() {
+    super.initState();
+    print(widget.globalData);
+  }
+
   Widget _card(var size) {
     return Container(
       height: 160,
@@ -57,9 +65,12 @@ class _BallonsGameState extends State<BallonsGame> {
                   ),
                   CustomButton(
                     text: 'Start',
-                    screen: PlayingBallonGames(),
+                    screen: PlayingBallonGames(
+                      globalData: widget.globalData,
+                    ),
                     buttonHeightSize: 40.0,
                     buttonWidthSize: 150.0,
+                    navFlag: false,
                   ),
                 ],
               ),

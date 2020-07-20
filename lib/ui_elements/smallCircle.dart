@@ -3,9 +3,11 @@ import 'package:lenglish/constants.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 
 class SmallCircle extends StatelessWidget {
+  final int number;
   final Color firstColor;
 
   SmallCircle({
+    this.number,
     this.firstColor,
   });
   @override
@@ -19,7 +21,7 @@ class SmallCircle extends StatelessWidget {
       ),
       child: Center(
         child: TextWidget(
-          text: '1',
+          text: number.toString(),
           size: 8.0,
           color: whiteColor,
         ),

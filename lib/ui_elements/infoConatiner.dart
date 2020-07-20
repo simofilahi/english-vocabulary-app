@@ -4,11 +4,19 @@ import 'package:lenglish/ui_elements/smallCircle.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 
 class InfoContainer extends StatelessWidget {
+  final int setNumber;
+  final int totalWords;
+  final int learningWords;
   final Color firstColor;
   final Color secondColor;
 
-  InfoContainer({this.firstColor, this.secondColor});
-  Widget _item(var text) {
+  InfoContainer(
+      {this.setNumber,
+      this.totalWords,
+      this.learningWords,
+      this.firstColor,
+      this.secondColor});
+  Widget _item(var text, int number) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 5.0,
@@ -17,6 +25,7 @@ class InfoContainer extends StatelessWidget {
       child: Row(
         children: <Widget>[
           SmallCircle(
+            number: number,
             firstColor: firstColor,
           ),
           SizedBox(
@@ -91,9 +100,9 @@ class InfoContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _item('sets'),
-                  _item('total words'),
-                  _item('learning words'),
+                  _item('set', setNumber),
+                  _item('total words', totalWords),
+                  _item('learning words', learningWords),
                 ],
               ),
             ),

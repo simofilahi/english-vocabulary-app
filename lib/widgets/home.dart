@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/models/data.dart';
 import 'package:lenglish/screens/wordsList.dart';
 import 'package:lenglish/ui_elements/infoConatiner.dart';
 import 'package:lenglish/widgets/radialProgress.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
-import 'dart:convert';
 
 import '../constants.dart';
 
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({Key key}) : super(key: key);
+class HomeWidget extends StatefulWidget {
+  final List<dynamic> globalData;
+  final String lang;
+  HomeWidget({this.globalData, this.lang});
 
-  void _fun() {
-    words.map((f) => {print(f[0])}).toList();
-  }
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
 
+class _HomeWidgetState extends State<HomeWidget> {
   Widget _rowItem(var text, var size) {
     return Container(
       width: size.width * .40,
@@ -109,15 +110,16 @@ class HomeWidget extends StatelessWidget {
     );
   }
 
-  Widget _item(Color firstColor, Color secondColor, BuildContext context) {
+  Widget _item(BuildContext context, int index, Color firstColor,
+      Color secondColor, var data, int learning_words) {
     return InkWell(
       onTap: () {
-        _fun();
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (BuildContext ctx) => WordsList(),
-        //   ),
-        // );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext ctx) =>
+                WordsList(data, index, data, widget.lang),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -151,6 +153,9 @@ class HomeWidget extends StatelessWidget {
             Expanded(
               flex: 3,
               child: InfoContainer(
+                setNumber: index + 1,
+                totalWords: 50,
+                learningWords: learning_words,
                 firstColor: firstColor,
                 secondColor: secondColor,
               ),
@@ -159,6 +164,21 @@ class HomeWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _wordsItem(BuildContext context) {
+    int index = -1;
+    var newdata = widget.globalData.map((item) {
+      index++;
+      return _item(
+          context,
+          index,
+          colors[index]['first_color'],
+          colors[index]['second_color'],
+          item['set_${index + 1}'].toList(),
+          int.parse(item['learning_words']));
+    }).toList();
+    return newdata;
   }
 
   Widget _gridList(BuildContext context) {
@@ -171,14 +191,7 @@ class HomeWidget extends StatelessWidget {
       controller: new ScrollController(keepScrollOffset: false),
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
-      children: <Widget>[
-        _item(Colors.deepOrange[400], Colors.deepOrange[200], context),
-        _item(Colors.deepPurple[400], Colors.deepPurple[200], context),
-        _item(Colors.green[400], Colors.green[200], context),
-        _item(Colors.red[400], Colors.red[200], context),
-        _item(Colors.pink[400], Colors.pink[200], context),
-        _item(Colors.grey[400], Colors.grey[200], context),
-      ],
+      children: _wordsItem(context),
     );
   }
 

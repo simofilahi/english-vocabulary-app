@@ -7,12 +7,18 @@ class CircleWithIcon extends StatefulWidget {
   final String iconName;
   final double iconHeight;
   final double iconWidth;
+  final Function func;
+  final int wordObjIndex;
+  final String word;
 
   CircleWithIcon({
     this.color,
     this.iconName,
     this.iconHeight,
     this.iconWidth,
+    this.func,
+    this.wordObjIndex,
+    this.word,
   });
   @override
   _CircleWithIconState createState() => _CircleWithIconState();
@@ -28,12 +34,20 @@ class _CircleWithIconState extends State<CircleWithIcon> {
         color: widget.color,
         shape: BoxShape.circle,
       ),
-      child: Center(
-        child: SvgPicture.asset(
-          widget.iconName,
-          height: widget.iconHeight,
-          width: widget.iconWidth,
-          color: whiteColor,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            widget.func(widget.wordObjIndex, widget.word);
+          },
+          child: Center(
+            child: SvgPicture.asset(
+              widget.iconName,
+              height: widget.iconHeight,
+              width: widget.iconWidth,
+              color: whiteColor,
+            ),
+          ),
         ),
       ),
     );

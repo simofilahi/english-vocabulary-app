@@ -22,7 +22,8 @@ class _SettingState extends State<Setting> {
     '2',
   ];
 
-  Widget _item(var size, String iconName, String text) {
+  Widget _item(
+      var size, String iconName, String text, String iconName_2, bool flag) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
@@ -33,30 +34,60 @@ class _SettingState extends State<Setting> {
           borderRadius: BorderRadius.circular(
             15.0,
           ),
-          border: Border(
-            top: BorderSide(
-              color: primaryColor,
-            ),
-          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              SvgPicture.asset(
-                iconName,
-                height: 20.0,
-                width: 20.0,
-                color: primaryGreyColor,
+              Expanded(
+                child: Row(
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      iconName,
+                      height: 20.0,
+                      width: 20.0,
+                      color: primaryGreyColor,
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    TextWidget(
+                      text: text,
+                      size: 18.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                width: 10.0,
-              ),
-              TextWidget(
-                text: text,
-                size: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
+              flag
+                  ? Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Container(),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                TextWidget(text: 'spanich'),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: SvgPicture.asset(
+                                    iconName_2,
+                                    height: 15.0,
+                                    width: 15.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),
@@ -93,12 +124,24 @@ class _SettingState extends State<Setting> {
                     SizedBox(
                       height: 35.0,
                     ),
-                    _item(size, gearIcon, 'language'),
-                    _item(size, gearIcon, 'language'),
-                    _item(size, gearIcon, 'language'),
-                    _item(size, gearIcon, 'language'),
-                    _item(size, gearIcon, 'language'),
-                    _item(size, gearIcon, 'language'),
+                    _item(
+                      size,
+                      gearIcon,
+                      'Language',
+                      rightArrowtIcon,
+                      true,
+                    ),
+                    _item(
+                      size,
+                      sleepModesIcon,
+                      'Mode nuit',
+                      rightArrowtIcon,
+                      true,
+                    ),
+                    _item(size, restoreIcon, 'Restore', null, false),
+                    _item(size, shareIcon, 'Share app', null, false),
+                    _item(size, gearIcon, 'language', null, false),
+                    _item(size, gearIcon, 'language', null, false),
                   ],
                 ),
               ),

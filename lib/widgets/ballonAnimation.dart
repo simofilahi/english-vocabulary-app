@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
+import 'package:lenglish/widgets/textWidget.dart';
 
 class AnimatedBalloon extends StatefulWidget {
-  const AnimatedBalloon({Key key}) : super(key: key);
+  final List<dynamic> globalData;
+  final String text;
+  final Function getNextItem;
+  final Function updateIndex;
+  const AnimatedBalloon(
+      {this.globalData, this.text, this.getNextItem, this.updateIndex});
 
   @override
   _AnimatedBalloonState createState() => _AnimatedBalloonState();
@@ -18,7 +23,6 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
   final bool bottom = true;
   bool flag = false;
   double marginValue = 0;
-
   double _balloonHeight;
   double _balloonWidth;
   double _balloonBottomLocation;
@@ -34,26 +38,21 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('Holla');
     _balloonHeight = 120;
     _balloonWidth = 120;
     print(_balloonHeight);
     print(_balloonWidth);
     _balloonBottomLocation = MediaQuery.of(context).size.height;
 
-    _animationFloatUp = Tween(begin: _balloonBottomLocation, end: 2.0).animate(
+    _animationFloatUp = Tween(
+      begin: _balloonBottomLocation,
+      end: 0.0,
+    ).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 1.0, curve: Curves.fastOutSlowIn),
+        curve: Interval(0.0, 1.0, curve: Curves.easeOut),
       ),
     );
-
-    // _animationGrowSize = Tween(begin: 50.0, end: _balloonWidth).animate(
-    //   CurvedAnimation(
-    //     parent: _controller,
-    //     curve: Interval(0.0, 0.75, curve: Curves.elasticInOut),
-    //   ),
-    // );
 
     if (_controller.isCompleted) {
       _controller.reverse();
@@ -69,100 +68,118 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
   }
 
   _item(Color color) {
-    print('margin value');
-    print(marginValue);
-    print('flag');
-    print(flag);
-    if (flag) {
-      print('inside');
-      return Container(
-        height: 100.0,
-        width: 100.0,
-        color: Colors.red,
-        margin: EdgeInsets.only(top: 0),
-      );
-    } else {
-      return GestureDetector(
-        child: SvgPicture.asset(
-          ballonIcon,
-          height: 200,
-          width: 200,
-          color: color,
+    return GestureDetector(
+      onTap: () {
+        // setState(() {
+        //   flag = !flag;
+        //   marginValue = _animationFloatUp.value;
+        // });
+        _controller.reset();
+        print("*************");
+        widget.getNextItem();
+        _controller.repeat(min: 0.0, max: 1.0);
+        // _controller.reverse();
+        // _controller.forward();
+      },
+      child: Container(
+        height: 150,
+        width: 150,
+        decoration: BoxDecoration(
+          color: primaryBlueColor,
+          borderRadius: BorderRadius.circular(
+            15.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: primaryGreyColor.withOpacity(
+                0.2,
+              ),
+              blurRadius: 20.0,
+              spreadRadius: 5.0,
+            )
+          ],
         ),
-        onTap: () {
-          setState(() {
-            flag = !flag;
-            marginValue = _animationFloatUp.value;
-          });
-          _controller.reverse();
-          // _controller.forward();
-        },
-      );
-    }
+        child: Center(
+          child: TextWidget(
+            text: widget.text,
+            color: whiteColor,
+          ),
+        ),
+      ),
+    );
+    // return GestureDetector(
+    //   child: SvgPicture.asset(
+    //     ballonIcon,
+    //     height: 200,
+    //     width: 200,
+    //     color: color,
+    //   ),
+    //   onTap: () {
+    //     setState(() {
+    //       flag = !flag;
+    //       marginValue = _animationFloatUp.value;
+    //     });
+    //     _controller.reset();
+    //     _controller.repeat(min: 0.0, max: 1.0);
+    //     // _controller.reverse();
+    //     // _controller.forward();
+    //   },
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              AnimatedBuilder(
-                animation: _animationFloatUp,
-                builder: (context, child) {
-                  return Container(
-                    child: child,
-                    margin: EdgeInsets.only(
-                      top: _animationFloatUp.value,
-                      bottom: 0,
-                      // left: _animationGrowSize.value * 0.25,
-                    ),
-                    // width: _animationGrowSize.value,
-                  );
-                },
-                child: _item(Colors.deepOrange),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              AnimatedBuilder(
-                animation: _animationFloatUp,
-                builder: (context, child) {
-                  return Container(
-                    child: child,
-                    margin: EdgeInsets.only(
-                      top: _animationFloatUp.value,
-                      bottom: 0,
-                      // left: _animationGrowSize.value * 0.25,
-                    ),
-                    // width: _animationGrowSize.value,
-                  );
-                },
-                child: _item(Colors.deepOrange),
-              ),
-              AnimatedBuilder(
-                animation: _animationFloatUp,
-                builder: (context, child) {
-                  return Container(
-                    child: child,
-                    margin: EdgeInsets.only(
-                      top: _animationFloatUp.value,
-                      bottom: 0,
-                      // left: _animationGrowSize.value * 0.25,
-                    ),
-                    // width: _animationGrowSize.value,
-                  );
-                },
-                child: _item(Colors.deepOrange),
-              )
-            ],
-          ),
-        ],
+      child: AnimatedBuilder(
+        animation: _animationFloatUp,
+        builder: (context, child) {
+          return Container(
+            child: child,
+            margin: EdgeInsets.only(
+              top: _animationFloatUp.value,
+              bottom: 0,
+              // left: _animationGrowSize.value * 0.25,
+            ),
+            // width: _animationGrowSize.value,
+          );
+        },
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      _item(Colors.deepOrange),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 50.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 20.0,
+                  ),
+                  child: _item(Colors.deepOrange),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: 20.0,
+                  ),
+                  child: _item(Colors.deepOrange),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

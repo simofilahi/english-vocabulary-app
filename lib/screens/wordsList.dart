@@ -1,28 +1,53 @@
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import '../constants.dart';
 import 'flashCards.dart';
 
 class WordsList extends StatefulWidget {
-  WordsList({Key key}) : super(key: key);
+  final List data;
+  final int objIndex;
+  final List<dynamic> allData;
+  final String lang;
+  WordsList(this.data, this.objIndex, this.allData, this.lang);
 
   @override
   _WordsListState createState() => _WordsListState();
 }
 
 class _WordsListState extends State<WordsList> {
-  Widget _cardItem(var size) {
+  static AudioCache player = AudioCache();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  playLocal(path) async {
+    final player = AudioCache();
+
+    // call this method when desired
+    player.play(path);
+  }
+
+  Widget _cardItem(var size, String title, String subtitle) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 20.0,
+        vertical: 5.0,
       ),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext ctx) => FlashCards(),
+              builder: (BuildContext ctx) => FlashCards(
+                widget.data,
+                widget.objIndex,
+                widget.allData,
+                widget.lang,
+              ),
             ),
           );
         },
@@ -35,12 +60,47 @@ class _WordsListState extends State<WordsList> {
               15.0,
             ),
           ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextWidget(
+                      text: title,
+                      size: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(
+                      height: 2.0,
+                    ),
+                    TextWidget(
+                      text: subtitle,
+                      color: Colors.grey[700],
+                      size: 16.0,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: SvgPicture.asset(
+                  rightArrowtIcon,
+                  height: 25.0,
+                  width: 25.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _listItem(var size, String word, String translate) {
+  Widget _listItem(var size, List data, int index) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
@@ -51,54 +111,65 @@ class _WordsListState extends State<WordsList> {
           borderRadius: BorderRadius.circular(
             15.0,
           ),
-          // border: Border(
-          //   top: BorderSide(
-          //     color: primaryColor,
-          //   ),
-          // ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              TextWidget(
-                text: word,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 15.0,
+                ),
+                child: TextWidget(
+                  text: data[index]['en'],
+                  size: 18.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: TextWidget(
+                text: getRightTranslate(data, null, index, widget.lang),
                 size: 18.0,
                 fontWeight: FontWeight.w400,
               ),
-              TextWidget(
-                text: translate,
-                size: 18.0,
-                fontWeight: FontWeight.w400,
+            ),
+            Expanded(
+              flex: 1,
+              child: GestureDetector(
+                onTap: () {
+                  playLocal('audio/${widget.data[index]['en']}.mp3');
+                },
+                child: SvgPicture.asset(
+                  speakerIcon,
+                  height: 25.0,
+                  width: 25.0,
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _textDivder(var size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-      ),
-      child: Container(
-        height: 35,
-        width: double.infinity,
-        child: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: TextWidget(
-                text: 'Words',
-                size: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
+    return Container(
+      height: 35,
+      width: double.infinity,
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: TextWidget(
+              text: 'Words',
+              size: 16.0,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -111,33 +182,41 @@ class _WordsListState extends State<WordsList> {
       body: Container(
         height: size.height,
         width: size.width,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                TopAppBar(
-                  icon_1: backArrowIcon,
-                  icon_2: null,
-                  text: 'Words',
-                  textSize: 18.0,
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              TopAppBar(
+                icon_1: backArrowIcon,
+                icon_2: null,
+                text: 'Words',
+                textSize: 18.0,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: ListView(
+                    children: <Widget>[
+                      _cardItem(size, 'Flash card', '50 words'),
+                      _cardItem(size, 'Familiar words', '23 parctise'),
+                      _cardItem(size, 'Unknown words', '10 parctise'),
+                      _textDivder(size),
+                      ...widget.data
+                          .asMap()
+                          .map(
+                            (index, element) => MapEntry(
+                              index,
+                              _listItem(size, widget.data, index),
+                            ),
+                          )
+                          .values
+                          .toList(),
+                    ],
+                  ),
                 ),
-                _cardItem(size),
-                _textDivder(size),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-                _listItem(size, 'hello', 'hello'),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

@@ -1,26 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
+import 'package:lenglish/logic/BoolSetter.dart';
+import 'package:lenglish/models/data.dart';
 import 'package:lenglish/screens/settings.dart';
 import 'package:lenglish/widgets/bottomBar.dart';
 import 'package:lenglish/widgets/home.dart';
+import 'package:localstorage/localstorage.dart';
 
 import 'ballonsGame.dart';
-import 'buyPremium.dart';
+import 'myWords.dart';
 
 class Home extends StatefulWidget {
+  final List<dynamic> globalData;
+  final String lang;
+  Home({this.globalData, this.lang = null});
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  static LocalStorage storage = new LocalStorage('data');
   int currentIndex = 0;
+  String _lang;
 
-  List<Widget> _tabs = [
-    HomeWidget(),
-    BallonsGame(),
-    BuyPremium(),
-    Setting(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    if (widget.lang == null) {
+      getTheSelectedLang().then((onValue) {
+        setState(() {
+          _lang = onValue;
+        });
+      });
+    }
+  }
+
+  // List<Widget> _tabs = [
+
+  //   // BuyPremium(),
+
+  // ];
 
   updateIndex(int index) {
     setState(
@@ -28,6 +47,18 @@ class _HomeState extends State<Home> {
         currentIndex = index;
       },
     );
+  }
+
+  dynamic _getScreen(currentIndex) {
+    if (currentIndex == 0) {
+      return HomeWidget(globalData: words, lang: _lang);
+    } else if (currentIndex == 1) {
+      return BallonsGame(globalData: words, lang: _lang);
+    } else if (currentIndex == 2) {
+      return MyWords(globalData: words, lang: _lang);
+    } else if (currentIndex == 3) {
+      return Setting();
+    }
   }
 
   @override
@@ -38,7 +69,7 @@ class _HomeState extends State<Home> {
         currentIndex: currentIndex,
         updateIndex: updateIndex,
       ),
-      body: _tabs[currentIndex],
+      body: _getScreen(currentIndex),
     );
   }
 }

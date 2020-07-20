@@ -37,7 +37,7 @@ class _BottomBarState extends State<BottomBar> {
                 widget.currentIndex == 1 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.shopping_cart,
+            Icons.menu,
             size: 30,
             color:
                 widget.currentIndex == 2 ? primaryBlueColor : primaryGreyColor,
