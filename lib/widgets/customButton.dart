@@ -12,7 +12,7 @@ class CustomButton extends StatelessWidget {
   final Color color;
   final bool navFlag;
   final String selectedLang;
-
+  // final Function saveLang;
   CustomButton({
     this.text,
     this.screen,
@@ -22,28 +22,31 @@ class CustomButton extends StatelessWidget {
     this.navFlag,
     this.selectedLang = null,
   });
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Material(
       child: InkWell(
         onTap: () {
-          updateSelectedLanguage(selectedLang).then(
-            (v) {
-              if (navFlag) {
+          if (navFlag == true) {
+            updateSelectedLanguage(selectedLang).then(
+              (v) {
+                print("hiiiiiii");
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext ctx) => screen,
                   ),
                 );
-              }
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext ctx) => screen,
-                ),
-              );
-            },
-          );
+              },
+            );
+          } else {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext ctx) => screen,
+              ),
+            );
+          }
         },
         child: Container(
           height: buttonHeightSize == 0 ? 55 : buttonHeightSize,

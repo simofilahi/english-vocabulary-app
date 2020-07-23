@@ -2,25 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/models/data.dart';
+import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/models/languages.dart';
 import 'package:lenglish/screens/home.dart';
 import 'package:lenglish/widgets/customButton.dart';
 import 'package:lenglish/widgets/textWidget.dart';
-import 'package:localstorage/localstorage.dart';
 
 class ChooseLanguage extends StatefulWidget {
-  final List<dynamic> globalData;
+  final Function globalDataUpdate;
 
-  ChooseLanguage({this.globalData});
+  ChooseLanguage({this.globalDataUpdate});
   @override
   _ChooseLanguageState createState() => _ChooseLanguageState();
 }
 
 class _ChooseLanguageState extends State<ChooseLanguage> {
+  List<dynamic> _globalData = [];
+
   @override
   void initState() {
     super.initState();
+    allData.getItem().then((data) {
+      print(data);
+      setState(() {
+        _globalData = data;
+      });
+    });
   }
 
   final List<LanguagesList> languagesList = [
@@ -106,6 +113,10 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     );
   }
 
+  // _saveLang(langData) {
+  //   saveChosenLang(langData);
+  // }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -162,10 +173,12 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                   CustomButton(
                     text: 'Continue',
                     screen: Home(
-                      globalData: widget.globalData,
+                      globalData: _globalData,
+                      globalDataUpdate: widget.globalDataUpdate,
                     ),
                     navFlag: true,
                     selectedLang: _getActiveLang(),
+                    // saveLang: _saveLang,
                   ),
                 ],
               ),

@@ -9,8 +9,9 @@ import 'package:lenglish/widgets/topAppBar.dart';
 class MyWords extends StatefulWidget {
   final List<dynamic> globalData;
   final String lang;
-  MyWords({this.globalData, this.lang});
+  final Function globalDataUpdate;
 
+  MyWords({this.globalData, this.lang, this.globalDataUpdate});
   @override
   _MyWordsState createState() => _MyWordsState();
 }

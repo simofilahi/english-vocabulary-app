@@ -10,7 +10,8 @@ import 'package:lenglish/widgets/topAppBar.dart';
 class BallonsGame extends StatefulWidget {
   final List<dynamic> globalData;
   final String lang;
-  BallonsGame({this.globalData, this.lang});
+  final Function globalDataUpdate;
+  BallonsGame({this.globalData, this.lang, this.globalDataUpdate});
 
   @override
   _BallonsGameState createState() => _BallonsGameState();
@@ -67,6 +68,7 @@ class _BallonsGameState extends State<BallonsGame> {
                     text: 'Start',
                     screen: PlayingBallonGames(
                       globalData: widget.globalData,
+                      lang: widget.lang,
                     ),
                     buttonHeightSize: 40.0,
                     buttonWidthSize: 150.0,

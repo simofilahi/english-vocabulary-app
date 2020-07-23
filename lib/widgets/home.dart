@@ -10,14 +10,31 @@ import '../constants.dart';
 class HomeWidget extends StatefulWidget {
   final List<dynamic> globalData;
   final String lang;
-  HomeWidget({this.globalData, this.lang});
+  final Function globalDataUpdate;
+  final int totalLearningWords;
+  final Function getTotalLearningWords;
+
+  HomeWidget({
+    this.globalData,
+    this.lang,
+    this.globalDataUpdate,
+    this.totalLearningWords,
+    this.getTotalLearningWords,
+  });
 
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  Widget _rowItem(var text, var size) {
+  @override
+  void initState() {
+    super.initState();
+    print("initState");
+    print(widget.lang);
+  }
+
+  Widget _rowItem(String text, int value, var size) {
     return Container(
       width: size.width * .40,
       child: Row(
@@ -28,7 +45,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             color: whiteColor,
           ),
           TextWidget(
-            text: '5000',
+            text: value.toString(),
             color: whiteColor,
           ),
         ],
@@ -57,8 +74,10 @@ class _HomeWidgetState extends State<HomeWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RadialProgress(
-                  height: 100,
-                  width: 100,
+                  goalCompleted: widget.totalLearningWords.toDouble() / 226.5,
+                  percent: widget.totalLearningWords.toDouble() * 100 / 2265,
+                  height: 120,
+                  width: 120,
                   color: whiteColor,
                   flag: true,
                 ),
@@ -87,15 +106,16 @@ class _HomeWidgetState extends State<HomeWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _rowItem('Points', size),
+                      _rowItem('level', 1, size),
                       SizedBox(
                         height: 15.0,
                       ),
-                      _rowItem('Learing words', size),
+                      _rowItem('total words', 2265, size),
                       SizedBox(
                         height: 15.0,
                       ),
-                      _rowItem('Rest words', size),
+                      _rowItem(
+                          'Learing words', widget.totalLearningWords, size),
                       SizedBox(
                         height: 15.0,
                       ),
@@ -112,12 +132,20 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Widget _item(BuildContext context, int index, Color firstColor,
       Color secondColor, var data, int learning_words) {
+    // print("learning words");
+    // print(learning_words);
     return InkWell(
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext ctx) =>
-                WordsList(data, index, data, widget.lang),
+            builder: (BuildContext ctx) => WordsList(
+              data,
+              index,
+              widget.globalData,
+              widget.lang,
+              widget.globalDataUpdate,
+              widget.getTotalLearningWords,
+            ),
           ),
         );
       },
@@ -140,6 +168,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       RadialProgress(
+                        goalCompleted: learning_words.toDouble() / 5,
+                        percent: learning_words.toDouble() * 100 / 50,
                         height: 50,
                         width: 50,
                         color: whiteColor,

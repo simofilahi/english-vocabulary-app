@@ -12,7 +12,17 @@ class WordsList extends StatefulWidget {
   final int objIndex;
   final List<dynamic> allData;
   final String lang;
-  WordsList(this.data, this.objIndex, this.allData, this.lang);
+  final Function globalDataUpdate;
+  final Function getTotalLearningWords;
+
+  WordsList(
+    this.data,
+    this.objIndex,
+    this.allData,
+    this.lang,
+    this.globalDataUpdate,
+    this.getTotalLearningWords,
+  );
 
   @override
   _WordsListState createState() => _WordsListState();
@@ -20,10 +30,34 @@ class WordsList extends StatefulWidget {
 
 class _WordsListState extends State<WordsList> {
   static AudioCache player = AudioCache();
+  List<dynamic> _flashCardWords = [];
+  List<dynamic> _familiarWords = [];
+  List<dynamic> _unknowWords = [];
 
   @override
   void initState() {
     super.initState();
+    _updateFalshCarsWords();
+    _updateFamiliarWords();
+    _updateUnknownWords();
+  }
+
+  _updateFalshCarsWords() {
+    setState(() {
+      _flashCardWords = getWords(widget.data);
+    });
+  }
+
+  _updateFamiliarWords() {
+    setState(() {
+      _familiarWords = getFamiliarWord(widget.data);
+    });
+  }
+
+  _updateUnknownWords() {
+    setState(() {
+      _unknowWords = getUnknownWord(widget.data);
+    });
   }
 
   playLocal(path) async {
@@ -33,7 +67,8 @@ class _WordsListState extends State<WordsList> {
     player.play(path);
   }
 
-  Widget _cardItem(var size, String title, String subtitle) {
+  Widget _cardItem(
+      var size, String title, String subtitle, List<dynamic> item) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5.0,
@@ -43,10 +78,15 @@ class _WordsListState extends State<WordsList> {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext ctx) => FlashCards(
-                widget.data,
+                item,
                 widget.objIndex,
                 widget.allData,
                 widget.lang,
+                _updateFalshCarsWords,
+                _updateFamiliarWords,
+                _updateUnknownWords,
+                widget.globalDataUpdate,
+                widget.getTotalLearningWords,
               ),
             ),
           );
@@ -198,9 +238,27 @@ class _WordsListState extends State<WordsList> {
                   ),
                   child: ListView(
                     children: <Widget>[
-                      _cardItem(size, 'Flash card', '50 words'),
-                      _cardItem(size, 'Familiar words', '23 parctise'),
-                      _cardItem(size, 'Unknown words', '10 parctise'),
+                      _cardItem(
+                          size,
+                          'Flash card',
+                          _flashCardWords == [] || _flashCardWords == null
+                              ? '0 words'
+                              : '${_flashCardWords.length} words',
+                          _flashCardWords),
+                      _cardItem(
+                          size,
+                          'Familiar words',
+                          _familiarWords == [] || _familiarWords == null
+                              ? '0 words'
+                              : '${_familiarWords.length} words',
+                          _familiarWords),
+                      _cardItem(
+                          size,
+                          'Unknown words',
+                          _unknowWords == [] || _unknowWords == null
+                              ? '0 words'
+                              : '${_unknowWords.length} words',
+                          _unknowWords),
                       _textDivder(size),
                       ...widget.data
                           .asMap()

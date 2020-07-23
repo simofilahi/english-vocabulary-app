@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/widgets/textWidget.dart';
@@ -7,9 +9,17 @@ class AnimatedBalloon extends StatefulWidget {
   final String text;
   final Function getNextItem;
   final Function updateIndex;
-  const AnimatedBalloon(
-      {this.globalData, this.text, this.getNextItem, this.updateIndex});
+  final List randomWords;
+  final Function failureHandler;
 
+  const AnimatedBalloon({
+    this.globalData,
+    this.text,
+    this.getNextItem,
+    this.updateIndex,
+    this.randomWords,
+    this.failureHandler,
+  });
   @override
   _AnimatedBalloonState createState() => _AnimatedBalloonState();
 }
@@ -26,13 +36,45 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
   double _balloonHeight;
   double _balloonWidth;
   double _balloonBottomLocation;
+  List _arrayNum = [0, 1, 2];
+  final _random = new Random();
+  int _i = 0;
+  int _j = 0;
+  int _k = 0;
 
   @override
   void initState() {
     super.initState();
 
+    _generateRandomIndex();
     _controller =
-        AnimationController(duration: Duration(seconds: 10), vsync: this);
+        AnimationController(duration: Duration(seconds: 10), vsync: this)
+          ..addStatusListener((AnimationStatus status) {
+            if (status == AnimationStatus.completed) {
+              widget.failureHandler();
+            }
+          });
+    ;
+  }
+
+  _generateRandomIndex() {
+    var i = 0;
+    var j = 0;
+    var k = 0;
+
+    while (true) {
+      i = _arrayNum[_random.nextInt(_arrayNum.length)];
+      j = _arrayNum[_random.nextInt(_arrayNum.length)];
+      k = _arrayNum[_random.nextInt(_arrayNum.length)];
+      if (i != j && i != k && j != k) {
+        break;
+      }
+    }
+    setState(() {
+      _i = i;
+      _j = j;
+      _k = k;
+    });
   }
 
   @override
@@ -53,9 +95,8 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
         curve: Interval(0.0, 1.0, curve: Curves.easeOut),
       ),
     );
-
     if (_controller.isCompleted) {
-      _controller.reverse();
+      _controller.reset();
     } else {
       _controller.forward();
     }
@@ -67,25 +108,24 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
     super.dispose();
   }
 
-  _item(Color color) {
+  _item(Color color, int index) {
     return GestureDetector(
       onTap: () {
-        // setState(() {
-        //   flag = !flag;
-        //   marginValue = _animationFloatUp.value;
-        // });
-        _controller.reset();
-        print("*************");
-        widget.getNextItem();
-        _controller.repeat(min: 0.0, max: 1.0);
-        // _controller.reverse();
-        // _controller.forward();
+        if (widget.text == widget.randomWords[index]) {
+          _controller.reset();
+          widget.getNextItem();
+          _generateRandomIndex();
+          _controller.forward();
+        } else {
+          _controller.reset();
+          widget.failureHandler();
+        }
       },
       child: Container(
         height: 150,
         width: 150,
         decoration: BoxDecoration(
-          color: primaryBlueColor,
+          color: color,
           borderRadius: BorderRadius.circular(
             15.0,
           ),
@@ -101,7 +141,7 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
         ),
         child: Center(
           child: TextWidget(
-            text: widget.text,
+            text: widget.randomWords[index],
             color: whiteColor,
           ),
         ),
@@ -136,6 +176,7 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
         builder: (context, child) {
           return Container(
             child: child,
+            color: primaryColor,
             margin: EdgeInsets.only(
               top: _animationFloatUp.value,
               bottom: 0,
@@ -152,7 +193,7 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
                 Container(
                   child: Stack(
                     children: <Widget>[
-                      _item(Colors.deepOrange),
+                      _item(Colors.pink[300], _i),
                     ],
                   ),
                 ),
@@ -168,13 +209,13 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
                   padding: EdgeInsets.only(
                     left: 20.0,
                   ),
-                  child: _item(Colors.deepOrange),
+                  child: _item(Colors.red[300], _j),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
                     right: 20.0,
                   ),
-                  child: _item(Colors.deepOrange),
+                  child: _item(Colors.blue[300], _k),
                 )
               ],
             ),

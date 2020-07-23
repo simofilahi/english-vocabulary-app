@@ -5,13 +5,20 @@ import 'package:vector_math/vector_math_64.dart' as math;
 import '../constants.dart';
 
 class RadialProgress extends StatefulWidget {
-  final double goalCompleted = 0.7;
+  final double goalCompleted;
+  final double percent;
   final double height;
   final double width;
   final Color color;
   final bool flag;
 
-  RadialProgress({this.height, this.width, this.color, this.flag});
+  RadialProgress(
+      {this.goalCompleted,
+      this.percent,
+      this.height,
+      this.width,
+      this.color,
+      this.flag});
   @override
   _RadialProgressState createState() => _RadialProgressState();
 }
@@ -30,6 +37,7 @@ class _RadialProgressState extends State<RadialProgress>
   @override
   void initState() {
     super.initState();
+    print(widget.goalCompleted);
     _radialProgressAnimationController =
         AnimationController(vsync: this, duration: fillDuration);
     _progressAnimation = Tween(begin: 0.0, end: 360.0).animate(CurvedAnimation(
@@ -80,7 +88,7 @@ class _RadialProgressState extends State<RadialProgress>
             children: <Widget>[
               _content(),
               Text(
-                '$counter%',
+                '${widget.percent.toStringAsPrecision(2)}%',
                 style: TextStyle(
                   fontSize: widget.flag == true ? 15.0 : 10.0,
                   fontWeight: FontWeight.w500,

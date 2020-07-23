@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lenglish/constants.dart';
-import 'package:lenglish/screens/chooseLanguage.dart';
 import 'package:lenglish/screens/splashScreen.dart';
 
 void main() => runApp(MyApp());
