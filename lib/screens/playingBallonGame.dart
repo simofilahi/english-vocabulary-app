@@ -1,17 +1,20 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/ballonAnimation.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 class PlayingBallonGames extends StatefulWidget {
   final List<dynamic> globalData;
   final String lang;
+  final int index;
+  final Function getIndex;
 
-  PlayingBallonGames({this.globalData, this.lang});
+  PlayingBallonGames({this.globalData, this.lang, this.index, this.getIndex});
   @override
   _PlayingBallonGamesState createState() => _PlayingBallonGamesState();
 }
@@ -25,17 +28,26 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   int _set = 1;
   int _index = 0;
   int _initIndex = 0;
+  bool spinner = false;
 
   @override
   void initState() {
     super.initState();
-    print("after");
-    _index = getIndexOfFlyingSquare();
+    setState(() {
+      spinner = true;
+      _index = widget.index;
+      _initIndex = widget.index;
+    });
     _getNextItem();
     _getRandomWords();
-    setState(() {
-      _initIndex = _index;
-    });
+    print("here init index");
+    print(widget.index);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.getIndex();
   }
 
   dynamic _getSetItem() {
@@ -58,20 +70,36 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     });
   }
 
+  playLocal(path) async {
+    // print("Here is the path");
+    // print(path);
+    // player.play(path);
+
+    assetsAudioPlayer.open(
+      Audio(path),
+    );
+  }
+
   void _getNextItem() {
     int i = 1;
     int j = 0;
     String word;
     String en_word;
-    int indexx;
 
-    if (_index == _initIndex + 10) {
+    if (_index == _initIndex + 5) {
       updateIndexOfFlyingSquare(_index);
+      print("helllllllo");
+      print(_index);
+      setState(() {
+        _initIndex = _index + 1;
+      });
     } else {
       widget.globalData.forEach(
         (item) {
           item['set_${i}'].forEach(
             (f) {
+              print("here index");
+              print(_index);
               if (j == _index) {
                 en_word = f['en'];
                 word = getRightTranslate(null, f, 0, widget.lang);
@@ -82,6 +110,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
           i++;
         },
       );
+      playLocal('assets/audio/${en_word}.mp3');
       _updataIndexAndWord(en_word, word);
       _getRandomWords();
     }
@@ -113,6 +142,69 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
 
   String _getWordByIndex(int index) {}
 
+  Widget _renderButtons() {
+    if (_boolean == false) {
+      return TextWidget(
+        text: _en_word,
+        size: 24.0,
+      );
+    } else {
+      return Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  playLocal('assets/audio/${_en_word}.mp3');
+                  setState(() {
+                    _index = widget.index;
+                    _boolean = false;
+                  });
+                },
+                child: Container(
+                  height: 50.0,
+                  width: 160.0,
+                  decoration: BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.circular(
+                        15.0,
+                      ),
+                      boxShadow: [shadow]),
+                  child: Center(
+                    child: TextWidget(
+                      text: 'Try again',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 50.0,
+              width: 200.0,
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(
+                  15.0,
+                ),
+                boxShadow: [shadow],
+              ),
+              child: Center(
+                child: TextWidget(
+                  text: 'Watch Ads',
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -127,66 +219,12 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
               child: Container(
                 height: size.height,
                 width: size.width,
+                color: primaryColor,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    TopAppBar(text: '${_index}/2000'),
-                    _boolean == false
-                        ? TextWidget(
-                            text: _en_word,
-                            size: 24.0,
-                          )
-                        : Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _index = 0;
-                                        _boolean = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 50.0,
-                                      width: 160.0,
-                                      decoration: BoxDecoration(
-                                        color: whiteColor,
-                                        borderRadius: BorderRadius.circular(
-                                          15.0,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: TextWidget(
-                                          text: 'Try again',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 50.0,
-                                  width: 200.0,
-                                  decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.circular(
-                                      15.0,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: TextWidget(
-                                      text: 'Watch Ads',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                    TopAppBar(icon_1: backArrowIcon, text: '${_index}/2000'),
+                    _renderButtons(),
                     Container(),
                   ],
                 ),

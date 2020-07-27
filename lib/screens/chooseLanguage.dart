@@ -10,8 +10,12 @@ import 'package:lenglish/widgets/textWidget.dart';
 
 class ChooseLanguage extends StatefulWidget {
   final Function globalDataUpdate;
+  final bool settingBool;
 
-  ChooseLanguage({this.globalDataUpdate});
+  ChooseLanguage({
+    this.globalDataUpdate,
+    this.settingBool,
+  });
   @override
   _ChooseLanguageState createState() => _ChooseLanguageState();
 }
@@ -171,7 +175,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                     height: 30.0,
                   ),
                   CustomButton(
-                    text: 'Continue',
+                    text: widget.settingBool == true ? 'Done' : 'Continue',
                     screen: Home(
                       globalData: _globalData,
                       globalDataUpdate: widget.globalDataUpdate,

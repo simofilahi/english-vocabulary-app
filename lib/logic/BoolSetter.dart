@@ -87,12 +87,14 @@ Future<dynamic> storeGlobalData() async {
 
 updateGlobalData(List<dynamic> globalData, int objIndex, int wordObjIndex,
     String word, List<dynamic> newData) {
-  // globalData[objIndex]['set_${objIndex + 1}'] = newData;
-  // allData.setItem('words', globalData);
+  globalData[objIndex]['set_${objIndex + 1}'] = newData;
+  allData.setItem('words', globalData);
+  print("set item ");
+  print(allData.getItem());
 }
 
 List<dynamic> setTrue(int objIndex, int wordObjIndex, String word,
-    List<dynamic> localData, List<dynamic> globalData, flag) {
+    List<dynamic> localData, List<dynamic> globalData, int flag) {
   if (flag == 1) {
     int number = int.parse(globalData[objIndex]['learning_words']);
     if (number < 50) {
@@ -202,23 +204,31 @@ void createIndexOfFlyingSquare() {
   // print(data);
 }
 
-int updateIndexOfFlyingSquare(int index) {
-  // print("INDEX ==> ");
-  // print(index);
-  // // var data = indexFile.getItem('Index');
-
-  // data['index'] = index.toString();
-  // indexFile.setItem('Index', data);
+Future<int> updateIndexOfFlyingSquare(int index) async {
+  print("INDEX ==> ");
+  print(index);
+  List<Map> newData = [
+    {'index': index.toString()}
+  ];
+  indexFile.setItem('Index', newData).then((value) {
+    if (value == true) {
+      print("upadted");
+      return index;
+    } else
+      return 0;
+  });
 }
 
-int getIndexOfFlyingSquare() {
-  // var data = indexFile.getItem('Index');
-  // print("HollaAAAAAA");
-  // print(data);
-  // if (data['index'] != null) {
-  //   print("holla_1");
-  //   return int.parse(data['index']);
-  // }
-  // print("holla");
-  // return 0;
+Future<int> getIndexOfFlyingSquare() async {
+  indexFile.getItem().then((data) {
+    print("HollaAAAAAA");
+    print(data);
+    if (data[0]['index'] != null) {
+      print("yup");
+      print(int.parse(data[0]['index']));
+      return int.parse(data[0]['index']);
+    } else {
+      return -1;
+    }
+  });
 }

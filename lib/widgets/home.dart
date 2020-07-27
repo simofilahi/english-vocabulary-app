@@ -30,8 +30,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void initState() {
     super.initState();
-    print("initState");
-    print(widget.lang);
   }
 
   Widget _rowItem(String text, int value, var size) {
@@ -74,10 +72,10 @@ class _HomeWidgetState extends State<HomeWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RadialProgress(
-                  goalCompleted: widget.totalLearningWords.toDouble() / 226.5,
+                  goalCompleted: widget.totalLearningWords.toDouble() / 2265,
                   percent: widget.totalLearningWords.toDouble() * 100 / 2265,
-                  height: 120,
-                  width: 120,
+                  height: 100,
+                  width: 100,
                   color: whiteColor,
                   flag: true,
                 ),
@@ -132,8 +130,8 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Widget _item(BuildContext context, int index, Color firstColor,
       Color secondColor, var data, int learning_words) {
-    // print("learning words");
-    // print(learning_words);
+    print("learning words");
+    print(learning_words);
     return InkWell(
       onTap: () {
         Navigator.of(context).push(
@@ -168,7 +166,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       RadialProgress(
-                        goalCompleted: learning_words.toDouble() / 5,
+                        goalCompleted: learning_words.toDouble() / 50,
                         percent: learning_words.toDouble() * 100 / 50,
                         height: 50,
                         width: 50,

@@ -29,13 +29,11 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // _getTotalLearningWords();
+    _getTotalLearningWords();
     if (widget.lang == null) {
-      print("inside null");
       langFile.getItem().then((data) {
         print(data);
         if (data == null) {
-          print("holla");
           setState(() {
             _lang = "en";
           });
@@ -57,11 +55,6 @@ class _HomeState extends State<Home> {
       _totalLearningWords = totoalLearningWords(widget.globalData);
     });
   }
-  // List<Widget> _tabs = [
-
-  //   // BuyPremium(),
-
-  // ];
 
   updateIndex(int index) {
     setState(
@@ -91,7 +84,9 @@ class _HomeState extends State<Home> {
         globalDataUpdate: widget.globalDataUpdate,
       );
     } else if (currentIndex == 3) {
-      return Setting();
+      return Setting(
+        lang: _lang,
+      );
     }
   }
 

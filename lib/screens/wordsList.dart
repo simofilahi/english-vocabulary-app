@@ -1,7 +1,8 @@
-import 'package:audioplayers/audio_cache.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
+import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import '../constants.dart';
@@ -29,17 +30,28 @@ class WordsList extends StatefulWidget {
 }
 
 class _WordsListState extends State<WordsList> {
-  static AudioCache player = AudioCache();
   List<dynamic> _flashCardWords = [];
   List<dynamic> _familiarWords = [];
   List<dynamic> _unknowWords = [];
+  int _flashCardsWordsCount = 0;
+  int _familiarWordsCount = 0;
+  int _unknowWordsCount = 0;
 
   @override
   void initState() {
     super.initState();
-    _updateFalshCarsWords();
-    _updateFamiliarWords();
-    _updateUnknownWords();
+    _updateCountOfWords();
+    // _updateFalshCarsWords();
+    // _updateFamiliarWords();
+    // _updateUnknownWords();
+  }
+
+  _updateCountOfWords() {
+    setState(() {
+      _flashCardsWordsCount = getWords(widget.data).length;
+      _familiarWordsCount = getFamiliarWord(widget.data).length;
+      _unknowWordsCount = getUnknownWord(widget.data).length;
+    });
   }
 
   _updateFalshCarsWords() {
@@ -61,17 +73,23 @@ class _WordsListState extends State<WordsList> {
   }
 
   playLocal(path) async {
-    final player = AudioCache();
+    // print("Here is the path");
+    // print(path);
+    // player.play(path);
 
-    // call this method when desired
-    player.play(path);
+    assetsAudioPlayer.open(
+      Audio(path),
+    );
   }
 
-  Widget _cardItem(
-      var size, String title, String subtitle, List<dynamic> item) {
+  Widget _cardItem(var size, String title, String subtitle, List<dynamic> item,
+      int flag, int len) {
+    print("leeen");
+    print(len);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5.0,
+        horizontal: 5.0,
       ),
       child: InkWell(
         onTap: () {
@@ -85,8 +103,11 @@ class _WordsListState extends State<WordsList> {
                 _updateFalshCarsWords,
                 _updateFamiliarWords,
                 _updateUnknownWords,
+                _updateCountOfWords,
                 widget.globalDataUpdate,
                 widget.getTotalLearningWords,
+                flag,
+                len,
               ),
             ),
           );
@@ -99,6 +120,9 @@ class _WordsListState extends State<WordsList> {
             borderRadius: BorderRadius.circular(
               15.0,
             ),
+            boxShadow: [
+              shadow,
+            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,7 +166,12 @@ class _WordsListState extends State<WordsList> {
 
   Widget _listItem(var size, List data, int index) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(
+        top: 4.0,
+        bottom: 4.0,
+        left: 5.0,
+        right: 5.0,
+      ),
       child: Container(
         height: 60.0,
         width: size.width * .90,
@@ -151,45 +180,54 @@ class _WordsListState extends State<WordsList> {
           borderRadius: BorderRadius.circular(
             15.0,
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 15.0,
-                ),
-                child: TextWidget(
-                  text: data[index]['en'],
-                  size: 18.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: TextWidget(
-                text: getRightTranslate(data, null, index, widget.lang),
-                size: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: GestureDetector(
-                onTap: () {
-                  playLocal('audio/${widget.data[index]['en']}.mp3');
-                },
-                child: SvgPicture.asset(
-                  speakerIcon,
-                  height: 25.0,
-                  width: 25.0,
-                ),
-              ),
-            ),
+          boxShadow: [
+            shadow,
           ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 15.0,
+                    ),
+                    child: TextWidget(
+                      text: data[index]['en'],
+                      size: 18.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: TextWidget(
+                    text: getRightTranslate(data, null, index, widget.lang),
+                    size: 18.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      playLocal(
+                          'assets/audio/${widget.data[index]['audioPath']}');
+                    },
+                    child: SvgPicture.asset(
+                      speakerIcon,
+                      height: 25.0,
+                      width: 25.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -239,26 +277,35 @@ class _WordsListState extends State<WordsList> {
                   child: ListView(
                     children: <Widget>[
                       _cardItem(
-                          size,
-                          'Flash card',
-                          _flashCardWords == [] || _flashCardWords == null
-                              ? '0 words'
-                              : '${_flashCardWords.length} words',
-                          _flashCardWords),
+                        size,
+                        'Flash card',
+                        _flashCardWords == [] || _flashCardWords == null
+                            ? '0 words'
+                            : '${_flashCardsWordsCount} words',
+                        widget.data,
+                        0,
+                        _flashCardsWordsCount,
+                      ),
                       _cardItem(
-                          size,
-                          'Familiar words',
-                          _familiarWords == [] || _familiarWords == null
-                              ? '0 words'
-                              : '${_familiarWords.length} words',
-                          _familiarWords),
+                        size,
+                        'Familiar words',
+                        _familiarWords == [] || _familiarWords == null
+                            ? '0 words'
+                            : '${_familiarWordsCount} words',
+                        widget.data,
+                        1,
+                        _familiarWordsCount,
+                      ),
                       _cardItem(
-                          size,
-                          'Unknown words',
-                          _unknowWords == [] || _unknowWords == null
-                              ? '0 words'
-                              : '${_unknowWords.length} words',
-                          _unknowWords),
+                        size,
+                        'Unknown words',
+                        _unknowWords == [] || _unknowWords == null
+                            ? '0 words'
+                            : '${_unknowWordsCount} words',
+                        widget.data,
+                        2,
+                        _unknowWordsCount,
+                      ),
                       _textDivder(size),
                       ...widget.data
                           .asMap()

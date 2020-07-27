@@ -45,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 indexFile.setItem('index', {"index": "0"});
               }
             });
-            favFile.createFile();
             langFile.createFile().then((v) {
               if (v == true) {
                 print("set lang data");
@@ -54,6 +53,15 @@ class _SplashScreenState extends State<SplashScreen> {
                 ]);
               }
             });
+            indexFile.createFile().then((v) {
+              if (v == true) {
+                print("set indexFile data");
+                indexFile.setItem('Index', [
+                  {"index": "0"}
+                ]);
+              }
+            });
+            favFile.createFile();
           }
         });
       } else {
@@ -87,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Color(0xfff78C800),
       body: Center(
         child: GestureDetector(
           onTap: () {
@@ -97,6 +105,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   if (_checkerBoolean == 0) {
                     return ChooseLanguage(
                       globalDataUpdate: _globalDataUpdate,
+                      settingBool: false,
                     );
                   } else {
                     return Home(

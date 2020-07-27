@@ -1,4 +1,3 @@
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 
 // Colors
@@ -11,6 +10,14 @@ const Color primaryGreyColor = Color(0xFF616161);
 const linearGradiantColor =
     LinearGradient(colors: [Color(0XFF09C6F9), Color(0XFF045DE9)]);
 const Color darkGreyColor = Color(0XFF808080);
+
+// shadow effect
+final shadow = BoxShadow(
+  blurRadius: 5.0,
+  spreadRadius: 2.0,
+  color: Colors.grey[300].withOpacity(0.8),
+  offset: Offset(3, 3),
+);
 
 // icons
 const String buyIcon = 'assets/icons/buy.svg';
@@ -31,6 +38,11 @@ const String sleepModesIcon = 'assets/icons/sleep-mode.svg';
 const String restoreIcon = 'assets/icons/restore.svg';
 const String shareIcon = 'assets/icons/share.svg';
 const String heartIcon = 'assets/icons/heart.svg';
+const String rightSwitch = 'assets/icons/Right_switch.svg';
+const String leftSwitch = 'assets/icons/Left_switch.svg';
+const String privacyIcon = 'assets/icons/privacy.svg';
+const String starIcon = 'assets/icons/star_icon.svg';
+const String aboutIcon = 'assets/icons/about.svg';
 // radius
 
 const double radiusValue = 15.0;

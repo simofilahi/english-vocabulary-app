@@ -31,10 +31,7 @@ class TopAppBar extends StatelessWidget {
           color: whiteColor,
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(
-              blurRadius: 20.0,
-              color: Colors.black26,
-            )
+            shadow,
           ],
         ),
         child: Center(

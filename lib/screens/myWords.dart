@@ -37,7 +37,12 @@ class _MyWordsState extends State<MyWords> {
   Widget _listItem(var size, Map item) {
     if (item['isFavorite'] == "true" && _defaultIndex == 0) {
       return Padding(
-        padding: const EdgeInsets.only(top: 8.0),
+        padding: const EdgeInsets.only(
+          top: 4.0,
+          bottom: 4.0,
+          left: 5.0,
+          right: 5.0,
+        ),
         child: Container(
           height: 60.0,
           width: size.width * .90,
@@ -46,6 +51,9 @@ class _MyWordsState extends State<MyWords> {
             borderRadius: BorderRadius.circular(
               15.0,
             ),
+            boxShadow: [
+              shadow,
+            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,6 +192,9 @@ class _MyWordsState extends State<MyWords> {
                     color: whiteColor,
                     width: 1.0,
                   ),
+                  boxShadow: [
+                    shadow,
+                  ],
                 ),
                 child: Row(
                   children: <Widget>[

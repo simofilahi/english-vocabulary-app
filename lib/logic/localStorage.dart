@@ -42,10 +42,9 @@ class LocalStorage {
     if (file != null) {
       var data = file.readAsStringSync();
       List<dynamic> newData = jsonDecode(data);
-      if (newData != null)
-        return newData;
-      else
-        return null;
+      print("newDATA ");
+      print(newData);
+      return newData;
     } else {
       return null;
     }

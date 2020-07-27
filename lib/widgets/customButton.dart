@@ -32,7 +32,6 @@ class CustomButton extends StatelessWidget {
           if (navFlag == true) {
             updateSelectedLanguage(selectedLang).then(
               (v) {
-                print("hiiiiiii");
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext ctx) => screen,
@@ -56,6 +55,9 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               10.0,
             ),
+            boxShadow: [
+              shadow,
+            ],
           ),
           child: Center(
             child: TextWidget(

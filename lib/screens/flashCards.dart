@@ -6,7 +6,11 @@ import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/ui_elements/circleWithIcon.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:like_button/like_button.dart';
 import '../constants.dart';
+import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'dart:async';
 
 class FlashCards extends StatefulWidget {
   final List<dynamic> item;
@@ -17,18 +21,25 @@ class FlashCards extends StatefulWidget {
   final Function updateFamiliarWords;
   final Function updateUnknownWords;
   final Function globalDataUpdate;
+  final Function _updateCountOfWords;
   final Function getTotalLearningWords;
+  final int flag;
+  final int len;
 
   FlashCards(
-      this.item,
-      this.objIndex,
-      this.allData,
-      this.lang,
-      this.updateFalshCarsWords,
-      this.updateFamiliarWords,
-      this.updateUnknownWords,
-      this.globalDataUpdate,
-      this.getTotalLearningWords);
+    this.item,
+    this.objIndex,
+    this.allData,
+    this.lang,
+    this.updateFalshCarsWords,
+    this.updateFamiliarWords,
+    this.updateUnknownWords,
+    this.globalDataUpdate,
+    this._updateCountOfWords,
+    this.getTotalLearningWords,
+    this.flag,
+    this.len,
+  );
   @override
   _FlashCardsState createState() => _FlashCardsState();
 }
@@ -43,10 +54,18 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    print(widget.item);
     setState(() {
       _item = widget.item;
+      _index = 0;
     });
     swiperController = SwiperController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget._updateCountOfWords();
   }
 
   _isFavorite(int wordObjIndex, String word) {
@@ -92,176 +111,234 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     swiperController.next();
   }
 
-  Widget _listItem(var size, int index) {
-    if (_item[index]['isFavorite'] == "true" ||
-        _item[index]['isExcellent'] == "true" ||
-        _item[index]['isFamiliar'] == "true" ||
-        _item[index]['isUnknown'] == "true") {
-      return Container();
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          height: size.height * .65,
-          width: size.width * .80,
-          decoration: BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadius.circular(
-              15.0,
-            ),
+  playLocal(path) async {
+    assetsAudioPlayer.open(
+      Audio(path),
+    );
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    /// send your request here
+    // final bool success= await sendRequest();
+
+    /// if failed, you can do nothing
+    // return success? !isLiked:isLiked;
+    Timer(Duration(seconds: 1), () {
+      _isFavorite(0, _item[0]['en']);
+    });
+    print(isLiked);
+
+    return !isLiked;
+  }
+
+  Widget _itemRender(var size, int index) {
+    var padidng = size.width * .10;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: size.height * .65,
+        width: size.width * .80,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(
+            15.0,
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 20.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    children: <Widget>[
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            _isFavorite(index, _item[index]['en']);
-                          },
-                          child: SvgPicture.asset(
-                            heartIcon,
-                            height: 20.0,
-                            width: 20.0,
-                            color: _item[index]['isFavorite'] == "true"
-                                ? Colors.red
-                                : primaryGreyColor,
-                          ),
+          boxShadow: [
+            shadow,
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 20.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Row(
+                  children: <Widget>[
+                    LikeButton(
+                      onTap: (bool isLiked) async {
+                        Timer(Duration(milliseconds: 900), () {
+                          _isFavorite(index, _item[index]['en']);
+                        });
+                        return true;
+                      },
+                      size: 30,
+                      circleColor: CircleColor(
+                          start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: Color(0xff33b5e5),
+                        dotSecondaryColor: Color(0xff0099cc),
+                      ),
+                      likeBuilder: (bool isLiked) {
+                        // print("Hello");
+
+                        // // timer.cancel();
+                        // return Icon(
+                        //   Icons.favorite,
+                        //   color: isLiked ? Colors.red : Colors.grey,
+                        //   size: 30,
+                        // );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20.0,
                         ),
-                      )
-                    ],
+                        TextWidget(
+                          text: _item[index]['en'],
+                          size: 24.0,
+                          color: blackColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        TextWidget(
+                          text: getRightTranslate(
+                              _item, null, index, widget.lang),
+                          color: primaryGreyColor,
+                          size: 20.0,
+                          fontWeight: FontWeight.w400,
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    child: Center(
-                      child: Column(
+              ),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextWidget(
+                      text: 'Examples',
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: padidng,
+                        right: padidng,
+                      ),
+                      child: TextWidget(
+                        text: _item[index]['examples'],
+                        color: blackColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          playLocal(
+                            'assets/audio/${_item[index]['audioPath']}',
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          speakerIcon,
+                          height: 50,
+                          width: 50.0,
+                          color: primaryGreyColor,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 5.0,
+                        ),
+                        child: TextWidget(
+                          text: _item[index]['pronunciation'],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          SizedBox(
-                            height: 20.0,
+                          CircleWithIcon(
+                            color: Colors.red,
+                            iconName: closeIcon,
+                            iconHeight: 20.0,
+                            iconWidth: 20.0,
+                            func: _unknown,
+                            wordObjIndex: index,
+                            word: _item[index]['en'],
                           ),
-                          TextWidget(
-                            text: _item[index]['en'],
-                            size: 24.0,
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
+                          CircleWithIcon(
+                            color: Colors.blue,
+                            iconName: hourIcon,
+                            iconHeight: 20.0,
+                            iconWidth: 10.0,
+                            func: _familiar,
+                            wordObjIndex: index,
+                            word: _item[index]['en'],
                           ),
-                          SizedBox(
-                            height: 10.0,
+                          CircleWithIcon(
+                            color: Colors.green,
+                            iconName: validateIcon,
+                            iconHeight: 20.0,
+                            iconWidth: 20.0,
+                            func: _excellent,
+                            wordObjIndex: index,
+                            word: _item[index]['en'],
                           ),
-                          TextWidget(
-                            text: getRightTranslate(
-                                _item, null, index, widget.lang),
-                            color: primaryGreyColor,
-                            size: 20.0,
-                            fontWeight: FontWeight.w400,
-                          )
                         ],
                       ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      TextWidget(
-                        text: 'Examples',
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            // playLocal('audio/${_item[index]['en']}.mp3');
-                          },
-                          child: SvgPicture.asset(
-                            speakerIcon,
-                            height: 50,
-                            width: 50.0,
-                            color: primaryGreyColor,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: 5.0,
-                          ),
-                          child: TextWidget(
-                            text: _item[index]['pronunciation'],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            CircleWithIcon(
-                              color: Colors.red,
-                              iconName: closeIcon,
-                              iconHeight: 20.0,
-                              iconWidth: 20.0,
-                              func: _unknown,
-                              wordObjIndex: index,
-                              word: _item[index]['en'],
-                            ),
-                            CircleWithIcon(
-                              color: Colors.blue,
-                              iconName: hourIcon,
-                              iconHeight: 20.0,
-                              iconWidth: 10.0,
-                              func: _familiar,
-                              wordObjIndex: index,
-                              word: _item[index]['en'],
-                            ),
-                            CircleWithIcon(
-                              color: Colors.green,
-                              iconName: validateIcon,
-                              iconHeight: 20.0,
-                              iconWidth: 20.0,
-                              func: _excellent,
-                              wordObjIndex: index,
-                              word: _item[index]['en'],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
+
+  Widget _listItem(var size, int index) {
+    if (_item[index]['isFamiliar'] == "true" && (widget.flag == 1)) {
+      return _itemRender(size, index);
+    } else if (_item[index]['isUnknown'] == "true" && (widget.flag == 2)) {
+      return _itemRender(size, index);
+    } else if ((_item[index]['isExcellent'] == "false" &&
+            _item[index]['isFamiliar'] == "false" &&
+            _item[index]['isUnknown'] == "false" &&
+            _item[index]['isFavorite'] == "false") &&
+        (widget.flag == 0)) {
+      return _itemRender(size, index);
+    } else {
+      Container();
     }
   }
 
@@ -282,7 +359,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                 TopAppBar(
                   icon_1: backArrowIcon,
                   icon_2: null,
-                  text: '${_index + 1}/${_item.length.toString()}',
+                  text: '${_index + 1}/${widget.len}',
                   color: primaryGreyColor,
                 ),
                 SizedBox(
@@ -291,7 +368,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                 Container(
                   height: size.height * .70,
                   child: Swiper(
-                    duration: 2000,
+                    duration: 1000,
                     itemHeight: size.height * .70,
                     itemWidth: size.width * .50,
                     itemCount: _item.length,

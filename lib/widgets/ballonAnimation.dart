@@ -176,7 +176,7 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
         builder: (context, child) {
           return Container(
             child: child,
-            color: primaryColor,
+            color: Colors.transparent,
             margin: EdgeInsets.only(
               top: _animationFloatUp.value,
               bottom: 0,

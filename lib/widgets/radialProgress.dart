@@ -37,7 +37,8 @@ class _RadialProgressState extends State<RadialProgress>
   @override
   void initState() {
     super.initState();
-    print(widget.goalCompleted);
+    print("yes yes");
+    print(widget.percent);
     _radialProgressAnimationController =
         AnimationController(vsync: this, duration: fillDuration);
     _progressAnimation = Tween(begin: 0.0, end: 360.0).animate(CurvedAnimation(
@@ -62,8 +63,8 @@ class _RadialProgressState extends State<RadialProgress>
       return Column(children: <Widget>[
         SvgPicture.asset(
           rocketIcon,
-          height: 35.0,
-          width: 35.0,
+          height: 30.0,
+          width: 30.0,
         ),
         SizedBox(
           height: 10.0,
@@ -81,14 +82,14 @@ class _RadialProgressState extends State<RadialProgress>
         width: widget.width,
         padding: EdgeInsets.symmetric(vertical: 10.0),
         child: AnimatedOpacity(
-          opacity: progressDegrees > 30 ? 1.0 : 0.0,
+          opacity: 1.0,
           duration: fadeInDuration,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _content(),
               Text(
-                '${widget.percent.toStringAsPrecision(2)}%',
+                '${widget.percent.toStringAsPrecision(3)}%',
                 style: TextStyle(
                   fontSize: widget.flag == true ? 15.0 : 10.0,
                   fontWeight: FontWeight.w500,
