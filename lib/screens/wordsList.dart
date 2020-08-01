@@ -33,26 +33,25 @@ class _WordsListState extends State<WordsList> {
   List<dynamic> _flashCardWords = [];
   List<dynamic> _familiarWords = [];
   List<dynamic> _unknowWords = [];
-  int _flashCardsWordsCount = 0;
-  int _familiarWordsCount = 0;
-  int _unknowWordsCount = 0;
+  // int _flashCardsWordsCount = 0;
+  // int _familiarWordsCount = 0;
+  // int _unknowWordsCount = 0;
 
   @override
   void initState() {
     super.initState();
-    _updateCountOfWords();
-    // _updateFalshCarsWords();
-    // _updateFamiliarWords();
-    // _updateUnknownWords();
+    // _updateCountOfWords();
+    _updateFalshCarsWords();
+    _updateFamiliarWords();
+    _updateUnknownWords();
   }
 
-  _updateCountOfWords() {
-    setState(() {
-      _flashCardsWordsCount = getWords(widget.data).length;
-      _familiarWordsCount = getFamiliarWord(widget.data).length;
-      _unknowWordsCount = getUnknownWord(widget.data).length;
-    });
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   widget.globalDataUpdate();
+  //   widget.getTotalLearningWords();
+  // }
 
   _updateFalshCarsWords() {
     setState(() {
@@ -73,19 +72,15 @@ class _WordsListState extends State<WordsList> {
   }
 
   playLocal(path) async {
-    // print("Here is the path");
-    // print(path);
-    // player.play(path);
-
     assetsAudioPlayer.open(
       Audio(path),
     );
   }
 
-  Widget _cardItem(var size, String title, String subtitle, List<dynamic> item,
-      int flag, int len) {
-    print("leeen");
-    print(len);
+  Widget _cardItem(var size, String title, String icon, String subtitle,
+      List<dynamic> item, int flag, int len) {
+    print("Againnnnnnn");
+    print(item);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5.0,
@@ -103,7 +98,7 @@ class _WordsListState extends State<WordsList> {
                 _updateFalshCarsWords,
                 _updateFamiliarWords,
                 _updateUnknownWords,
-                _updateCountOfWords,
+                // _updateCountOfWords,
                 widget.globalDataUpdate,
                 widget.getTotalLearningWords,
                 flag,
@@ -129,22 +124,34 @@ class _WordsListState extends State<WordsList> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
                   children: <Widget>[
-                    TextWidget(
-                      text: title,
-                      size: 20.0,
-                      fontWeight: FontWeight.bold,
+                    SvgPicture.asset(
+                      icon,
+                      height: 50.0,
+                      width: 40.0,
                     ),
                     SizedBox(
-                      height: 2.0,
+                      width: 10.0,
                     ),
-                    TextWidget(
-                      text: subtitle,
-                      color: Colors.grey[700],
-                      size: 16.0,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextWidget(
+                          text: title,
+                          size: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        SizedBox(
+                          height: 2.0,
+                        ),
+                        TextWidget(
+                          text: subtitle,
+                          color: Colors.grey[700],
+                          size: 16.0,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -240,7 +247,7 @@ class _WordsListState extends State<WordsList> {
       child: Row(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 5.0),
+            padding: const EdgeInsets.only(left: 10.0),
             child: TextWidget(
               text: 'Words',
               size: 16.0,
@@ -278,33 +285,36 @@ class _WordsListState extends State<WordsList> {
                     children: <Widget>[
                       _cardItem(
                         size,
-                        'Flash card',
+                        'Words',
+                        wordsIcon,
                         _flashCardWords == [] || _flashCardWords == null
                             ? '0 words'
-                            : '${_flashCardsWordsCount} words',
-                        widget.data,
+                            : '${_flashCardWords.length.toString()} words',
+                        _flashCardWords,
                         0,
-                        _flashCardsWordsCount,
+                        _flashCardWords.length,
                       ),
                       _cardItem(
                         size,
                         'Familiar words',
+                        familliarIcon,
                         _familiarWords == [] || _familiarWords == null
                             ? '0 words'
-                            : '${_familiarWordsCount} words',
-                        widget.data,
+                            : '${_familiarWords.length.toString()} words',
+                        _familiarWords,
                         1,
-                        _familiarWordsCount,
+                        _familiarWords.length,
                       ),
                       _cardItem(
                         size,
                         'Unknown words',
+                        unknownIcon,
                         _unknowWords == [] || _unknowWords == null
                             ? '0 words'
-                            : '${_unknowWordsCount} words',
-                        widget.data,
+                            : '${_unknowWords.length.toString()} words',
+                        _unknowWords,
                         2,
-                        _unknowWordsCount,
+                        _unknowWords.length,
                       ),
                       _textDivder(size),
                       ...widget.data

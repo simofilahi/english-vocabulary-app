@@ -11,6 +11,13 @@ import 'chooseLanguage.dart';
 import 'home.dart';
 
 class SplashScreen extends StatefulWidget {
+  final Function updateNightMode;
+  final bool nightMode;
+
+  SplashScreen({
+    this.updateNightMode,
+    this.nightMode,
+  });
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -82,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  _globalDataUpdate() {
+  Future<bool> _globalDataUpdate() async {
     if (this.mounted) {
       getGlobalData().then((onValue) {
         setState(() {
@@ -106,12 +113,16 @@ class _SplashScreenState extends State<SplashScreen> {
                     return ChooseLanguage(
                       globalDataUpdate: _globalDataUpdate,
                       settingBool: false,
+                      updateNightMode: widget.updateNightMode,
+                      nightMode: widget.nightMode,
                     );
                   } else {
                     return Home(
                       globalData: _globalData,
                       lang: _lang,
                       globalDataUpdate: _globalDataUpdate,
+                      updateNightMode: widget.updateNightMode,
+                      nightMode: widget.nightMode,
                     );
                   }
                 },

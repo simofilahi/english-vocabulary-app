@@ -85,43 +85,58 @@ Future<dynamic> storeGlobalData() async {
   // return data;
 }
 
-updateGlobalData(List<dynamic> globalData, int objIndex, int wordObjIndex,
-    String word, List<dynamic> newData) {
+Future<bool> updateGlobalData(List<dynamic> globalData, int objIndex,
+    int wordObjIndex, String word, List<dynamic> newData) async {
   globalData[objIndex]['set_${objIndex + 1}'] = newData;
   allData.setItem('words', globalData);
-  print("set item ");
-  print(allData.getItem());
+  return true;
 }
 
-List<dynamic> setTrue(int objIndex, int wordObjIndex, String word,
-    List<dynamic> localData, List<dynamic> globalData, int flag) {
-  if (flag == 1) {
-    int number = int.parse(globalData[objIndex]['learning_words']);
-    if (number < 50) {
-      number += 1;
-      globalData[objIndex]['learning_words'] = number.toString();
-      print(globalData[objIndex]['learning_words']);
-    }
-  }
-  List<dynamic> newData = localData.map((f) {
-    if (f['en'] == word) {
-      if (flag == 0) {
-        if (f['isFavorite'] == "true")
-          f['isFavorite'] = "false";
-        else
-          f['isFavorite'] = "true";
-      } else if (flag == 1) {
-        f['isExcellent'] = "true";
-      } else if (flag == 2) {
-        f['isFamiliar'] = "true";
-      } else if (flag == 3) {
-        f['isUnknown'] = "true";
+Future<bool> setTrue(int objIndex, int wordObjIndex, String word,
+    List<dynamic> localData, List<dynamic> globalData, int flag) async {
+  try {
+    if (flag == 1 || flag == 0) {
+      int number = int.parse(globalData[objIndex]['learning_words']);
+      if (number < 50) {
+        number += 1;
+        globalData[objIndex]['learning_words'] = number.toString();
+        // print(globalData[objIndex]['learning_words']);
       }
     }
-    return f;
-  }).toList();
-  updateGlobalData(globalData, objIndex, wordObjIndex, word, newData);
-  return newData;
+    List<dynamic> newData = localData.map((f) {
+      if (f['en'] == word) {
+        if (flag == 0) {
+          if (f['isFavorite'] == "true")
+            f['isFavorite'] = "false";
+          else
+            f['isFavorite'] = "true";
+        } else if (flag == 1) {
+          f['isExcellent'] = "true";
+          f['isFamiliar'] = "false";
+          f['isFavorite'] = "false";
+          f['isUnknown'] = "false";
+        } else if (flag == 2) {
+          f['isFamiliar'] = "true";
+          f['isFavorite'] = "false";
+          f['isUnknown'] = "false";
+        } else if (flag == 3) {
+          f['isUnknown'] = "true";
+          f['isFavorite'] = "false";
+          f['isFamiliar'] = "false";
+        }
+      }
+      return f;
+    }).toList();
+    updateGlobalData(globalData, objIndex, wordObjIndex, word, newData)
+        .then((v) {
+      return true;
+    });
+  } catch (onError) {
+    print("onError");
+    print(onError);
+    return false;
+  }
+  return false;
 }
 
 List<dynamic> getWords(List<dynamic> item) {
@@ -134,13 +149,15 @@ List<dynamic> getWords(List<dynamic> item) {
       newData.add(f);
     }
   });
+  print("new Data =======>");
+  print(newData);
   return newData;
 }
 
 List<dynamic> getFamiliarWord(List<dynamic> item) {
   List<dynamic> newData = [];
   item.forEach((f) {
-    if (f['isFamiliar'] == "true") {
+    if (f['isFamiliar'] == "true" && f['isFavorite'] == "false") {
       newData.add(f);
     }
   });
@@ -150,7 +167,7 @@ List<dynamic> getFamiliarWord(List<dynamic> item) {
 List<dynamic> getUnknownWord(List<dynamic> item) {
   List<dynamic> newData = [];
   item.forEach((f) {
-    if (f['isUnknown'] == "true") {
+    if (f['isUnknown'] == "true" && f['isFavorite'] == "false") {
       newData.add(f);
     }
   });

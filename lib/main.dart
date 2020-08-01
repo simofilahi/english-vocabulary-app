@@ -5,8 +5,21 @@ import 'package:lenglish/screens/splashScreen.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _nightMode = false;
+
+  _updateNightMode() {
+    setState(() {
+      _nightMode = !_nightMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +35,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.black,
         primaryColor: primaryColor,
       ),
-      home: SplashScreen(),
+      home: SplashScreen(
+        updateNightMode: _updateNightMode(),
+        nightMode: _nightMode,
+      ),
     );
   }
 }

@@ -27,26 +27,20 @@ class _BottomBarState extends State<BottomBar> {
           Icon(
             Icons.home,
             size: 30,
-            color:
-                widget.currentIndex == 0 ? primaryBlueColor : primaryGreyColor,
+            color: primaryBlueColor,
+            // widget.currentIndex == 0 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.games,
-            size: 30,
-            color:
-                widget.currentIndex == 1 ? primaryBlueColor : primaryGreyColor,
+            Icons.games, size: 30, color: primaryBlueColor,
+            // widget.currentIndex == 1 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.menu,
-            size: 30,
-            color:
-                widget.currentIndex == 2 ? primaryBlueColor : primaryGreyColor,
+            Icons.menu, size: 30, color: primaryBlueColor,
+            // widget.currentIndex == 2 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.settings,
-            size: 30,
-            color:
-                widget.currentIndex == 3 ? primaryBlueColor : primaryGreyColor,
+            Icons.settings, size: 30, color: primaryBlueColor,
+            // widget.currentIndex == 3 ? primaryBlueColor : primaryGreyColor,
           ),
         ],
         onTap: (index) {

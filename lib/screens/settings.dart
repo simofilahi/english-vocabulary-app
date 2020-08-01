@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/chooseLanguage.dart';
-import 'package:lenglish/widgets/customButton.dart';
 import 'package:lenglish/widgets/shopCard.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 
 class Setting extends StatefulWidget {
   final String lang;
-  Setting({this.lang});
+  final Function updateNightMode;
+  final bool nightMode;
+  Setting({this.lang, this.updateNightMode, this.nightMode});
 
   @override
   _SettingState createState() => _SettingState();
@@ -41,8 +42,53 @@ class _SettingState extends State<Setting> {
     }
   }
 
+  Widget _render(var size, String iconName, String text, String text_1,
+      String iconName_2, var screen, int flag) {
+    if (flag == 1) {
+      return Expanded(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(),
+            ),
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  text != null ? TextWidget(text: text_1) : Container(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: SvgPicture.asset(
+                      iconName_2,
+                      height: 15.0,
+                      width: 15.0,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    } else if (flag == 2) {
+      return Padding(
+        padding: const EdgeInsets.only(right: 15.0),
+        child: SvgPicture.asset(
+          iconName_2,
+          height: 40.0,
+          width: 50.0,
+          color: widget.nightMode == true ? greenColor : primaryColor,
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   Widget _item(var size, String iconName, String text, String text_1,
-      String iconName_2, var screen, bool flag) {
+      String iconName_2, var screen, int flag) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 4.0,
@@ -83,7 +129,7 @@ class _SettingState extends State<Setting> {
                           iconName,
                           height: 20.0,
                           width: 20.0,
-                          color: primaryGreyColor,
+                          // color: primaryGreyColor,
                         ),
                         SizedBox(
                           width: 10.0,
@@ -96,39 +142,8 @@ class _SettingState extends State<Setting> {
                       ],
                     ),
                   ),
-                  flag
-                      ? Expanded(
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                flex: 2,
-                                child: Container(),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    text != null
-                                        ? TextWidget(text: text_1)
-                                        : Container(),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: SvgPicture.asset(
-                                        iconName_2,
-                                        height: 15.0,
-                                        width: 15.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      : Container(),
+                  _render(
+                      size, iconName, text, text_1, iconName_2, screen, flag),
                 ],
               ),
             ),
@@ -169,7 +184,7 @@ class _SettingState extends State<Setting> {
                     ),
                     _item(
                       size,
-                      gearIcon,
+                      languagesIcon,
                       'Language',
                       lang,
                       rightArrowtIcon,
@@ -177,25 +192,22 @@ class _SettingState extends State<Setting> {
                         globalDataUpdate: null,
                         settingBool: true,
                       ),
-                      true,
+                      1,
                     ),
                     _item(
                       size,
                       sleepModesIcon,
                       'Mode nuit',
                       null,
-                      rightSwitch,
+                      widget.nightMode == false ? leftSwitch : rightSwitch,
                       null,
-                      true,
+                      2,
                     ),
-                    _item(
-                        size, restoreIcon, 'Restore', null, null, null, false),
-                    _item(
-                        size, shareIcon, 'Share app', null, null, null, false),
-                    _item(size, starIcon, 'Rate app', null, null, null, false),
-                    _item(
-                        size, privacyIcon, 'Privacy', null, null, null, false),
-                    _item(size, aboutIcon, 'About', null, null, null, false),
+                    _item(size, restoreIcon, 'Restore', null, null, null, 0),
+                    _item(size, shareIcon, 'Share app', null, null, null, 0),
+                    _item(size, starIcon, 'Rate app', null, null, null, 0),
+                    _item(size, privacyIcon, 'Privacy', null, null, null, 0),
+                    _item(size, aboutIcon, 'About', null, null, null, 0),
                   ],
                 ),
               ),

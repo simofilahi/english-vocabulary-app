@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/models/languages.dart';
 import 'package:lenglish/screens/home.dart';
@@ -11,10 +10,14 @@ import 'package:lenglish/widgets/textWidget.dart';
 class ChooseLanguage extends StatefulWidget {
   final Function globalDataUpdate;
   final bool settingBool;
+  final Function updateNightMode;
+  final bool nightMode;
 
   ChooseLanguage({
     this.globalDataUpdate,
     this.settingBool,
+    this.updateNightMode,
+    this.nightMode,
   });
   @override
   _ChooseLanguageState createState() => _ChooseLanguageState();
@@ -179,9 +182,12 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                     screen: Home(
                       globalData: _globalData,
                       globalDataUpdate: widget.globalDataUpdate,
+                      updateNightMode: widget.updateNightMode,
+                      nightMode: widget.nightMode,
                     ),
                     navFlag: true,
                     selectedLang: _getActiveLang(),
+
                     // saveLang: _saveLang,
                   ),
                 ],

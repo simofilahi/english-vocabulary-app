@@ -8,6 +8,7 @@ import 'package:lenglish/screens/playingBallonGame.dart';
 import 'package:lenglish/widgets/customButton.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:lenglish/screens/spellingGame.dart';
 
 class BallonsGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -45,7 +46,43 @@ class _BallonsGameState extends State<BallonsGame> {
     updateIndexOfFlyingSquare(index);
   }
 
-  Widget _card(var size) {
+  Widget _shape1(var size) {
+    return Container(
+      color: primaryColor,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 30.0,
+              width: 30.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  5.0,
+                ),
+                color: Colors.red,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _card(
+      String gameTitle, String gameDes, var screen, Widget shape, var size) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 4.0,
@@ -81,7 +118,7 @@ class _BallonsGameState extends State<BallonsGame> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextWidget(
-                          text: 'Balloons game',
+                          text: gameTitle,
                           size: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -89,7 +126,7 @@ class _BallonsGameState extends State<BallonsGame> {
                           height: 2.0,
                         ),
                         TextWidget(
-                          text: 'Helps for memorazing',
+                          text: gameDes,
                           color: Colors.grey[700],
                           size: 16.0,
                         ),
@@ -97,12 +134,7 @@ class _BallonsGameState extends State<BallonsGame> {
                     ),
                     CustomButton(
                       text: 'Start',
-                      screen: PlayingBallonGames(
-                        globalData: widget.globalData,
-                        lang: widget.lang,
-                        index: _index,
-                        getIndex: _getIndex,
-                      ),
+                      screen: screen,
                       buttonHeightSize: 40.0,
                       buttonWidthSize: 150.0,
                       navFlag: false,
@@ -115,17 +147,11 @@ class _BallonsGameState extends State<BallonsGame> {
               flex: 1,
               child: Container(
                 padding: const EdgeInsets.only(
-                  right: 30.0,
+                  right: 25.0,
                 ),
-                margin: const EdgeInsets.only(
-                  bottom: 20.0,
-                ),
-                child: SvgPicture.asset(
-                  ballonIcon,
-                  height: 80.0,
-                  width: 80.0,
-                  color: Colors.red[500],
-                ),
+                height: size.height * .14,
+                width: size.width * .10,
+                child: shape,
               ),
             ),
           ],
@@ -134,69 +160,24 @@ class _BallonsGameState extends State<BallonsGame> {
     );
   }
 
-  Widget _infoItem(var size, String text, int wordsCount, double progress) {
+  _moreGameCard(var size) {
     return Padding(
       padding: const EdgeInsets.only(
-        right: 8.0,
+        top: 4.0,
+        bottom: 4.0,
+        left: 2.0,
+        right: 2.0,
       ),
       child: Container(
-        height: 150.0,
-        width: size.width * .25,
+        height: 160,
+        width: size.width * .90,
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(
-            10.0,
+            15.0,
           ),
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TextWidget(
-                    text: wordsCount.toString(),
-                    size: 18.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  TextWidget(
-                    text: text,
-                    size: 20.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 5.0,
-                    width: 80.0,
-                    decoration: BoxDecoration(
-                      color: whiteColor,
-                      borderRadius: BorderRadius.circular(
-                        30.0,
-                      ),
-                    ),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: primaryBlueColor,
-                        borderRadius: BorderRadius.circular(
-                          30.0,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
+          boxShadow: [
+            shadow,
           ],
         ),
       ),
@@ -216,77 +197,39 @@ class _BallonsGameState extends State<BallonsGame> {
             TopAppBar(
               icon_1: null,
               icon_2: null,
-              text: 'Flying Balloons',
+              text: 'Games',
               textSize: 18,
             ),
-            SizedBox(
-              height: 50.0,
-            ),
-            _card(size),
-            SizedBox(
-              height: 20.0,
-            ),
-            Container(
-              height: 210,
-              width: size.width * .90,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(
-                  20.0,
-                ),
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 15.0,
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 0.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 5.0,
-                        top: 10.0,
-                        bottom: 12.0,
+              child: ListView(
+                children: <Widget>[
+                  _card(
+                      'Flying squares',
+                      'Helps for memorizing',
+                      PlayingBallonGames(
+                        globalData: widget.globalData,
+                        lang: widget.lang,
+                        index: _index,
+                        getIndex: _getIndex,
                       ),
-                      child: TextWidget(
-                        text: 'Latest round',
-                        size: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: _infoItem(
-                            size,
-                            'Familiar',
-                            10,
-                            10.0,
-                          ),
-                        ),
-                        Expanded(
-                          child: _infoItem(
-                            size,
-                            'Unknowns',
-                            50,
-                            50.0,
-                          ),
-                        ),
-                        Expanded(
-                          child: _infoItem(
-                            size,
-                            'Excelent',
-                            40,
-                            40.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      _shape1(size),
+                      size),
+                  _card(
+                    'Spelling',
+                    'improves writing skill',
+                    SpellingGame(),
+                    _shape1(size),
+                    size,
+                  ),
+                  _moreGameCard(size),
+                ],
               ),
-            ),
+            )),
           ],
         ),
       ),

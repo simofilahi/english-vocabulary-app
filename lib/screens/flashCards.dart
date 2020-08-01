@@ -21,7 +21,7 @@ class FlashCards extends StatefulWidget {
   final Function updateFamiliarWords;
   final Function updateUnknownWords;
   final Function globalDataUpdate;
-  final Function _updateCountOfWords;
+  // final Function _updateCountOfWords;
   final Function getTotalLearningWords;
   final int flag;
   final int len;
@@ -35,7 +35,7 @@ class FlashCards extends StatefulWidget {
     this.updateFamiliarWords,
     this.updateUnknownWords,
     this.globalDataUpdate,
-    this._updateCountOfWords,
+    // this._updateCountOfWords,
     this.getTotalLearningWords,
     this.flag,
     this.len,
@@ -47,68 +47,61 @@ class FlashCards extends StatefulWidget {
 class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   var controller;
   var _index = 0;
-  List<dynamic> _item;
+
   static AudioCache player = AudioCache();
   SwiperController swiperController;
 
   @override
   void initState() {
     super.initState();
-    print(widget.item);
-    setState(() {
-      _item = widget.item;
-      _index = 0;
-    });
+    // print(widget.item);
+    // setState(() {
+    //   widget.item = widget.item;
+    //   _index = 0;
+    // });
     swiperController = SwiperController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget._updateCountOfWords();
+    // widget._updateCountOfWords();
+  }
+
+  _updateFun() {
+    widget.updateFalshCarsWords();
+    widget.updateFamiliarWords();
+    widget.updateUnknownWords();
+    widget.getTotalLearningWords();
+    swiperController.next();
   }
 
   _isFavorite(int wordObjIndex, String word) {
-    setState(() {
-      _item = setTrue(
-          widget.objIndex, wordObjIndex, word, _item, widget.allData, 0);
+    setTrue(widget.objIndex, wordObjIndex, word, widget.item, widget.allData, 0)
+        .then((v) {
+      _updateFun();
     });
-    widget.updateFalshCarsWords();
-    widget.globalDataUpdate();
-    swiperController.next();
   }
 
   _excellent(int wordObjIndex, String word) {
-    setState(() {
-      _item = setTrue(
-          widget.objIndex, wordObjIndex, word, _item, widget.allData, 1);
+    setTrue(widget.objIndex, wordObjIndex, word, widget.item, widget.allData, 1)
+        .then((v) {
+      _updateFun();
     });
-    widget.getTotalLearningWords();
-    widget.updateFalshCarsWords();
-    widget.globalDataUpdate();
-    swiperController.next();
   }
 
   _familiar(int wordObjIndex, String word) {
-    setState(() {
-      _item = setTrue(
-          widget.objIndex, wordObjIndex, word, _item, widget.allData, 2);
+    setTrue(widget.objIndex, wordObjIndex, word, widget.item, widget.allData, 2)
+        .then((v) {
+      _updateFun();
     });
-    widget.updateFalshCarsWords();
-    widget.updateFamiliarWords();
-    widget.globalDataUpdate();
-    swiperController.next();
   }
 
   _unknown(int wordObjIndex, String word) {
-    setState(() {
-      _item = setTrue(
-          widget.objIndex, wordObjIndex, word, _item, widget.allData, 3);
+    setTrue(widget.objIndex, wordObjIndex, word, widget.item, widget.allData, 3)
+        .then((v) {
+      _updateFun();
     });
-    widget.updateFalshCarsWords();
-    widget.updateUnknownWords();
-    widget.globalDataUpdate();
-    swiperController.next();
   }
 
   playLocal(path) async {
@@ -124,14 +117,13 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     /// if failed, you can do nothing
     // return success? !isLiked:isLiked;
     Timer(Duration(seconds: 1), () {
-      _isFavorite(0, _item[0]['en']);
+      _isFavorite(0, widget.item[0]['en']);
     });
-    print(isLiked);
 
     return !isLiked;
   }
 
-  Widget _itemRender(var size, int index) {
+  Widget itemRender(var size, int index) {
     var padidng = size.width * .10;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -162,7 +154,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                     LikeButton(
                       onTap: (bool isLiked) async {
                         Timer(Duration(milliseconds: 900), () {
-                          _isFavorite(index, _item[index]['en']);
+                          _isFavorite(index, widget.item[index]['en']);
                         });
                         return true;
                       },
@@ -175,13 +167,14 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                       ),
                       likeBuilder: (bool isLiked) {
                         // print("Hello");
-
+                        if (widget.item[index]['isFavorite'] == "true") {
+                          return Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                            size: 30,
+                          );
+                        }
                         // // timer.cancel();
-                        // return Icon(
-                        //   Icons.favorite,
-                        //   color: isLiked ? Colors.red : Colors.grey,
-                        //   size: 30,
-                        // );
                       },
                     ),
                   ],
@@ -196,7 +189,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           height: 20.0,
                         ),
                         TextWidget(
-                          text: _item[index]['en'],
+                          text: widget.item[index]['en'],
                           size: 24.0,
                           color: blackColor,
                           fontWeight: FontWeight.bold,
@@ -206,7 +199,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         ),
                         TextWidget(
                           text: getRightTranslate(
-                              _item, null, index, widget.lang),
+                              widget.item, null, index, widget.lang),
                           color: primaryGreyColor,
                           size: 20.0,
                           fontWeight: FontWeight.w400,
@@ -234,7 +227,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         right: padidng,
                       ),
                       child: TextWidget(
-                        text: _item[index]['examples'],
+                        text: widget.item[index]['examples'],
                         color: blackColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -252,7 +245,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                       child: GestureDetector(
                         onTap: () {
                           playLocal(
-                            'assets/audio/${_item[index]['audioPath']}',
+                            'assets/audio/${widget.item[index]['audioPath']}',
                           );
                         },
                         child: SvgPicture.asset(
@@ -269,7 +262,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           top: 5.0,
                         ),
                         child: TextWidget(
-                          text: _item[index]['pronunciation'],
+                          text: widget.item[index]['pronunciation'],
                         ),
                       ),
                     )
@@ -293,7 +286,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                             iconWidth: 20.0,
                             func: _unknown,
                             wordObjIndex: index,
-                            word: _item[index]['en'],
+                            word: widget.item[index]['en'],
                           ),
                           CircleWithIcon(
                             color: Colors.blue,
@@ -302,7 +295,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                             iconWidth: 10.0,
                             func: _familiar,
                             wordObjIndex: index,
-                            word: _item[index]['en'],
+                            word: widget.item[index]['en'],
                           ),
                           CircleWithIcon(
                             color: Colors.green,
@@ -311,7 +304,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                             iconWidth: 20.0,
                             func: _excellent,
                             wordObjIndex: index,
-                            word: _item[index]['en'],
+                            word: widget.item[index]['en'],
                           ),
                         ],
                       ),
@@ -327,25 +320,28 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   }
 
   Widget _listItem(var size, int index) {
-    if (_item[index]['isFamiliar'] == "true" && (widget.flag == 1)) {
-      return _itemRender(size, index);
-    } else if (_item[index]['isUnknown'] == "true" && (widget.flag == 2)) {
-      return _itemRender(size, index);
-    } else if ((_item[index]['isExcellent'] == "false" &&
-            _item[index]['isFamiliar'] == "false" &&
-            _item[index]['isUnknown'] == "false" &&
-            _item[index]['isFavorite'] == "false") &&
-        (widget.flag == 0)) {
-      return _itemRender(size, index);
-    } else {
-      Container();
-    }
+    return itemRender(size, index);
+    // print("widget.flag");
+    // print(widget.flag);
+    // if (widget.item[index]['isFamiliar'] == "true" && (widget.flag == 1)) {
+    //   print("hello");
+
+    // } else if (widget.item[index]['isUnknown'] == "true" && (widget.flag == 2)) {
+    //   return widget.itemRender(size, index);
+    // } else if ((widget.item[index]['isExcellent'] == "false" &&
+    //         widget.item[index]['isFamiliar'] == "false" &&
+    //         widget.item[index]['isUnknown'] == "false" &&
+    //         widget.item[index]['isFavorite'] == "false") &&
+    //     (widget.flag == 0)) {
+    //   return widget.itemRender(size, index);
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    print("here is item");
+    print(widget.item);
     return Scaffold(
       backgroundColor: primaryColor,
       body: Container(
@@ -359,35 +355,47 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                 TopAppBar(
                   icon_1: backArrowIcon,
                   icon_2: null,
-                  text: '${_index + 1}/${widget.len}',
+                  text: _index + 1 > widget.len
+                      ? '${widget.len}/${widget.len}'
+                      : '${_index + 1}/${widget.len}',
                   color: primaryGreyColor,
                 ),
                 SizedBox(
                   height: 40.0,
                 ),
-                Container(
-                  height: size.height * .70,
-                  child: Swiper(
-                    duration: 1000,
-                    itemHeight: size.height * .70,
-                    itemWidth: size.width * .50,
-                    itemCount: _item.length,
-                    viewportFraction: 0.7,
-                    scale: 0.8,
-                    itemBuilder: (BuildContext ctx, int index) {
-                      return _listItem(size, index);
-                    },
-                    loop: true,
-                    controller: swiperController,
-                    index: _index,
-                    onIndexChanged: (int index) {
-                      // print(_index);
-                      setState(() {
-                        _index = index;
-                      });
-                    },
-                  ),
-                ),
+                widget.len == _index
+                    ? Container(
+                        // child: TextWidget(text: 'finish'),
+                        )
+                    : Container(
+                        height: size.height * .70,
+                        child: Swiper(
+                          duration: 1000,
+                          itemHeight: size.height * .70,
+                          itemWidth: size.width * .50,
+                          itemCount: widget.item.length,
+                          viewportFraction: 0.7,
+                          scale: 0.8,
+                          itemBuilder: (BuildContext ctx, int index) {
+                            return _listItem(size, index);
+                          },
+                          controller: swiperController,
+                          onIndexChanged: (int index) {
+                            // print(_index);
+                            if (widget.len == _index + 1) {
+                              setState(() {
+                                _index += 1;
+                              });
+                            } else {
+                              setState(() {
+                                _index = index;
+                              });
+                            }
+                          },
+                          index: _index,
+                          loop: false,
+                        ),
+                      ),
               ],
             ),
           ),

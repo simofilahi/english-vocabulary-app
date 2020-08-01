@@ -10,6 +10,7 @@ const Color primaryGreyColor = Color(0xFF616161);
 const linearGradiantColor =
     LinearGradient(colors: [Color(0XFF09C6F9), Color(0XFF045DE9)]);
 const Color darkGreyColor = Color(0XFF808080);
+const Color greenColor = Color(0XFF03CD54);
 
 // shadow effect
 final shadow = BoxShadow(
@@ -34,7 +35,7 @@ const String speakerIcon = 'assets/icons/speaker.svg';
 const String rightArrowtIcon = 'assets/icons/next.svg';
 const String menuIcon = 'assets/icons/open-menu.svg';
 const String languagesIcon = 'assets/icons/languages.svg';
-const String sleepModesIcon = 'assets/icons/sleep-mode.svg';
+const String sleepModesIcon = 'assets/icons/night-mode.svg';
 const String restoreIcon = 'assets/icons/restore.svg';
 const String shareIcon = 'assets/icons/share.svg';
 const String heartIcon = 'assets/icons/heart.svg';
@@ -43,6 +44,9 @@ const String leftSwitch = 'assets/icons/Left_switch.svg';
 const String privacyIcon = 'assets/icons/privacy.svg';
 const String starIcon = 'assets/icons/star_icon.svg';
 const String aboutIcon = 'assets/icons/about.svg';
+const String wordsIcon = 'assets/icons/words.svg';
+const String familliarIcon = 'assets/icons/familliar.svg';
+const String unknownIcon = 'assets/icons/unknown.svg';
 // radius
 
 const double radiusValue = 15.0;
@@ -291,3 +295,17 @@ final List<Map<String, Color>> colors = [
     "second_color": Colors.blue[200],
   },
 ];
+
+// 50 /
+
+// [                  ]
+
+// [][][][][][][]  []
+// [][][][][][][]  []
+// [][][][][][][]
+// [][][][][][][]
+// [][][][][][][]
+
+// []
+
+// []

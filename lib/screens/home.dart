@@ -12,10 +12,14 @@ class Home extends StatefulWidget {
   final List<dynamic> globalData;
   final String lang;
   final Function globalDataUpdate;
+  final Function updateNightMode;
+  final bool nightMode;
   Home({
     this.globalData,
     this.lang = null,
     this.globalDataUpdate,
+    this.updateNightMode,
+    this.nightMode,
   });
   @override
   _HomeState createState() => _HomeState();
@@ -30,9 +34,14 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _getTotalLearningWords();
+    _updateData();
+  }
+
+  _updateData() {
     if (widget.lang == null) {
       langFile.getItem().then((data) {
         print(data);
+        print("holla");
         if (data == null) {
           setState(() {
             _lang = "en";
@@ -67,11 +76,12 @@ class _HomeState extends State<Home> {
   dynamic _getScreen(currentIndex) {
     if (currentIndex == 0) {
       return HomeWidget(
-          globalData: widget.globalData,
-          lang: _lang,
-          globalDataUpdate: widget.globalDataUpdate,
-          totalLearningWords: _totalLearningWords,
-          getTotalLearningWords: _getTotalLearningWords);
+        globalData: widget.globalData,
+        lang: _lang,
+        globalDataUpdate: widget.globalDataUpdate,
+        totalLearningWords: _totalLearningWords,
+        getTotalLearningWords: _getTotalLearningWords,
+      );
     } else if (currentIndex == 1) {
       return BallonsGame(
           globalData: widget.globalData,
@@ -86,6 +96,8 @@ class _HomeState extends State<Home> {
     } else if (currentIndex == 3) {
       return Setting(
         lang: _lang,
+        updateNightMode: widget.updateNightMode,
+        nightMode: widget.nightMode,
       );
     }
   }

@@ -27,9 +27,12 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  double _level;
+
   @override
   void initState() {
     super.initState();
+    _level = widget.totalLearningWords * 20 / 2265;
   }
 
   Widget _rowItem(String text, int value, var size) {
@@ -104,7 +107,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _rowItem('level', 1, size),
+                      _rowItem(
+                        'level',
+                        _level.toInt(),
+                        size,
+                      ),
                       SizedBox(
                         height: 15.0,
                       ),
