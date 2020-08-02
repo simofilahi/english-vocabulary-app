@@ -212,14 +212,14 @@ int totoalLearningWords(List<dynamic> globalData) {
   return count;
 }
 
-void createIndexOfFlyingSquare() {
-  indexFile.setItem('Index', {"index": "0"});
-  // var data = indexFile.getItem('Index');
-  // print(
-  //   "Index data ==> ",
-  // );
-  // print(data);
-}
+// void createIndexOfFlyingSquare() {
+//   indexFile.setItem('Index', {"index": "0"});
+//   // var data = indexFile.getItem('Index');
+//   // print(
+//   //   "Index data ==> ",
+//   // );
+//   // print(data);
+// }
 
 Future<int> updateIndexOfFlyingSquare(int index) async {
   print("INDEX ==> ");
@@ -236,16 +236,31 @@ Future<int> updateIndexOfFlyingSquare(int index) async {
   });
 }
 
-Future<int> getIndexOfFlyingSquare() async {
-  indexFile.getItem().then((data) {
-    print("HollaAAAAAA");
-    print(data);
-    if (data[0]['index'] != null) {
-      print("yup");
-      print(int.parse(data[0]['index']));
-      return int.parse(data[0]['index']);
-    } else {
-      return -1;
-    }
+Future<int> updateIndexOfSpellingWords(int index) async {
+  print("INDEX ==> ");
+  print(index);
+  List<Map> newData = [
+    {'index': index.toString()}
+  ];
+  indexFile_2.setItem('Index', newData).then((value) {
+    if (value == true) {
+      print("upadted");
+      return index;
+    } else
+      return 0;
   });
 }
+
+// Future<int> getIndexOfFlyingSquare() async {
+//   indexFile.getItem().then((data) {
+//     print("HollaAAAAAA");
+//     print(data);
+//     if (data[0]['index'] != null) {
+//       print("yup");
+//       print(int.parse(data[0]['index']));
+//       return int.parse(data[0]['index']);
+//     } else {
+//       return -1;
+//     }
+//   });
+// }

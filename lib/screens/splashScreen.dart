@@ -52,6 +52,12 @@ class _SplashScreenState extends State<SplashScreen> {
                 indexFile.setItem('index', {"index": "0"});
               }
             });
+            indexFile_2.createFile().then((v) {
+              if (v == true) {
+                print("set global index");
+                indexFile_2.setItem('index', {"index": "0"});
+              }
+            });
             langFile.createFile().then((v) {
               if (v == true) {
                 print("set lang data");

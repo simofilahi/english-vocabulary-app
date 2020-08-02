@@ -22,12 +22,26 @@ class BallonsGame extends StatefulWidget {
 
 class _BallonsGameState extends State<BallonsGame> {
   int _index = 0;
+  int _index_2 = 0;
 
   @override
   void initState() {
     super.initState();
     _getIndex();
+    _getIndex_2();
     print(widget.globalData);
+  }
+
+  _getIndex_2() {
+    indexFile_2.getItem().then((onValue) {
+      if (onValue != null) {
+        print("here on value");
+        print(onValue);
+        setState(() {
+          _index_2 = int.parse(onValue[0]['index']);
+        });
+      }
+    });
   }
 
   _getIndex() {
@@ -46,43 +60,8 @@ class _BallonsGameState extends State<BallonsGame> {
     updateIndexOfFlyingSquare(index);
   }
 
-  Widget _shape1(var size) {
-    return Container(
-      color: primaryColor,
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              height: 30.0,
-              width: 30.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  5.0,
-                ),
-                color: Colors.red,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _card(
-      String gameTitle, String gameDes, var screen, Widget shape, var size) {
+      String gameTitle, String gameDes, var screen, String icon, var size) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 4.0,
@@ -98,9 +77,6 @@ class _BallonsGameState extends State<BallonsGame> {
           borderRadius: BorderRadius.circular(
             15.0,
           ),
-          boxShadow: [
-            shadow,
-          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,11 +123,16 @@ class _BallonsGameState extends State<BallonsGame> {
               flex: 1,
               child: Container(
                 padding: const EdgeInsets.only(
-                  right: 25.0,
+                  right: 30.0,
                 ),
-                height: size.height * .14,
-                width: size.width * .10,
-                child: shape,
+                margin: const EdgeInsets.only(
+                  bottom: 20.0,
+                ),
+                child: SvgPicture.asset(
+                  icon,
+                  height: 80.0,
+                  width: 80.0,
+                ),
               ),
             ),
           ],
@@ -178,6 +159,27 @@ class _BallonsGameState extends State<BallonsGame> {
           ),
           boxShadow: [
             shadow,
+          ],
+        ),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.red[400].withOpacity(
+                  0.8,
+                ),
+                borderRadius: BorderRadius.circular(
+                  15.0,
+                ),
+              ),
+              child: Center(
+                child: TextWidget(
+                  text: 'More games are coming soon',
+                  color: whiteColor,
+                  size: 20.0,
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -217,13 +219,18 @@ class _BallonsGameState extends State<BallonsGame> {
                         index: _index,
                         getIndex: _getIndex,
                       ),
-                      _shape1(size),
+                      cubeIcon,
                       size),
                   _card(
                     'Spelling',
                     'improves writing skill',
-                    SpellingGame(),
-                    _shape1(size),
+                    SpellingGame(
+                      globalData: widget.globalData,
+                      lang: widget.lang,
+                      index: _index_2,
+                      getIndex: _getIndex_2,
+                    ),
+                    abcIcon,
                     size,
                   ),
                   _moreGameCard(size),

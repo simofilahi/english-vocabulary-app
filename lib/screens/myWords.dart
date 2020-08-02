@@ -210,14 +210,27 @@ class _MyWordsState extends State<MyWords> {
                               ? primaryBlueColor
                               : whiteColor,
                           child: Center(
-                            child: TextWidget(
-                              text: 'Favorites',
-                              size: 18.0,
-                              color: _defaultIndex == 0
-                                  ? whiteColor
-                                  : primaryGreyColor,
-                            ),
-                          ),
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(
+                                heartIcon,
+                                height: 20.0,
+                                width: 20.0,
+                                color: Colors.red,
+                              ),
+                              SizedBox(
+                                width: 8.0,
+                              ),
+                              TextWidget(
+                                text: 'Favorites',
+                                size: 18.0,
+                                color: _defaultIndex == 0
+                                    ? whiteColor
+                                    : primaryGreyColor,
+                              ),
+                            ],
+                          )),
                         ),
                       ),
                     ),
@@ -233,12 +246,25 @@ class _MyWordsState extends State<MyWords> {
                               ? primaryBlueColor
                               : whiteColor,
                           child: Center(
-                            child: TextWidget(
-                              text: 'Unknown',
-                              size: 18.0,
-                              color: _defaultIndex == 1
-                                  ? whiteColor
-                                  : primaryGreyColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  unknownIcon,
+                                  height: 20.0,
+                                  width: 20.0,
+                                ),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                TextWidget(
+                                  text: 'Unknown',
+                                  size: 18.0,
+                                  color: _defaultIndex == 1
+                                      ? whiteColor
+                                      : primaryGreyColor,
+                                ),
+                              ],
                             ),
                           ),
                         ),

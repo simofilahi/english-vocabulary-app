@@ -31,7 +31,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Roboto',
-        brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.black,
         primaryColor: primaryColor,
       ),

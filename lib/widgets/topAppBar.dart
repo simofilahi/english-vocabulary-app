@@ -57,7 +57,7 @@ class TopAppBar extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 40.0,
+          horizontal: 15.0,
           vertical: 2.0,
         ),
         child: Center(
@@ -112,11 +112,37 @@ class TopAppBar extends StatelessWidget {
           horizontal: 20.0,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            icon_1 != null ? _leading(context) : Container(),
-            _center(),
-            icon_2 != null ? _tailing(context) : Container(),
+            icon_1 != null
+                ? Expanded(
+                    flex: 1,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _leading(context)),
+                  )
+                : Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(),
+                    ),
+                  ),
+            Expanded(flex: 1, child: _center()),
+            icon_2 != null
+                ? Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: _tailing(context),
+                    ),
+                  )
+                : Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(),
+                    ),
+                  ),
           ],
         ),
       ),

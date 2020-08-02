@@ -223,7 +223,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    TopAppBar(icon_1: backArrowIcon, text: '${_index}/2000'),
+                    TopAppBar(icon_1: backArrowIcon, text: '${_index}/2265'),
                     _renderButtons(),
                     Container(),
                   ],

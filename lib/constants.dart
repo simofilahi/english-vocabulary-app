@@ -20,6 +20,13 @@ final shadow = BoxShadow(
   offset: Offset(3, 3),
 );
 
+final shadow_1 = BoxShadow(
+  blurRadius: 5.0,
+  spreadRadius: 2.0,
+  color: Colors.grey[200].withOpacity(0.4),
+  offset: Offset(3, 3),
+);
+
 // icons
 const String buyIcon = 'assets/icons/buy.svg';
 const String gearIcon = 'assets/icons/gear.svg';
@@ -47,6 +54,14 @@ const String aboutIcon = 'assets/icons/about.svg';
 const String wordsIcon = 'assets/icons/words.svg';
 const String familliarIcon = 'assets/icons/familliar.svg';
 const String unknownIcon = 'assets/icons/unknown.svg';
+const String enterIcon = 'assets/icons/enter.svg';
+const String deleteIcon = 'assets/icons/delete.svg';
+const String watchIcon = 'assets/icons/watch.svg';
+const String hintIcon = 'assets/icons/idea.svg';
+const String forwardIcon = 'assets/icons/forward.svg';
+const String keyBoardIcon = 'assets/icons/hardware.svg';
+const String cubeIcon = 'assets/icons/cube.svg';
+const String abcIcon = 'assets/icons/abc.svg';
 // radius
 
 const double radiusValue = 15.0;
