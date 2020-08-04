@@ -11,13 +11,14 @@ class TopAppBar extends StatelessWidget {
   final Color color;
   final FontWeight fontWeight;
 
-  TopAppBar(
-      {this.icon_1,
-      this.icon_2,
-      this.text,
-      this.textSize,
-      this.color = primaryGreyColor,
-      this.fontWeight = FontWeight.normal});
+  TopAppBar({
+    this.icon_1,
+    this.icon_2,
+    this.text,
+    this.textSize,
+    this.color = primaryGreyColor,
+    this.fontWeight = FontWeight.normal,
+  });
 
   Widget _leading(BuildContext context) {
     return GestureDetector(
@@ -28,10 +29,10 @@ class TopAppBar extends StatelessWidget {
         height: 30.0,
         width: 30.0,
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: Theme.of(context).cardColor,
           shape: BoxShape.circle,
           boxShadow: [
-            shadow,
+            shadow(Theme.of(context).cardColor),
           ],
         ),
         child: Center(
@@ -39,18 +40,18 @@ class TopAppBar extends StatelessWidget {
             icon_1,
             height: 20.0,
             width: 20.0,
-            color: primaryGreyColor,
+            color: Theme.of(context).textSelectionColor,
           ),
         ),
       ),
     );
   }
 
-  Widget _center() {
+  Widget _center(BuildContext context) {
     return Container(
       height: 30.0,
       decoration: BoxDecoration(
-        color: whiteColor,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(
           15.0,
         ),
@@ -64,7 +65,7 @@ class TopAppBar extends StatelessWidget {
           child: TextWidget(
             text: text,
             size: textSize,
-            color: color,
+            color: Theme.of(context).textSelectionColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -81,13 +82,10 @@ class TopAppBar extends StatelessWidget {
         height: 30.0,
         width: 30.0,
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: Theme.of(context).cardColor,
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(
-              blurRadius: 20.0,
-              color: Colors.black26,
-            )
+            shadow(Theme.of(context).cardColor),
           ],
         ),
         child: Center(
@@ -95,7 +93,7 @@ class TopAppBar extends StatelessWidget {
             icon_2,
             height: 20.0,
             width: 20.0,
-            color: primaryGreyColor,
+            color: Theme.of(context).indicatorColor,
           ),
         ),
       ),
@@ -127,7 +125,7 @@ class TopAppBar extends StatelessWidget {
                       child: Container(),
                     ),
                   ),
-            Expanded(flex: 1, child: _center()),
+            Expanded(flex: 1, child: _center(context)),
             icon_2 != null
                 ? Expanded(
                     flex: 1,

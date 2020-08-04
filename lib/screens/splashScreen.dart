@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:lenglish/logic/localStorage.dart';
 import 'package:lenglish/models/data.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 
@@ -49,13 +48,25 @@ class _SplashScreenState extends State<SplashScreen> {
             indexFile.createFile().then((v) {
               if (v == true) {
                 print("set global index");
-                indexFile.setItem('index', {"index": "0"});
+                indexFile.setItem('index', [
+                  {"index": "0"}
+                ]);
               }
             });
             indexFile_2.createFile().then((v) {
               if (v == true) {
-                print("set global index");
-                indexFile_2.setItem('index', {"index": "0"});
+                print("set global indexData 2");
+                indexFile_2.setItem('index', [
+                  {"index": "0"}
+                ]);
+              }
+            });
+            hintPointsFile.createFile().then((v) {
+              if (v == true) {
+                print("set global points ******************************* ");
+                hintPointsFile.setItem('points', [
+                  {"points": "3"}
+                ]);
               }
             });
             langFile.createFile().then((v) {

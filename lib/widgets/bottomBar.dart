@@ -19,10 +19,10 @@ class _BottomBarState extends State<BottomBar> {
       height: 50.0,
       child: CurvedNavigationBar(
         initialIndex: widget.currentIndex,
-        color: whiteColor,
-        buttonBackgroundColor: whiteColor,
+        color: Theme.of(context).cardColor,
+        buttonBackgroundColor: Theme.of(context).cardColor,
         // animationCurve: Curves.easeInOut,
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         items: <Widget>[
           Icon(
             Icons.home,

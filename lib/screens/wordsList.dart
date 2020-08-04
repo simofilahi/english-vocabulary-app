@@ -77,10 +77,8 @@ class _WordsListState extends State<WordsList> {
     );
   }
 
-  Widget _cardItem(var size, String title, String icon, String subtitle,
-      List<dynamic> item, int flag, int len) {
-    print("Againnnnnnn");
-    print(item);
+  Widget _cardItem(BuildContext context, var size, String title, String icon,
+      String subtitle, List<dynamic> item, int flag, int len) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5.0,
@@ -111,12 +109,12 @@ class _WordsListState extends State<WordsList> {
           height: 80.0,
           width: size.width * 90.0,
           decoration: BoxDecoration(
-            color: whiteColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
               15.0,
             ),
             boxShadow: [
-              shadow,
+              shadow(Theme.of(context).cardColor),
             ],
           ),
           child: Row(
@@ -141,6 +139,7 @@ class _WordsListState extends State<WordsList> {
                         TextWidget(
                           text: title,
                           size: 20.0,
+                          color: Theme.of(context).textSelectionColor,
                           fontWeight: FontWeight.bold,
                         ),
                         SizedBox(
@@ -148,7 +147,7 @@ class _WordsListState extends State<WordsList> {
                         ),
                         TextWidget(
                           text: subtitle,
-                          color: Colors.grey[700],
+                          color: Theme.of(context).cursorColor,
                           size: 16.0,
                         ),
                       ],
@@ -162,6 +161,7 @@ class _WordsListState extends State<WordsList> {
                   rightArrowtIcon,
                   height: 25.0,
                   width: 25.0,
+                  color: Theme.of(context).indicatorColor,
                 ),
               ),
             ],
@@ -171,7 +171,7 @@ class _WordsListState extends State<WordsList> {
     );
   }
 
-  Widget _listItem(var size, List data, int index) {
+  Widget _listItem(BuildContext context, var size, List data, int index) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 4.0,
@@ -183,12 +183,12 @@ class _WordsListState extends State<WordsList> {
         height: 60.0,
         width: size.width * .90,
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(
             15.0,
           ),
           boxShadow: [
-            shadow,
+            shadow(Theme.of(context).cardColor),
           ],
         ),
         child: Material(
@@ -206,6 +206,7 @@ class _WordsListState extends State<WordsList> {
                     child: TextWidget(
                       text: data[index]['en'],
                       size: 18.0,
+                      color: Theme.of(context).textSelectionColor,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -215,6 +216,7 @@ class _WordsListState extends State<WordsList> {
                   child: TextWidget(
                     text: getRightTranslate(data, null, index, widget.lang),
                     size: 18.0,
+                    color: Theme.of(context).textSelectionColor,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -229,6 +231,7 @@ class _WordsListState extends State<WordsList> {
                       speakerIcon,
                       height: 25.0,
                       width: 25.0,
+                      color: Theme.of(context).indicatorColor,
                     ),
                   ),
                 ),
@@ -263,7 +266,7 @@ class _WordsListState extends State<WordsList> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         height: size.height,
         width: size.width,
@@ -284,6 +287,7 @@ class _WordsListState extends State<WordsList> {
                   child: ListView(
                     children: <Widget>[
                       _cardItem(
+                        context,
                         size,
                         'Words',
                         wordsIcon,
@@ -295,6 +299,7 @@ class _WordsListState extends State<WordsList> {
                         _flashCardWords.length,
                       ),
                       _cardItem(
+                        context,
                         size,
                         'Familiar words',
                         familliarIcon,
@@ -306,6 +311,7 @@ class _WordsListState extends State<WordsList> {
                         _familiarWords.length,
                       ),
                       _cardItem(
+                        context,
                         size,
                         'Unknown words',
                         unknownIcon,
@@ -322,7 +328,7 @@ class _WordsListState extends State<WordsList> {
                           .map(
                             (index, element) => MapEntry(
                               index,
-                              _listItem(size, widget.data, index),
+                              _listItem(context, size, widget.data, index),
                             ),
                           )
                           .values

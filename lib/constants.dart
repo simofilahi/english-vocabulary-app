@@ -11,19 +11,20 @@ const linearGradiantColor =
     LinearGradient(colors: [Color(0XFF09C6F9), Color(0XFF045DE9)]);
 const Color darkGreyColor = Color(0XFF808080);
 const Color greenColor = Color(0XFF03CD54);
+const Color blackGrey = Color(0XFF464646);
 
 // shadow effect
-final shadow = BoxShadow(
-  blurRadius: 5.0,
-  spreadRadius: 2.0,
-  color: Colors.grey[300].withOpacity(0.8),
-  offset: Offset(3, 3),
-);
+shadow(Color color) => BoxShadow(
+      blurRadius: 5.0,
+      spreadRadius: 1.0,
+      color: Colors.grey[500].withOpacity(0.2),
+      offset: Offset(3, 3),
+    );
 
 final shadow_1 = BoxShadow(
-  blurRadius: 5.0,
-  spreadRadius: 2.0,
-  color: Colors.grey[200].withOpacity(0.4),
+  blurRadius: 2.0,
+  spreadRadius: 1.0,
+  color: Colors.grey[300].withOpacity(0.8),
   offset: Offset(3, 3),
 );
 
@@ -62,6 +63,7 @@ const String forwardIcon = 'assets/icons/forward.svg';
 const String keyBoardIcon = 'assets/icons/hardware.svg';
 const String cubeIcon = 'assets/icons/cube.svg';
 const String abcIcon = 'assets/icons/abc.svg';
+const String handTapIcon = 'assets/icons/touch.svg';
 // radius
 
 const double radiusValue = 15.0;

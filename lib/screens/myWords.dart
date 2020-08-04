@@ -47,12 +47,12 @@ class _MyWordsState extends State<MyWords> {
           height: 60.0,
           width: size.width * .90,
           decoration: BoxDecoration(
-            color: whiteColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
               15.0,
             ),
             boxShadow: [
-              shadow,
+              shadow(Theme.of(context).cardColor),
             ],
           ),
           child: Row(
@@ -67,6 +67,7 @@ class _MyWordsState extends State<MyWords> {
                   child: TextWidget(
                     text: item['en'],
                     size: 18.0,
+                    color: Theme.of(context).textSelectionColor,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -76,6 +77,7 @@ class _MyWordsState extends State<MyWords> {
                 child: TextWidget(
                   text: getRightTranslate(null, item, 0, widget.lang),
                   size: 18.0,
+                  color: Theme.of(context).textSelectionColor,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -89,6 +91,7 @@ class _MyWordsState extends State<MyWords> {
                     speakerIcon,
                     height: 25.0,
                     width: 25.0,
+                    color: Theme.of(context).indicatorColor,
                   ),
                 ),
               ),
@@ -103,7 +106,7 @@ class _MyWordsState extends State<MyWords> {
           height: 60.0,
           width: size.width * .90,
           decoration: BoxDecoration(
-            color: whiteColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
               15.0,
             ),
@@ -142,6 +145,7 @@ class _MyWordsState extends State<MyWords> {
                     speakerIcon,
                     height: 25.0,
                     width: 25.0,
+                    color: Theme.of(context).indicatorColor,
                   ),
                 ),
               ),
@@ -170,7 +174,7 @@ class _MyWordsState extends State<MyWords> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         height: size.height,
         width: size.width,
@@ -193,7 +197,7 @@ class _MyWordsState extends State<MyWords> {
                     width: 1.0,
                   ),
                   boxShadow: [
-                    shadow,
+                    shadow(Theme.of(context).cardColor),
                   ],
                 ),
                 child: Row(
@@ -208,7 +212,7 @@ class _MyWordsState extends State<MyWords> {
                         child: Container(
                           color: _defaultIndex == 0
                               ? primaryBlueColor
-                              : whiteColor,
+                              : Theme.of(context).cardColor,
                           child: Center(
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -244,7 +248,7 @@ class _MyWordsState extends State<MyWords> {
                         child: Container(
                           color: _defaultIndex == 1
                               ? primaryBlueColor
-                              : whiteColor,
+                              : Theme.of(context).cardColor,
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

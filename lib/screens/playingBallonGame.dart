@@ -146,6 +146,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     if (_boolean == false) {
       return TextWidget(
         text: _en_word,
+        color: Theme.of(context).textSelectionColor,
         size: 24.0,
       );
     } else {
@@ -167,14 +168,15 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                   height: 50.0,
                   width: 160.0,
                   decoration: BoxDecoration(
-                      color: whiteColor,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(
                         15.0,
                       ),
-                      boxShadow: [shadow]),
+                      boxShadow: [shadow(Theme.of(context).cardColor)]),
                   child: Center(
                     child: TextWidget(
                       text: 'Try again',
+                      color: Theme.of(context).textSelectionColor,
                     ),
                   ),
                 ),
@@ -187,15 +189,16 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
               height: 50.0,
               width: 200.0,
               decoration: BoxDecoration(
-                color: whiteColor,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(
                   15.0,
                 ),
-                boxShadow: [shadow],
+                boxShadow: [shadow(Theme.of(context).cardColor)],
               ),
               child: Center(
                 child: TextWidget(
                   text: 'Watch Ads',
+                  color: Theme.of(context).textSelectionColor,
                 ),
               ),
             ),
@@ -209,7 +212,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         height: size.height,
         width: size.width,
@@ -219,7 +222,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
               child: Container(
                 height: size.height,
                 width: size.width,
-                color: primaryColor,
+                color: Theme.of(context).backgroundColor,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

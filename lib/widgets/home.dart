@@ -4,7 +4,8 @@ import 'package:lenglish/ui_elements/infoConatiner.dart';
 import 'package:lenglish/widgets/radialProgress.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
-
+import 'package:lenglish/logic/BoolSetter.dart';
+import 'package:lenglish/logic/initalizeFiles.dart';
 import '../constants.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -28,11 +29,15 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   double _level;
+  List<dynamic> _globalData = [];
 
   @override
   void initState() {
     super.initState();
     _level = widget.totalLearningWords * 20 / 2265;
+    setState(() {
+      _globalData = widget.globalData;
+    });
   }
 
   Widget _rowItem(String text, int value, var size) {
@@ -135,6 +140,16 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
+  _resetItem(var data, int index) {
+    resetItemHomeWidget(widget.globalData, data, index).then((value) {
+      setState(() {
+        _globalData:
+        allData.getItem();
+      });
+      widget.getTotalLearningWords();
+    });
+  }
+
   Widget _item(BuildContext context, int index, Color firstColor,
       Color secondColor, var data, int learning_words) {
     print("learning words");
@@ -193,6 +208,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 learningWords: learning_words,
                 firstColor: firstColor,
                 secondColor: secondColor,
+                reset: () => _resetItem(data, index),
               ),
             )
           ],
@@ -203,7 +219,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   List<Widget> _wordsItem(BuildContext context) {
     int index = -1;
-    var newdata = widget.globalData.map((item) {
+    var newdata = _globalData.map((item) {
       index++;
       return _item(
           context,

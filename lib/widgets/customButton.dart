@@ -56,7 +56,7 @@ class CustomButton extends StatelessWidget {
               10.0,
             ),
             boxShadow: [
-              shadow,
+              shadow(Theme.of(context).cardColor),
             ],
           ),
           child: Center(

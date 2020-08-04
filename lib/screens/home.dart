@@ -105,7 +105,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       bottomNavigationBar: BottomBar(
         currentIndex: currentIndex,
         updateIndex: updateIndex,

@@ -9,13 +9,16 @@ class InfoContainer extends StatelessWidget {
   final int learningWords;
   final Color firstColor;
   final Color secondColor;
+  final Function reset;
 
-  InfoContainer(
-      {this.setNumber,
-      this.totalWords,
-      this.learningWords,
-      this.firstColor,
-      this.secondColor});
+  InfoContainer({
+    this.setNumber,
+    this.totalWords,
+    this.learningWords,
+    this.firstColor,
+    this.secondColor,
+    this.reset,
+  });
   Widget _item(var text, int number) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -45,19 +48,24 @@ class InfoContainer extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Container(
-          width: 80.0,
-          height: 25.0,
-          decoration: BoxDecoration(
-            color: firstColor,
-            borderRadius: BorderRadius.circular(
-              10.0,
+        InkWell(
+          onTap: () {
+            reset();
+          },
+          child: Container(
+            width: 80.0,
+            height: 25.0,
+            decoration: BoxDecoration(
+              color: firstColor,
+              borderRadius: BorderRadius.circular(
+                10.0,
+              ),
             ),
-          ),
-          child: Center(
-            child: TextWidget(
-              text: 'Unlock',
-              color: whiteColor.withOpacity(0.8),
+            child: Center(
+              child: TextWidget(
+                text: 'Reset',
+                color: whiteColor.withOpacity(0.8),
+              ),
             ),
           ),
         )

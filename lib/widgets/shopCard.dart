@@ -20,12 +20,12 @@ class ShopCard extends StatelessWidget {
         height: 160,
         width: size.width * .90,
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(
             15.0,
           ),
           boxShadow: [
-            shadow,
+            shadow(Theme.of(context).cardColor),
           ],
         ),
         child: Row(
@@ -46,6 +46,7 @@ class ShopCard extends StatelessWidget {
                         TextWidget(
                           text: 'Premium account',
                           size: 20.0,
+                          color: Theme.of(context).textSelectionColor,
                           fontWeight: FontWeight.bold,
                         ),
                         SizedBox(
@@ -53,7 +54,7 @@ class ShopCard extends StatelessWidget {
                         ),
                         TextWidget(
                           text: 'Remove ads',
-                          color: Colors.grey[700],
+                          color: Theme.of(context).cursorColor,
                           size: 16.0,
                         ),
                       ],

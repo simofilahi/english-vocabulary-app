@@ -37,8 +37,7 @@ class _RadialProgressState extends State<RadialProgress>
   @override
   void initState() {
     super.initState();
-    print("yes yes");
-    print(widget.percent);
+    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     _radialProgressAnimationController =
         AnimationController(vsync: this, duration: fillDuration);
     _progressAnimation = Tween(begin: 0.0, end: 360.0).animate(CurvedAnimation(

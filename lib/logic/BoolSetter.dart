@@ -222,8 +222,6 @@ int totoalLearningWords(List<dynamic> globalData) {
 // }
 
 Future<int> updateIndexOfFlyingSquare(int index) async {
-  print("INDEX ==> ");
-  print(index);
   List<Map> newData = [
     {'index': index.toString()}
   ];
@@ -237,18 +235,59 @@ Future<int> updateIndexOfFlyingSquare(int index) async {
 }
 
 Future<int> updateIndexOfSpellingWords(int index) async {
-  print("INDEX ==> ");
-  print(index);
   List<Map> newData = [
     {'index': index.toString()}
   ];
   indexFile_2.setItem('Index', newData).then((value) {
     if (value == true) {
-      print("upadted");
       return index;
     } else
       return 0;
   });
+}
+
+addinghintPoints() {
+  List<Map> newData = [];
+  int number = 0;
+  hintPointsFile.getItem().then((value) {
+    number = int.parse(value[0]['points']) + 3;
+    newData = [
+      {
+        'points': number.toString(),
+      }
+    ];
+    hintPointsFile.setItem('Index', newData);
+  });
+  print("here is value down");
+  hintPointsFile.getItem().then((value) => print(value));
+}
+
+Future<bool> resetItemHomeWidget(
+    List<dynamic> globalData, List<dynamic> data, int index) async {
+  print("uuuuuuu");
+  print("index ======>");
+  // print(index);
+  print(data);
+  // print(data[index]);
+  data.forEach((elem) {
+    // print(elem);
+    elem['isFavorite'] = "false";
+    elem['isExcellent'] = "false";
+    elem['isExcellent'] = "false";
+    elem['isUnknown'] = "false";
+  });
+  print("new data");
+  print(data);
+  for (int i = 0; i < globalData.length; i++) {
+    if (i == index) {
+      globalData[i]['learning_words'] = "0";
+      globalData[i]['Favorite'] = "0";
+      globalData[i]['Excellent'] = "0";
+      globalData[i]['Familiar'] = "0";
+      globalData[i]['set_${index + 1}'] = data;
+    }
+  }
+  allData.setItem('words', globalData).then((value) => true);
 }
 
 // Future<int> getIndexOfFlyingSquare() async {

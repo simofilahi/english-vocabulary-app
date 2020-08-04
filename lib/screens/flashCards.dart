@@ -123,7 +123,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     return !isLiked;
   }
 
-  Widget itemRender(var size, int index) {
+  Widget itemRender(BuildContext context, var size, int index) {
     var padidng = size.width * .10;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -131,12 +131,12 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
         height: size.height * .65,
         width: size.width * .80,
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(
             15.0,
           ),
           boxShadow: [
-            shadow,
+            shadow(Theme.of(context).cardColor),
           ],
         ),
         child: Padding(
@@ -191,7 +191,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         TextWidget(
                           text: widget.item[index]['en'],
                           size: 24.0,
-                          color: blackColor,
+                          color: Theme.of(context).textSelectionColor,
                           fontWeight: FontWeight.bold,
                         ),
                         SizedBox(
@@ -200,7 +200,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         TextWidget(
                           text: getRightTranslate(
                               widget.item, null, index, widget.lang),
-                          color: primaryGreyColor,
+                          color: Theme.of(context).cursorColor,
                           size: 20.0,
                           fontWeight: FontWeight.w400,
                         )
@@ -213,23 +213,35 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 10.0,
+                      height: 20.0,
                     ),
-                    TextWidget(
-                      text: 'Examples',
+                    FittedBox(
+                      child: TextWidget(
+                        text: 'Examples',
+                        color: Theme.of(context).textSelectionColor,
+                        fontWeight: FontWeight.bold,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     SizedBox(
-                      height: 5.0,
+                      height: 10.0,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
                         left: padidng,
                         right: padidng,
                       ),
-                      child: TextWidget(
-                        text: widget.item[index]['examples'],
-                        color: blackColor,
-                        fontWeight: FontWeight.bold,
+                      child: SingleChildScrollView(
+                        controller: controller,
+                        child: Column(
+                          children: <Widget>[
+                            TextWidget(
+                              text: widget.item[index]['examples'],
+                              color: Theme.of(context).cursorColor,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -252,7 +264,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           speakerIcon,
                           height: 50,
                           width: 50.0,
-                          color: primaryGreyColor,
+                          color: Theme.of(context).indicatorColor,
                         ),
                       ),
                     ),
@@ -263,6 +275,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         ),
                         child: TextWidget(
                           text: widget.item[index]['pronunciation'],
+                          color: Theme.of(context).cursorColor,
                         ),
                       ),
                     )
@@ -319,8 +332,8 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     );
   }
 
-  Widget _listItem(var size, int index) {
-    return itemRender(size, index);
+  Widget _listItem(BuildContext context, var size, int index) {
+    return itemRender(context, size, index);
     // print("widget.flag");
     // print(widget.flag);
     // if (widget.item[index]['isFamiliar'] == "true" && (widget.flag == 1)) {
@@ -343,7 +356,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     print("here is item");
     print(widget.item);
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         height: size.height,
         width: size.width,
@@ -377,7 +390,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           viewportFraction: 0.7,
                           scale: 0.8,
                           itemBuilder: (BuildContext ctx, int index) {
-                            return _listItem(size, index);
+                            return _listItem(context, size, index);
                           },
                           controller: swiperController,
                           onIndexChanged: (int index) {
