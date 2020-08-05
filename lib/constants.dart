@@ -17,7 +17,7 @@ const Color blackGrey = Color(0XFF464646);
 shadow(Color color) => BoxShadow(
       blurRadius: 5.0,
       spreadRadius: 1.0,
-      color: Colors.grey[500].withOpacity(0.2),
+      color: Colors.grey[600].withOpacity(0.2),
       offset: Offset(3, 3),
     );
 

@@ -193,7 +193,7 @@ class _MyWordsState extends State<MyWords> {
                 decoration: BoxDecoration(
                   color: primaryColor,
                   border: Border.all(
-                    color: whiteColor,
+                    color: Theme.of(context).cardColor,
                     width: 1.0,
                   ),
                   boxShadow: [
@@ -217,15 +217,6 @@ class _MyWordsState extends State<MyWords> {
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              SvgPicture.asset(
-                                heartIcon,
-                                height: 20.0,
-                                width: 20.0,
-                                color: Colors.red,
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
                               TextWidget(
                                 text: 'Favorites',
                                 size: 18.0,
@@ -253,14 +244,6 @@ class _MyWordsState extends State<MyWords> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                SvgPicture.asset(
-                                  unknownIcon,
-                                  height: 20.0,
-                                  width: 20.0,
-                                ),
-                                SizedBox(
-                                  width: 8.0,
-                                ),
                                 TextWidget(
                                   text: 'Unknown',
                                   size: 18.0,

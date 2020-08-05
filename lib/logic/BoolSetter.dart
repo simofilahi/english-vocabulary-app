@@ -1,5 +1,3 @@
-import 'package:lenglish/models/data.dart';
-
 import 'initalizeFiles.dart';
 
 Future<void> updateSelectedLanguage(String selectedLang) async {
@@ -63,11 +61,6 @@ String getRightTranslate(List data, Map item, int index, lang) {
   return data[index]['en'];
 }
 
-// saveDataIntoLocalStorage(List<dynamic> data) {
-//   LocalStorage storage = new LocalStorage('wordsData');
-//   storage.setItem('words', data);
-// }
-
 Future<dynamic> getGlobalData() async {
   // List<dynamic> data = allData.getItem('words');
   // if (data == null) {
@@ -100,7 +93,6 @@ Future<bool> setTrue(int objIndex, int wordObjIndex, String word,
       if (number < 50) {
         number += 1;
         globalData[objIndex]['learning_words'] = number.toString();
-        // print(globalData[objIndex]['learning_words']);
       }
     }
     List<dynamic> newData = localData.map((f) {
@@ -212,22 +204,12 @@ int totoalLearningWords(List<dynamic> globalData) {
   return count;
 }
 
-// void createIndexOfFlyingSquare() {
-//   indexFile.setItem('Index', {"index": "0"});
-//   // var data = indexFile.getItem('Index');
-//   // print(
-//   //   "Index data ==> ",
-//   // );
-//   // print(data);
-// }
-
 Future<int> updateIndexOfFlyingSquare(int index) async {
   List<Map> newData = [
     {'index': index.toString()}
   ];
   indexFile.setItem('Index', newData).then((value) {
     if (value == true) {
-      print("upadted");
       return index;
     } else
       return 0;
@@ -290,16 +272,78 @@ Future<bool> resetItemHomeWidget(
   allData.setItem('words', globalData).then((value) => true);
 }
 
-// Future<int> getIndexOfFlyingSquare() async {
-//   indexFile.getItem().then((data) {
-//     print("HollaAAAAAA");
-//     print(data);
-//     if (data[0]['index'] != null) {
-//       print("yup");
-//       print(int.parse(data[0]['index']));
-//       return int.parse(data[0]['index']);
-//     } else {
-//       return -1;
-//     }
-//   });
-// }
+List<dynamic> _newData(List<dynamic> data) {
+  for (int i = 0; i < data.length; i++) {
+    data[i]['isFavorite'] = "false";
+    data[i]['isExcellent'] = "false";
+    data[i]['isFamiliar'] = "false";
+    data[i]['isUnknown'] = "false";
+  }
+  return data;
+}
+
+resetAll(Function globalDataUpdate) {
+  allData.getItem().then((value) {
+    for (int i = 0; i < value.length; i++) {
+      value[i]['learning_words'] = "0";
+      value[i]['Favorite'] = "0";
+      value[i]['Excellent'] = "0";
+      value[i]['Familiar'] = "0";
+      value[i]['Unknown'] = "0";
+      value[i]['set_${i + 1}'] = _newData(value[i]['set_${i + 1}']);
+    }
+    allData.setItem('AllData', value).then((value) => globalDataUpdate());
+  });
+}
+
+Future<int> getIndexOfSqaureFlying() async {
+  return indexFile.getItem().then((value) {
+    if (value != null) {
+      return int.parse(value[0]['index']);
+    } else
+      return 0;
+  }).catchError((onError) {
+    return 0;
+  });
+}
+
+Future<int> getIndexOfSpellingWords() async {
+  return indexFile_2.getItem().then((value) {
+    if (value != null) {
+      return int.parse(value[0]['index']);
+    } else
+      return 0;
+  }).catchError((onError) {
+    return 0;
+  });
+}
+
+Future<int> getHintPoints() async {
+  return hintPointsFile.getItem().then((onValue) {
+    if (onValue != null) {
+      return int.parse(onValue[0]['points']);
+    } else
+      return 0;
+  }).catchError((onError) {
+    return 0;
+  });
+}
+
+Future<Map<dynamic, dynamic>> searchForWordByIndex(
+    List<dynamic> globalData, int index, String lang) async {
+  int j = 0;
+  Map<dynamic, dynamic> data = {};
+  List<dynamic> tmp = [];
+
+  for (int i = 0; i < globalData.length; i++) {
+    tmp = globalData[i]['set_${i + 1}'];
+    for (int f = 0; f < tmp.length; f++) {
+      if (j == index) {
+        data['enWord'] = tmp[f]['en'];
+        data['translatedWord'] = getRightTranslate(null, tmp[f], 0, lang);
+      }
+      j++;
+    }
+  }
+  return data;
+}

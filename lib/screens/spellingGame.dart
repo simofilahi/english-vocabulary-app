@@ -6,7 +6,6 @@ import '../constants.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:flutter/services.dart';
 import 'dart:math';
 
 class SpellingGame extends StatefulWidget {
@@ -15,6 +14,7 @@ class SpellingGame extends StatefulWidget {
   final int index;
   final Function getIndex;
   final int hintPoints;
+  final Function getHintPoints;
 
   SpellingGame({
     this.globalData,
@@ -22,21 +22,19 @@ class SpellingGame extends StatefulWidget {
     this.index,
     this.getIndex,
     this.hintPoints,
+    this.getHintPoints,
   });
   @override
   _SpellingGameState createState() => _SpellingGameState();
 }
 
 class _SpellingGameState extends State<SpellingGame> {
-  String _text = '';
-  String _randomWordsString = '';
   final TextEditingController _controller = TextEditingController(text: '');
   List<Map<String, dynamic>> _listOfchar = [];
   final _random = new Random();
   bool _boolean = false;
-  String _word;
-  String _en_word;
-  String _randomWord = '';
+  String _word = "";
+  String _en_word = "";
   int _set = 1;
   int _index = 0;
   int _initIndex = 0;
@@ -62,8 +60,6 @@ class _SpellingGameState extends State<SpellingGame> {
       _hintPoints = widget.hintPoints;
     });
     _getNextItem();
-    print("here init index");
-    print(widget.index);
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
         FocusScope.of(context).requestFocus(_focusNode);
@@ -71,11 +67,12 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   widget.getIndex();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    widget.getIndex();
+    widget.getHintPoints();
+  }
 
   dynamic _getSetItem() {
     for (int i = 0; i < widget.globalData.length; i++) {
@@ -99,49 +96,41 @@ class _SpellingGameState extends State<SpellingGame> {
       var obj = {'char': character, 'selected': false};
       arr.add(obj);
     });
-    print("here arr ===> ");
-    print(arr);
+    // print("here arr ===> ");
+    // print(arr);
+    print("here is en_word");
+    print(_en_word);
     arr.shuffle();
     setState(() {
       _listOfchar = arr;
     });
   }
 
-  void _getNextItem() {
-    int i = 1;
-    int j = 0;
-    String word;
-    String en_word;
+  void _getNextHelper() async {
+    Map<dynamic, dynamic> data = {};
 
+    data = await searchForWordByIndex(widget.globalData, _index, widget.lang);
+    _updataIndexAndWord(data['enWord'], data['translatedWord']);
+    _getRandomWords();
+  }
+
+  void _getNextItem() {
     if (_index == _initIndex + 5) {
       updateIndexOfSpellingWords(_index);
       setState(() {
         _initIndex = _index + 1;
       });
+      _getNextHelper();
     } else {
-      widget.globalData.forEach(
-        (item) {
-          item['set_${i}'].forEach(
-            (f) {
-              if (j == _index) {
-                en_word = f['en'];
-                word = getRightTranslate(null, f, 0, widget.lang);
-              }
-              j++;
-            },
-          );
-          i++;
-        },
-      );
-      _updataIndexAndWord(en_word, word);
-      _getRandomWords();
+      _getNextHelper();
     }
   }
 
-  _updataIndexAndWord(String en_word, String word) {
+  _updataIndexAndWord(String enWord, String word) {
+    print(_en_word);
     setState(() {
       _index = _index + 1;
-      _en_word = en_word;
+      _en_word = enWord;
       _word = word;
     });
   }
@@ -176,20 +165,24 @@ class _SpellingGameState extends State<SpellingGame> {
     if (_dataRowChar.isEmpty) {}
   }
 
-  bool _verfieAnswer() {
-    print("before");
-    if (_dataRowChar.isEmpty) return false;
-    for (int i = 0; i < _dataRowChar.length; i++) {
-      print(_dataRowChar[i]);
-      print(_en_word[i]);
-      if (_dataRowChar[i] != _en_word[i]) {
-        return false;
+  bool _verfieAnswer(int flag) {
+    if (flag == 1) {
+      if (_dataRowChar.isEmpty) return false;
+      for (int i = 0; i < _dataRowChar.length; i++) {
+        if (_dataRowChar[i] != _en_word[i]) {
+          return false;
+        }
       }
+      setState(() {
+        _dataRowChar = [];
+      });
+      return true;
+    } else if (flag == 2) {
+      if (_controller.text == _en_word)
+        return true;
+      else
+        return false;
     }
-    setState(() {
-      _dataRowChar = [];
-    });
-    return true;
   }
 
   Widget _hintAndWatchAdButton(BuildContext context, String icon, int flag) {
@@ -277,10 +270,10 @@ class _SpellingGameState extends State<SpellingGame> {
         child: TextField(
           key: formKey,
           autofocus: true,
+          focusNode: _focusNode,
           onSubmitted: (String value) {
-            print("VAlue");
-            print(value);
-            if (_verfieAnswer()) {
+            if (_verfieAnswer(2)) {
+              _controller.text = "";
               _getNextItem();
             } else {
               _controller.text = "";
@@ -300,22 +293,22 @@ class _SpellingGameState extends State<SpellingGame> {
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
-            // suffix: _inputError
-            //     ? Padding(
-            //         padding: const EdgeInsets.only(right: 15.0),
-            //         child: GestureDetector(
-            //           onTap: () {
-            //             _showAnswer(2);
-            //           },
-            //           child: Text(
-            //             'Show me',
-            //             style: TextStyle(
-            //               color: primaryBlueColor,
-            //             ),
-            //           ),
-            //         ),
-            //       )
-            //     : Container(),
+            suffix: _inputError
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showAnswer(2);
+                      },
+                      child: Text(
+                        'Show me',
+                        style: TextStyle(
+                          color: primaryBlueColor,
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox(),
           ),
         ),
       ),
@@ -347,7 +340,7 @@ class _SpellingGameState extends State<SpellingGame> {
       children: <Widget>[
         InkWell(
           onTap: () {
-            if (_verfieAnswer()) {
+            if (_verfieAnswer(1)) {
               _getNextItem();
             } else {
               setState(() {
@@ -439,8 +432,8 @@ class _SpellingGameState extends State<SpellingGame> {
               ),
               boxShadow: [
                 _listOfchar[index]['selected'] == true
-                    ? shadow_1
-                    : shadow(Theme.of(context).cardColor),
+                    ? shadow(Theme.of(context).cardColor)
+                    : shadow_1,
               ],
             ),
             child: _listOfchar[index]['selected'] == false
@@ -472,21 +465,40 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
-  _showAnswer(int flag) {
-    if (flag == 1) {
+  _showAnwerHelper(int flag) {
+    if (flag == 2) {
+      _controller.text = _en_word;
+      setState(() {
+        _inputError = false;
+      });
+    } else {
       List<dynamic> arr = [];
       _en_word.runes.forEach((int rune) {
         var character = String.fromCharCode(rune);
         arr.add(character);
       });
-
       setState(() {
         _inputError = false;
         _dataRowChar = arr;
+        _listOfchar = _listOfchar.map((e) {
+          for (int i = 0; i < arr.length; i++) {
+            print(arr[i]);
+            if (arr[i] == e['char']) {
+              e['selected'] = true;
+              break;
+            }
+          }
+          return e;
+        }).toList();
       });
+    }
+  }
+
+  _showAnswer(int flag) {
+    if (flag > 0) {
+      _showAnwerHelper(flag);
     } else {
       _controller.text = _en_word;
-
       setState(() {
         _inputError = false;
       });
@@ -517,7 +529,7 @@ class _SpellingGameState extends State<SpellingGame> {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        _showAnswer(2);
+                        _showAnswer(1);
                       },
                       child: Text(
                         'Show me',
@@ -563,6 +575,18 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
+  _nextSet() {
+    int index = (_index - 50).abs() + _index;
+    print("here index");
+    print(index);
+    updateIndexOfSpellingWords(index);
+    setState(() {
+      _index = index;
+      _initIndex = index;
+    });
+    _getNextItem();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -578,8 +602,10 @@ class _SpellingGameState extends State<SpellingGame> {
               TopAppBar(
                 icon_1: backArrowIcon,
                 icon_2: forwardIcon,
+                icon_2_flag: 2,
                 text: '${_index}/2265',
                 textSize: 18,
+                clickHandler: _nextSet,
               ),
               Expanded(flex: 1, child: Container()),
               Expanded(
@@ -671,15 +697,12 @@ class _SpellingGameState extends State<SpellingGame> {
                     horizontal: 20.0,
                     vertical: 10.0,
                   ),
-                  child: Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _hintAndWatchAdButton(context, watchIcon, 1),
-                        _hintAndWatchAdButton(context, hintIcon, 2),
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _hintAndWatchAdButton(context, watchIcon, 1),
+                      _hintAndWatchAdButton(context, hintIcon, 2),
+                    ],
                   ),
                 ),
               )

@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
+import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:lenglish/models/CustomPopupMenu.dart';
 
 class TopAppBar extends StatelessWidget {
   final String icon_1;
   final String icon_2;
+  final int icon_2_flag;
   final String text;
   final double textSize;
   final Color color;
   final FontWeight fontWeight;
+  final Function clickHandler;
 
   TopAppBar({
     this.icon_1,
     this.icon_2,
+    this.icon_2_flag = 0,
     this.text,
     this.textSize,
     this.color = primaryGreyColor,
     this.fontWeight = FontWeight.normal,
+    this.clickHandler = null,
   });
 
   Widget _leading(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(
+        20.0,
+      ),
       onTap: () {
         Navigator.of(context).pop();
       },
@@ -73,10 +82,68 @@ class TopAppBar extends StatelessWidget {
     );
   }
 
+  List choices = [
+    CustomPopupMenu(
+      title: 'Reset all',
+      icon: SvgPicture.asset(
+        restoreIcon,
+      ),
+    ),
+  ];
+
+  Widget _child(BuildContext context) {
+    if (icon_2_flag == 1) {
+      return PopupMenuButton(
+        icon: SvgPicture.asset(
+          icon_2,
+          height: 20.0,
+          width: 20.0,
+          color: Theme.of(context).indicatorColor,
+        ),
+        onSelected: (dynamic _) {
+          resetAll(clickHandler);
+        },
+        elevation: 3.2,
+        initialValue: choices[0],
+        tooltip: 'This is tooltip',
+        // onSelected: _select,
+        itemBuilder: (BuildContext context) {
+          return choices.map((choice) {
+            return PopupMenuItem(
+              height: 20.0,
+              value: choice,
+              child: Text(choice.title),
+            );
+          }).toList();
+        },
+      );
+    } else if (icon_2_flag == 2) {
+      return InkWell(
+        onTap: () {
+          clickHandler();
+        },
+        child: SvgPicture.asset(
+          icon_2,
+          height: 20.0,
+          width: 20.0,
+          color: Theme.of(context).indicatorColor,
+        ),
+      );
+    } else {
+      return SvgPicture.asset(
+        icon_2,
+        height: 20.0,
+        width: 20.0,
+        color: Theme.of(context).indicatorColor,
+      );
+    }
+  }
+
   Widget _tailing(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        Navigator.of(context).pop();
+        print("yoyoyyoyyooyoyo");
+        if (icon_2_flag == 1) {}
       },
       child: Container(
         height: 30.0,
@@ -89,12 +156,7 @@ class TopAppBar extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: SvgPicture.asset(
-            icon_2,
-            height: 20.0,
-            width: 20.0,
-            color: Theme.of(context).indicatorColor,
-          ),
+          child: _child(context),
         ),
       ),
     );

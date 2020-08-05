@@ -6,6 +6,7 @@ import 'package:lenglish/models/languages.dart';
 import 'package:lenglish/screens/home.dart';
 import 'package:lenglish/widgets/customButton.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
 class ChooseLanguage extends StatefulWidget {
   final Function globalDataUpdate;
@@ -29,6 +30,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
   @override
   void initState() {
     super.initState();
+
     allData.getItem().then((data) {
       print(data);
       setState(() {
@@ -58,6 +60,46 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
       icon: 'assets/icons/china.svg',
       isActive: false,
     ),
+    LanguagesList(
+      name: 'Italian',
+      icon: 'assets/icons/italy.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'Hindi',
+      icon: 'assets/icons/india.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'Urdu',
+      icon: 'assets/icons/pakistan.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'Filipino',
+      icon: 'assets/icons/philippines.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'German',
+      icon: 'assets/icons/germany.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'Russian',
+      icon: 'assets/icons/russia.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'Turkish',
+      icon: 'assets/icons/turkey.svg',
+      isActive: false,
+    ),
+    LanguagesList(
+      name: 'Bengali',
+      icon: 'assets/icons/bangladesh.svg',
+      isActive: false,
+    ),
   ];
 
   void _changeIsActive(LanguagesList item) {
@@ -83,37 +125,56 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
   }
 
   Widget _item(LanguagesList item) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          _changeIsActive(item);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: item.isActive ? primaryBlueColor : whiteColor,
-            borderRadius: BorderRadius.circular(
-              10.0,
+    return ResponsiveGridCol(
+      xs: 4,
+      xl: 2,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            _changeIsActive(item);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5.0,
+              vertical: 5.0,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SvgPicture.asset(
-                item.icon,
-                height: 30.0,
-                width: 30.0,
+            child: Container(
+              height: 80.0,
+              decoration: BoxDecoration(
+                color: item.isActive
+                    ? primaryBlueColor
+                    : Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
               ),
-              SizedBox(
-                height: 10.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FittedBox(
+                    child: SvgPicture.asset(
+                      item.icon,
+                      height: 30.0,
+                      width: 30.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  FittedBox(
+                    child: TextWidget(
+                      text: item.name,
+                      size: 18.0,
+                      color: item.isActive
+                          ? whiteColor
+                          : Theme.of(context).textSelectionColor,
+                    ),
+                  )
+                ],
               ),
-              TextWidget(
-                text: item.name,
-                size: 18.0,
-                color: item.isActive ? whiteColor : blackColor,
-              )
-            ],
+            ),
           ),
         ),
       ),
@@ -131,7 +192,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     final double top_bottom_padding = size.width * .15;
 
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: OrientationBuilder(builder: (context, orientation) {
         return Container(
           height: size.height,
@@ -142,7 +203,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: size.height * .20,
+                    height: size.height * .15,
                   ),
                   TextWidget(
                     text: 'Choose Language',
@@ -152,26 +213,20 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                     height: 40.0,
                   ),
                   Container(
-                    height: size.height * .50,
+                    height: size.height * .55,
                     width: size.width,
-                    child: GridView.count(
-                      padding: EdgeInsets.only(
-                        left: left_right_padding,
-                        right: left_right_padding,
-                        top: top_bottom_padding,
-                        bottom: top_bottom_padding,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 35.0,
                       ),
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                      crossAxisCount: 2,
-                      childAspectRatio: orientation == Orientation.portrait
-                          ? (1.2 / 1)
-                          : (2 / 1),
-                      controller: new ScrollController(keepScrollOffset: false),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      children:
-                          languagesList.map((item) => _item(item)).toList(),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: ResponsiveGridRow(
+                          children: [
+                            ...languagesList.map((item) => _item(item)).toList()
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(

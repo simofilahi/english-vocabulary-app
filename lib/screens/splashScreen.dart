@@ -5,7 +5,7 @@ import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/models/data.dart';
 import 'package:lenglish/widgets/textWidget.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'chooseLanguage.dart';
 import 'home.dart';
 
@@ -21,14 +21,22 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   int _checkerBoolean = 0;
   String _lang;
   List<dynamic> _globalData;
+  var spinkit;
 
   @override
   void initState() {
     super.initState();
+    spinkit = SpinKitDoubleBounce(
+      color: primaryBlueColor,
+      size: 50.0,
+      controller: AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 1200)),
+    );
     print("before is exist");
     langFile.isExist().then((ret) {
       print('inside is exist');
@@ -84,8 +92,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   {"index": "0"}
                 ]);
               }
+              _callScreen();
             });
-            favFile.createFile();
+            // favFile.createFile();
           }
         });
       } else {
@@ -100,10 +109,36 @@ class _SplashScreenState extends State<SplashScreen> {
               _globalData = data;
               _checkerBoolean = 1;
             });
+            _callScreen();
           });
         });
       }
     });
+  }
+
+  _callScreen() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (BuildContext ctx) {
+          if (_checkerBoolean == 0) {
+            return ChooseLanguage(
+              globalDataUpdate: _globalDataUpdate,
+              settingBool: false,
+              updateNightMode: widget.updateNightMode,
+              nightMode: widget.nightMode,
+            );
+          } else {
+            return Home(
+              globalData: _globalData,
+              lang: _lang,
+              globalDataUpdate: _globalDataUpdate,
+              updateNightMode: widget.updateNightMode,
+              nightMode: widget.nightMode,
+            );
+          }
+        },
+      ),
+    );
   }
 
   Future<bool> _globalDataUpdate() async {
@@ -119,7 +154,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff78C800),
+      backgroundColor: primaryColor,
       body: Center(
         child: GestureDetector(
           onTap: () {
@@ -146,10 +181,11 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             );
           },
-          child: TextWidget(
-            text: 'Click here',
-            color: blackColor,
-          ),
+          child: spinkit,
+          // child: TextWidget(
+          //   text: 'Click here',
+          //   color: blackColor,
+          // ),
         ),
       ),
     );

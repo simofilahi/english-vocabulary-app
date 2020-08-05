@@ -29,12 +29,26 @@ class _HomeState extends State<Home> {
   int currentIndex = 0;
   String _lang;
   int _totalLearningWords = 0;
+  List<dynamic> _globalData = [];
 
   @override
   void initState() {
     super.initState();
     _getTotalLearningWords();
     _updateData();
+    setState(() {
+      _globalData = widget.globalData;
+    });
+  }
+
+  setNewGlobalData() {
+    allData.getItem().then((value) {
+      if (value == true) {
+        setState(() {
+          _globalData = value;
+        });
+      }
+    });
   }
 
   _updateData() {
@@ -76,20 +90,22 @@ class _HomeState extends State<Home> {
   dynamic _getScreen(currentIndex) {
     if (currentIndex == 0) {
       return HomeWidget(
-        globalData: widget.globalData,
+        globalData: _globalData,
         lang: _lang,
         globalDataUpdate: widget.globalDataUpdate,
         totalLearningWords: _totalLearningWords,
         getTotalLearningWords: _getTotalLearningWords,
+        setNewGlobalData: setNewGlobalData,
       );
     } else if (currentIndex == 1) {
       return BallonsGame(
-          globalData: widget.globalData,
-          lang: _lang,
-          globalDataUpdate: widget.globalDataUpdate);
+        globalData: _globalData,
+        lang: _lang,
+        globalDataUpdate: widget.globalDataUpdate,
+      );
     } else if (currentIndex == 2) {
       return MyWords(
-        globalData: widget.globalData,
+        globalData: _globalData,
         lang: _lang,
         globalDataUpdate: widget.globalDataUpdate,
       );

@@ -91,7 +91,9 @@ class _SettingState extends State<Setting> {
             iconName_2,
             height: 40.0,
             width: 50.0,
-            color: widget.nightMode == true ? greenColor : primaryColor,
+            color: Theme.of(context).backgroundColor == blackColor
+                ? greenColor
+                : primaryColor,
           ),
         ),
       );
@@ -102,39 +104,42 @@ class _SettingState extends State<Setting> {
 
   Widget _item(var size, String iconName, String text, String text_1,
       String iconName_2, var screen, int flag, int navFlag) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 4.0,
-        bottom: 4.0,
-        left: 2.0,
-        right: 2.0,
+    return Material(
+      color: Colors.transparent,
+      // shadowColor: blackColor,
+      borderRadius: BorderRadius.circular(
+        15.0,
       ),
-      child: Container(
-        height: 60.0,
-        width: size.width * .92,
-        decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(
-              15.0,
-            ),
-            boxShadow: [
-              shadow(Theme.of(context).cardColor),
-            ]),
+      child: InkWell(
+        onTap: () {
+          if (navFlag != 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (BuildContext ctx) {
+                return screen;
+              }),
+            );
+          }
+        },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Material(
-            color: Colors.transparent,
-            shadowColor: blackColor,
-            child: InkWell(
-              onTap: () {
-                if (navFlag != 2) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (BuildContext ctx) {
-                      return screen;
-                    }),
-                  );
-                }
-              },
+          padding: const EdgeInsets.only(
+            top: 4.0,
+            bottom: 4.0,
+            left: 2.0,
+            right: 2.0,
+          ),
+          child: Container(
+            height: 60.0,
+            width: size.width * .92,
+            decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(
+                  15.0,
+                ),
+                boxShadow: [
+                  shadow(Theme.of(context).cardColor),
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -217,7 +222,9 @@ class _SettingState extends State<Setting> {
                         sleepModesIcon,
                         'Mode nuit',
                         null,
-                        widget.nightMode == false ? leftSwitch : rightSwitch,
+                        Theme.of(context).backgroundColor == blackColor
+                            ? rightSwitch
+                            : leftSwitch,
                         null,
                         2,
                         2,

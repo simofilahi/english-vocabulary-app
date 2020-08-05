@@ -22,26 +22,28 @@ class PlayingBallonGames extends StatefulWidget {
 class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   final _random = new Random();
   bool _boolean = false;
-  String _word;
-  String _en_word;
+  String _word = "";
+  String _en_word = "";
   List _randomWords = [];
   int _set = 1;
   int _index = 0;
   int _initIndex = 0;
+  int _counter = 0;
   bool spinner = false;
 
   @override
   void initState() {
     super.initState();
+    print("Widget");
+    print(widget.index);
     setState(() {
       spinner = true;
       _index = widget.index;
       _initIndex = widget.index;
+      _counter = widget.index == 1 ? 1 : widget.index - 1;
     });
     _getNextItem();
     _getRandomWords();
-    print("here init index");
-    print(widget.index);
   }
 
   @override
@@ -71,56 +73,40 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   }
 
   playLocal(path) async {
-    // print("Here is the path");
-    // print(path);
-    // player.play(path);
-
     assetsAudioPlayer.open(
       Audio(path),
     );
   }
 
-  void _getNextItem() {
-    int i = 1;
-    int j = 0;
-    String word;
-    String en_word;
+  void _getNextItemHelper() async {
+    Map<dynamic, dynamic> data = {};
 
+    data = await searchForWordByIndex(widget.globalData, _index, widget.lang);
+    print(data);
+    playLocal('assets/audio/${data['enWord']}.mp3');
+    _updataIndexAndWord(data['enWord'], data['translatedWord']);
+    _getRandomWords();
+  }
+
+  void _getNextItem() {
     if (_index == _initIndex + 5) {
-      updateIndexOfFlyingSquare(_index);
-      print("helllllllo");
-      print(_index);
+      print("holla");
+      updateIndexOfFlyingSquare(_index + 1);
       setState(() {
         _initIndex = _index + 1;
       });
+      _getNextItemHelper();
     } else {
-      widget.globalData.forEach(
-        (item) {
-          item['set_${i}'].forEach(
-            (f) {
-              print("here index");
-              print(_index);
-              if (j == _index) {
-                en_word = f['en'];
-                word = getRightTranslate(null, f, 0, widget.lang);
-              }
-              j++;
-            },
-          );
-          i++;
-        },
-      );
-      playLocal('assets/audio/${en_word}.mp3');
-      _updataIndexAndWord(en_word, word);
-      _getRandomWords();
+      _getNextItemHelper();
     }
   }
 
-  _updataIndexAndWord(String en_word, String word) {
+  _updataIndexAndWord(String enWord, String word) {
     setState(() {
       _index = _index + 1;
-      _en_word = en_word;
+      _en_word = enWord;
       _word = word;
+      _counter = _counter + 1;
     });
   }
 
@@ -140,8 +126,6 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     );
   }
 
-  String _getWordByIndex(int index) {}
-
   Widget _renderButtons() {
     if (_boolean == false) {
       return TextWidget(
@@ -158,10 +142,16 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  playLocal('assets/audio/${_en_word}.mp3');
-                  setState(() {
-                    _index = widget.index;
-                    _boolean = false;
+                  getIndexOfSqaureFlying().then((value) {
+                    if (value != null) {
+                      setState(() {
+                        _index = value;
+                        _initIndex = value;
+                        _counter = value == 1 ? 1 : value - 1;
+                        _boolean = false;
+                      });
+                      _getNextItem();
+                    }
                   });
                 },
                 child: Container(
@@ -226,7 +216,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    TopAppBar(icon_1: backArrowIcon, text: '${_index}/2265'),
+                    TopAppBar(icon_1: backArrowIcon, text: '${_counter}/2265'),
                     _renderButtons(),
                     Container(),
                   ],

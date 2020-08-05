@@ -28,50 +28,31 @@ class _BallonsGameState extends State<BallonsGame> {
   @override
   void initState() {
     super.initState();
-    print("before  111111111");
     _getIndex();
-    print("before");
     _getIndex_2();
     _getHintPoints();
     print(widget.globalData);
   }
 
   _getIndex_2() {
-    print("bbbbbbbbbbbbbbbb");
-    indexFile_2.getItem().then((onValue) {
-      print("LOOOOOOOOO");
-      print(onValue);
-      if (onValue != null) {
-        print("here on value (((((((");
-        print(onValue);
-        setState(() {
-          _index_2 = int.parse(onValue[0]['index']);
-        });
-      }
+    getIndexOfSpellingWords().then((value) {
+      setState(() {
+        _index_2 = value;
+      });
     });
   }
 
-  _getIndex() {
-    indexFile.getItem().then((onValue) {
-      if (onValue != null) {
-        print("here on value 0000000000");
-        print(onValue);
-        setState(() {
-          _index = int.parse(onValue[0]['index']);
-        });
-      }
+  _getIndex() async {
+    int value = await getIndexOfSqaureFlying();
+    setState(() {
+      _index = value;
     });
   }
 
-  _getHintPoints() {
-    hintPointsFile.getItem().then((onValue) {
-      if (onValue != null) {
-        print("here on value ____________");
-        print(onValue);
-        setState(() {
-          _hintPoints = int.parse(onValue[0]['points']);
-        });
-      }
+  _getHintPoints() async {
+    int value = await getHintPoints();
+    setState(() {
+      _hintPoints = value;
     });
   }
 
@@ -264,6 +245,7 @@ class _BallonsGameState extends State<BallonsGame> {
                         index: _index_2,
                         getIndex: _getIndex_2,
                         hintPoints: _hintPoints,
+                        getHintPoints: _getHintPoints,
                       ),
                       abcIcon,
                       size,

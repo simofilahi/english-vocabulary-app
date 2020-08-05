@@ -14,6 +14,7 @@ class HomeWidget extends StatefulWidget {
   final Function globalDataUpdate;
   final int totalLearningWords;
   final Function getTotalLearningWords;
+  final Function setNewGlobalData;
 
   HomeWidget({
     this.globalData,
@@ -21,6 +22,7 @@ class HomeWidget extends StatefulWidget {
     this.globalDataUpdate,
     this.totalLearningWords,
     this.getTotalLearningWords,
+    this.setNewGlobalData,
   });
 
   @override
@@ -258,10 +260,12 @@ class _HomeWidgetState extends State<HomeWidget> {
             TopAppBar(
               icon_1: crownIcon,
               icon_2: moreIcon,
+              icon_2_flag: 1,
               text: 'Home',
               textSize: 18.9,
               color: blackColor,
               fontWeight: FontWeight.bold,
+              clickHandler: widget.setNewGlobalData,
             ),
             Expanded(
               child: SingleChildScrollView(
