@@ -26,49 +26,51 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Material(
-      child: InkWell(
-        onTap: () {
-          if (navFlag == true) {
-            updateSelectedLanguage(selectedLang).then(
-              (v) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext ctx) => screen,
-                  ),
-                );
-              },
-            );
-          } else {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext ctx) => screen,
+    return FittedBox(
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            if (navFlag == true) {
+              updateSelectedLanguage(selectedLang).then(
+                (v) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (BuildContext ctx) => screen,
+                    ),
+                  );
+                },
+              );
+            } else {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext ctx) => screen,
+                ),
+              );
+            }
+          },
+          child: Container(
+            height: buttonHeightSize == 0 ? 55 : buttonHeightSize,
+            width: buttonWidthSize == 0.0 ? size.width * .80 : buttonWidthSize,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(
+                10.0,
               ),
-            );
-          }
-        },
-        child: Container(
-          height: buttonHeightSize == 0 ? 55 : buttonHeightSize,
-          width: buttonWidthSize == 0.0 ? size.width * .80 : buttonWidthSize,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(
-              10.0,
+              boxShadow: [
+                shadow(Theme.of(context).cardColor),
+              ],
             ),
-            boxShadow: [
-              shadow(Theme.of(context).cardColor),
-            ],
-          ),
-          child: Center(
-            child: TextWidget(
-              text: text,
-              size: 18.0,
-              color: whiteColor,
+            child: Center(
+              child: TextWidget(
+                text: text,
+                size: 18.0,
+                color: whiteColor,
+              ),
             ),
           ),
         ),
+        color: Colors.transparent,
       ),
-      color: Colors.transparent,
     );
   }
 }

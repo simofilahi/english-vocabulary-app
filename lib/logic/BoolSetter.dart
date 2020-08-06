@@ -1,4 +1,5 @@
 import 'initalizeFiles.dart';
+import 'package:lenglish/models/data.dart';
 
 Future<void> updateSelectedLanguage(String selectedLang) async {
   String lang;
@@ -58,53 +59,47 @@ Future<bool> verfieLangFile() async {
 
 String getTheSelectedLang() {}
 
-String getRightTranslate(List data, Map item, int index, lang) {
-  print("ttttttttttt");
-  print(lang);
-  if (data == null) {
-    if (lang == 'sp') {
-      return item['sp'];
-    } else if (lang == 'fr') {
-      return item['fr'];
-    } else if (lang == 'ar') {
-      return item['ar'];
-    } else if (lang == 'ch') {
-      return item['ch'];
-    }
-  } else {
-    if (lang == 'sp') {
-      return data[index]['sp'];
-    } else if (lang == 'fr') {
-      return data[index]['fr'];
-    } else if (lang == 'ar') {
-      return data[index]['ar'];
-    } else if (lang == 'ch') {
-      return data[index]['ch'];
-    } else if (lang == 'hi') {
-      return data[index]['hi'];
-    } else if (lang == 'ur') {
-      return data[index]['ur'];
-    } else if (lang == 'fi') {
-      return data[index]['fi'];
-    } else if (lang == 'ge') {
-      return data[index]['ge'];
-    } else if (lang == 'ru') {
-      return data[index]['ru'];
-    } else if (lang == 'tu') {
-      return data[index]['tu'];
-    } else if (lang == 'be') {
-      return data[index]['be'];
-    } else if (lang == 'ja') {
-      return data[index]['ja'];
-    } else if (lang == 'pr') {
-      return data[index]['pr'];
-    } else if (lang == 'ko') {
-      return data[index]['ko'];
-    } else if (lang == 'it') {
-      return data[index]['it'];
-    }
+String getRightTranslateHelper(String lang, Map item) {
+  if (lang == 'sp') {
+    return item['sp'];
+  } else if (lang == 'fr') {
+    return item['fr'];
+  } else if (lang == 'ar') {
+    return item['ar'];
+  } else if (lang == 'ch') {
+    return item['ch'];
+  } else if (lang == 'hi') {
+    return item['hi'];
+  } else if (lang == 'ur') {
+    return item['ur'];
+  } else if (lang == 'fi') {
+    return item['fi'];
+  } else if (lang == 'ge') {
+    return item['ge'];
+  } else if (lang == 'ru') {
+    return item['ru'];
+  } else if (lang == 'tu') {
+    return item['tu'];
+  } else if (lang == 'be') {
+    return item['be'];
+  } else if (lang == 'ja') {
+    return item['ja'];
+  } else if (lang == 'pr') {
+    return item['pr'];
+  } else if (lang == 'ko') {
+    return item['ko'];
+  } else if (lang == 'it') {
+    return item['it'];
   }
-  return data[index]['en'];
+  return item['en'];
+}
+
+String getRightTranslate(List data, Map item, int index, lang) {
+  if (data == null) {
+    return getRightTranslateHelper(lang, item);
+  } else {
+    return getRightTranslateHelper(lang, data[index]);
+  }
 }
 
 String getNameOfLang(String lang) {
@@ -143,11 +138,53 @@ String getNameOfLang(String lang) {
 }
 
 Future<dynamic> getGlobalData() async {
-  // List<dynamic> data = allData.getItem('words');
-  // if (data == null) {
-  //   return null;
-  // }
-  // return data;
+  List<dynamic> data = await allData.getItem();
+  if (data == null) {
+    return null;
+  }
+  return data;
+}
+
+Future<bool> creationOfFiles() async {
+  try {
+    var value;
+    value = await langFile.createFile();
+    if (value == true)
+      allData.setItem('data', words);
+    else
+      return false;
+    value = await indexFile.createFile();
+    if (value == true)
+      indexFile.setItem('index', [
+        {"index": "0"}
+      ]);
+    else
+      return false;
+    value = await indexFile_2.createFile();
+    if (value == true)
+      indexFile_2.setItem('index', [
+        {"index": "0"}
+      ]);
+    else
+      return false;
+    value = await hintPointsFile.createFile();
+    if (value == true)
+      hintPointsFile.setItem('points', [
+        {"points": "3"}
+      ]);
+    else
+      return false;
+    value = await langFile.createFile();
+    if (value == true)
+      langFile.setItem('Lang', [
+        {"selected_lang": "en"}
+      ]);
+    else
+      return false;
+    return true;
+  } catch (onError) {
+    return false;
+  }
 }
 
 Future<dynamic> storeGlobalData() async {

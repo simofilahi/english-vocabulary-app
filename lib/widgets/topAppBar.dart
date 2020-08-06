@@ -45,11 +45,13 @@ class TopAppBar extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: SvgPicture.asset(
-            icon_1,
-            height: 20.0,
-            width: 20.0,
-            color: Theme.of(context).textSelectionColor,
+          child: FittedBox(
+            child: SvgPicture.asset(
+              icon_1,
+              height: 20.0,
+              width: 20.0,
+              color: Theme.of(context).textSelectionColor,
+            ),
           ),
         ),
       ),
@@ -122,19 +124,23 @@ class TopAppBar extends StatelessWidget {
         onTap: () {
           clickHandler();
         },
+        child: FittedBox(
+          child: SvgPicture.asset(
+            icon_2,
+            height: 20.0,
+            width: 20.0,
+            color: Theme.of(context).indicatorColor,
+          ),
+        ),
+      );
+    } else {
+      return FittedBox(
         child: SvgPicture.asset(
           icon_2,
           height: 20.0,
           width: 20.0,
           color: Theme.of(context).indicatorColor,
         ),
-      );
-    } else {
-      return SvgPicture.asset(
-        icon_2,
-        height: 20.0,
-        width: 20.0,
-        color: Theme.of(context).indicatorColor,
       );
     }
   }

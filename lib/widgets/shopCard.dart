@@ -77,11 +77,13 @@ class ShopCard extends StatelessWidget {
                 margin: const EdgeInsets.only(
                   bottom: 20.0,
                 ),
-                child: SvgPicture.asset(
-                  crownIcon,
-                  height: 80.0,
-                  width: 80.0,
-                  color: primaryYellow,
+                child: FittedBox(
+                  child: SvgPicture.asset(
+                    crownIcon,
+                    height: 80.0,
+                    width: 80.0,
+                    color: primaryYellow,
+                  ),
                 ),
               ),
             ),

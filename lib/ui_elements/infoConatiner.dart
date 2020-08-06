@@ -88,10 +88,10 @@ class InfoContainer extends StatelessWidget {
             30.0,
           ),
           bottomRight: Radius.circular(
-            10.0,
+            15.0,
           ),
           bottomLeft: Radius.circular(
-            10.0,
+            15.0,
           ),
         ),
       ),

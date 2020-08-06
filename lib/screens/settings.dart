@@ -54,11 +54,13 @@ class _SettingState extends State<Setting> {
                       : Container(),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: SvgPicture.asset(
-                      iconName_2,
-                      height: 15.0,
-                      width: 15.0,
-                      color: Theme.of(context).textSelectionColor,
+                    child: FittedBox(
+                      child: SvgPicture.asset(
+                        iconName_2,
+                        height: 15.0,
+                        width: 15.0,
+                        color: Theme.of(context).textSelectionColor,
+                      ),
                     ),
                   ),
                 ],
@@ -72,6 +74,7 @@ class _SettingState extends State<Setting> {
         padding: const EdgeInsets.only(right: 15.0),
         child: InkWell(
           onTap: () {
+            print("yoyoyyoyo");
             widget.updateNightMode();
           },
           child: SvgPicture.asset(
@@ -91,73 +94,113 @@ class _SettingState extends State<Setting> {
 
   Widget _item(var size, String iconName, String text, String text_1,
       String iconName_2, var screen, int flag, int navFlag) {
-    return Material(
-      color: Colors.transparent,
-      // shadowColor: blackColor,
-      borderRadius: BorderRadius.circular(
-        15.0,
-      ),
-      child: InkWell(
-        onTap: () {
-          if (navFlag != 2) {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext ctx) {
-                return screen;
-              }),
-            );
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 4.0,
-            bottom: 4.0,
-            left: 2.0,
-            right: 2.0,
-          ),
-          child: Container(
-            height: 60.0,
-            width: size.width * .92,
-            decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(
-                  15.0,
-                ),
-                boxShadow: [
-                  shadow(Theme.of(context).cardColor),
-                ]),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          iconName,
-                          height: 20.0,
-                          width: 20.0,
-                          // color: primaryGreyColor,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        TextWidget(
-                          text: text,
-                          size: 18.0,
-                          color: Theme.of(context).textSelectionColor,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ],
-                    ),
+    return FittedBox(
+      child: Material(
+        color: Colors.transparent,
+        // shadowColor: blackColor,
+        borderRadius: BorderRadius.circular(
+          15.0,
+        ),
+        child: InkWell(
+          onTap: () {
+            if (navFlag != 2) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext ctx) {
+                  return screen;
+                }),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 4.0,
+              bottom: 4.0,
+              left: 2.0,
+              right: 2.0,
+            ),
+            child: Container(
+              height: 60.0,
+              width: size.width * .92,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(
+                    15.0,
                   ),
-                  _render(size, iconName, text, text_1, iconName_2, screen,
-                      flag, navFlag),
-                ],
+                  boxShadow: [
+                    shadow(Theme.of(context).cardColor),
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            iconName,
+                            height: 20.0,
+                            width: 20.0,
+                            // color: primaryGreyColor,
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          TextWidget(
+                            text: text,
+                            size: 18.0,
+                            color: Theme.of(context).textSelectionColor,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ],
+                      ),
+                    ),
+                    _render(size, iconName, text, text_1, iconName_2, screen,
+                        flag, navFlag),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _settingItems(var size) {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      children: <Widget>[
+        _item(
+          size,
+          languagesIcon,
+          'Language',
+          lang,
+          rightArrowtIcon,
+          ChooseLanguage(
+            globalDataUpdate: null,
+            settingBool: true,
+          ),
+          1,
+          1,
+        ),
+        _item(
+          size,
+          sleepModesIcon,
+          'Night mode',
+          null,
+          Theme.of(context).backgroundColor == blackColor
+              ? rightSwitch
+              : leftSwitch,
+          null,
+          2,
+          2,
+        ),
+        _item(size, restoreIcon, 'Restore', null, null, null, 0, 3),
+        _item(size, shareIcon, 'Share app', null, null, null, 0, 4),
+        _item(size, starIcon, 'Rate app', null, null, null, 0, 5),
+        _item(size, privacyIcon, 'Privacy', null, null, null, 0, 6),
+        _item(size, aboutIcon, 'About', null, null, null, 0, 7),
+      ],
     );
   }
 
@@ -178,54 +221,26 @@ class _SettingState extends State<Setting> {
                 text: 'Settings',
                 textSize: 18,
               ),
+              SizedBox(
+                height: 10.0,
+              ),
               Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: FittedBox(child: ShopCard()),
+                ),
+              ),
+              Expanded(
+                flex: 4,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
                     vertical: 15.0,
                   ),
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: <Widget>[
-                      ShopCard(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      _item(
-                        size,
-                        languagesIcon,
-                        'Language',
-                        lang,
-                        rightArrowtIcon,
-                        ChooseLanguage(
-                          globalDataUpdate: null,
-                          settingBool: true,
-                        ),
-                        1,
-                        1,
-                      ),
-                      _item(
-                        size,
-                        sleepModesIcon,
-                        'Mode nuit',
-                        null,
-                        Theme.of(context).backgroundColor == blackColor
-                            ? rightSwitch
-                            : leftSwitch,
-                        null,
-                        2,
-                        2,
-                      ),
-                      _item(
-                          size, restoreIcon, 'Restore', null, null, null, 0, 3),
-                      _item(
-                          size, shareIcon, 'Share app', null, null, null, 0, 4),
-                      _item(size, starIcon, 'Rate app', null, null, null, 0, 5),
-                      _item(
-                          size, privacyIcon, 'Privacy', null, null, null, 0, 6),
-                      _item(size, aboutIcon, 'About', null, null, null, 0, 7),
-                    ],
-                  ),
+                  child: _settingItems(size),
                 ),
               ),
             ],

@@ -260,11 +260,13 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                             'assets/audio/${widget.item[index]['audioPath']}',
                           );
                         },
-                        child: SvgPicture.asset(
-                          speakerIcon,
-                          height: 50,
-                          width: 50.0,
-                          color: Theme.of(context).indicatorColor,
+                        child: FittedBox(
+                          child: SvgPicture.asset(
+                            speakerIcon,
+                            height: 50,
+                            width: 50.0,
+                            color: Theme.of(context).indicatorColor,
+                          ),
                         ),
                       ),
                     ),

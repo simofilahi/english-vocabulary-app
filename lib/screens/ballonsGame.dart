@@ -108,23 +108,19 @@ class _BallonsGameState extends State<BallonsGame> {
                           SizedBox(
                             height: 2.0,
                           ),
-                          FittedBox(
-                            child: TextWidget(
-                              text: gameDes,
-                              color: Theme.of(context).indicatorColor,
-                              size: 16.0,
-                            ),
+                          TextWidget(
+                            text: gameDes,
+                            color: Theme.of(context).indicatorColor,
+                            size: 16.0,
                           ),
                         ],
                       ),
-                      FittedBox(
-                        child: CustomButton(
-                          text: 'Start',
-                          screen: screen,
-                          buttonHeightSize: 40.0,
-                          buttonWidthSize: 150.0,
-                          navFlag: false,
-                        ),
+                      CustomButton(
+                        text: 'Start',
+                        screen: screen,
+                        buttonHeightSize: 40.0,
+                        buttonWidthSize: 150.0,
+                        navFlag: false,
                       ),
                     ],
                   ),

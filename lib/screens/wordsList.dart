@@ -48,12 +48,12 @@ class _WordsListState extends State<WordsList> {
     _updateUnknownWords();
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   widget.globalDataUpdate();
-  //   widget.getTotalLearningWords();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    widget.globalDataUpdate();
+    widget.getTotalLearningWords();
+  }
 
   _updateFalshCarsWords() {
     setState(() {
@@ -126,10 +126,12 @@ class _WordsListState extends State<WordsList> {
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
                   children: <Widget>[
-                    SvgPicture.asset(
-                      icon,
-                      height: 50.0,
-                      width: 40.0,
+                    FittedBox(
+                      child: SvgPicture.asset(
+                        icon,
+                        height: 50.0,
+                        width: 40.0,
+                      ),
                     ),
                     SizedBox(
                       width: 10.0,
@@ -159,11 +161,13 @@ class _WordsListState extends State<WordsList> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0),
-                child: SvgPicture.asset(
-                  rightArrowtIcon,
-                  height: 25.0,
-                  width: 25.0,
-                  color: Theme.of(context).indicatorColor,
+                child: FittedBox(
+                  child: SvgPicture.asset(
+                    rightArrowtIcon,
+                    height: 25.0,
+                    width: 25.0,
+                    color: Theme.of(context).indicatorColor,
+                  ),
                 ),
               ),
             ],
@@ -199,41 +203,39 @@ class _WordsListState extends State<WordsList> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15.0,
-                    ),
-                    child: TextWidget(
-                      text: data[index]['en'],
-                      size: 18.0,
-                      color: Theme.of(context).textSelectionColor,
-                      fontWeight: FontWeight.w400,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15.0,
                   ),
-                ),
-                Expanded(
-                  flex: 2,
                   child: TextWidget(
-                    text: getRightTranslate(data, null, index, widget.lang),
+                    text: data[index]['en'],
                     size: 18.0,
                     color: Theme.of(context).textSelectionColor,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: () {
-                      playLocal(
-                          'assets/audio/${widget.data[index]['audioPath']}');
-                    },
-                    child: SvgPicture.asset(
-                      speakerIcon,
-                      height: 25.0,
-                      width: 25.0,
-                      color: Theme.of(context).indicatorColor,
+                TextWidget(
+                  text: getRightTranslate(data, null, index, widget.lang),
+                  size: 18.0,
+                  color: Theme.of(context).textSelectionColor,
+                  fontWeight: FontWeight.w400,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    playLocal(
+                        'assets/audio/${widget.data[index]['audioPath']}');
+                  },
+                  child: FittedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 15.0,
+                      ),
+                      child: SvgPicture.asset(
+                        speakerIcon,
+                        height: 25.0,
+                        width: 25.0,
+                        color: Theme.of(context).indicatorColor,
+                      ),
                     ),
                   ),
                 ),

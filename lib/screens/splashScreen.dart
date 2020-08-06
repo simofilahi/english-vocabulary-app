@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:lenglish/models/data.dart';
+
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'chooseLanguage.dart';
@@ -42,74 +42,26 @@ class _SplashScreenState extends State<SplashScreen>
       print('inside is exist');
       print("ret ");
       print(ret);
+      creationOfFiles().then((value) {
+        if (value) {
+          Future.delayed(const Duration(seconds: 4), () {
+            _callScreen();
+          });
+        }
+      });
       if (ret == false) {
-        langFile.createFile().then((value) {
-          print("first value is false");
-          if (value == true) {
-            print("inside first false");
-            allData.createFile().then((v) {
-              if (v == true) {
-                print("set global data");
-                allData.setItem('data', words);
-              }
-            });
-            indexFile.createFile().then((v) {
-              if (v == true) {
-                print("set global index");
-                indexFile.setItem('index', [
-                  {"index": "0"}
-                ]);
-              }
-            });
-            indexFile_2.createFile().then((v) {
-              if (v == true) {
-                print("set global indexData 2");
-                indexFile_2.setItem('index', [
-                  {"index": "0"}
-                ]);
-              }
-            });
-            hintPointsFile.createFile().then((v) {
-              if (v == true) {
-                print("set global points ******************************* ");
-                hintPointsFile.setItem('points', [
-                  {"points": "3"}
-                ]);
-              }
-            });
-            langFile.createFile().then((v) {
-              if (v == true) {
-                print("set lang data");
-                langFile.setItem('Lang', [
-                  {"selected_lang": "en"}
-                ]);
-              }
-            });
-            indexFile.createFile().then((v) {
-              if (v == true) {
-                print("set indexFile data");
-                indexFile.setItem('Index', [
-                  {"index": "0"}
-                ]);
-              }
-              _callScreen();
-            });
-            // favFile.createFile();
-          }
-        });
       } else {
         print("else condition");
         allData.getItem().then((data) {
-          print("before get iTEM");
           langFile.getItem().then((lang) {
-            print("item ======> lang");
-            print(lang[0]['selected_lang']);
-            setState(() {
-              _lang = lang[0]['selected_lang'];
-              _globalData = data;
-              _checkerBoolean = 1;
+            Future.delayed(const Duration(seconds: 4), () {
+              setState(() {
+                _lang = lang[0]['selected_lang'];
+                _globalData = data;
+                _checkerBoolean = 1;
+              });
+              _callScreen();
             });
-            _callScreen();
           });
         });
       }
@@ -182,10 +134,6 @@ class _SplashScreenState extends State<SplashScreen>
             );
           },
           child: spinkit,
-          // child: TextWidget(
-          //   text: 'Click here',
-          //   color: blackColor,
-          // ),
         ),
       ),
     );

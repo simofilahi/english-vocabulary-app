@@ -146,6 +146,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                     child: TextWidget(
                       text: 'Choose Language',
                       size: 30.0,
+                      color: Theme.of(context).textSelectionColor,
                     ),
                   ),
                   SizedBox(

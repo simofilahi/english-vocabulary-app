@@ -214,10 +214,12 @@ class _SpellingGameState extends State<SpellingGame> {
                     ],
                   ),
                   child: Center(
-                    child: SvgPicture.asset(
-                      icon,
-                      height: 35.0,
-                      width: 35.0,
+                    child: FittedBox(
+                      child: SvgPicture.asset(
+                        icon,
+                        height: 35.0,
+                        width: 35.0,
+                      ),
                     ),
                   ),
                 ),

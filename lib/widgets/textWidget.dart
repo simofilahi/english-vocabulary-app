@@ -17,13 +17,15 @@ class TextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: textAlign,
-      style: TextStyle(
-        fontSize: size,
-        color: color,
-        fontWeight: fontWeight,
+    return FittedBox(
+      child: Text(
+        text,
+        textAlign: textAlign,
+        style: TextStyle(
+          fontSize: size,
+          color: color,
+          fontWeight: fontWeight,
+        ),
       ),
     );
   }
