@@ -31,10 +31,8 @@ class SpellingGame extends StatefulWidget {
 class _SpellingGameState extends State<SpellingGame> {
   final TextEditingController _controller = TextEditingController(text: '');
   List<Map<String, dynamic>> _listOfchar = [];
-  final _random = new Random();
-  bool _boolean = false;
   String _word = "";
-  String _en_word = "";
+  String _enWord = "";
   int _set = 1;
   int _index = 0;
   int _initIndex = 0;
@@ -91,7 +89,7 @@ class _SpellingGameState extends State<SpellingGame> {
       var obj = {'char': character, 'selected': false};
       arr.add(obj);
     });
-    _en_word.runes.forEach((int rune) {
+    _enWord.runes.forEach((int rune) {
       var character = new String.fromCharCode(rune);
       var obj = {'char': character, 'selected': false};
       arr.add(obj);
@@ -99,7 +97,7 @@ class _SpellingGameState extends State<SpellingGame> {
     // print("here arr ===> ");
     // print(arr);
     print("here is en_word");
-    print(_en_word);
+    print(_enWord);
     arr.shuffle();
     setState(() {
       _listOfchar = arr;
@@ -127,10 +125,10 @@ class _SpellingGameState extends State<SpellingGame> {
   }
 
   _updataIndexAndWord(String enWord, String word) {
-    print(_en_word);
+    print(_enWord);
     setState(() {
       _index = _index + 1;
-      _en_word = enWord;
+      _enWord = enWord;
       _word = word;
     });
   }
@@ -169,7 +167,7 @@ class _SpellingGameState extends State<SpellingGame> {
     if (flag == 1) {
       if (_dataRowChar.isEmpty) return false;
       for (int i = 0; i < _dataRowChar.length; i++) {
-        if (_dataRowChar[i] != _en_word[i]) {
+        if (_dataRowChar[i] != _enWord[i]) {
           return false;
         }
       }
@@ -178,7 +176,7 @@ class _SpellingGameState extends State<SpellingGame> {
       });
       return true;
     } else if (flag == 2) {
-      if (_controller.text == _en_word)
+      if (_controller.text == _enWord)
         return true;
       else
         return false;
@@ -467,13 +465,13 @@ class _SpellingGameState extends State<SpellingGame> {
 
   _showAnwerHelper(int flag) {
     if (flag == 2) {
-      _controller.text = _en_word;
+      _controller.text = _enWord;
       setState(() {
         _inputError = false;
       });
     } else {
       List<dynamic> arr = [];
-      _en_word.runes.forEach((int rune) {
+      _enWord.runes.forEach((int rune) {
         var character = String.fromCharCode(rune);
         arr.add(character);
       });
@@ -498,7 +496,7 @@ class _SpellingGameState extends State<SpellingGame> {
     if (flag > 0) {
       _showAnwerHelper(flag);
     } else {
-      _controller.text = _en_word;
+      _controller.text = _enWord;
       setState(() {
         _inputError = false;
       });
@@ -610,19 +608,19 @@ class _SpellingGameState extends State<SpellingGame> {
               Expanded(flex: 1, child: Container()),
               Expanded(
                 flex: 4,
-                child: Column(
-                  children: <Widget>[
-                    TextWidget(
-                      text: _word,
-                      size: 24.0,
-                      color: Theme.of(context).textSelectionColor,
-                    ),
-                    SizedBox(
-                      height: size.height * .04,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Padding(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      TextWidget(
+                        text: _word,
+                        size: 24.0,
+                        color: Theme.of(context).textSelectionColor,
+                      ),
+                      SizedBox(
+                        height: size.height * .04,
+                      ),
+                      Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 20.0,
                           vertical: 10.0,
@@ -640,16 +638,19 @@ class _SpellingGameState extends State<SpellingGame> {
                                   onTap: () {
                                     setState(() {
                                       _useKeyBoard = !_useKeyBoard;
+                                      _inputError = false;
                                     });
                                   },
-                                  child: Text(
-                                    _useKeyBoard == true
-                                        ? 'Use hand tap'
-                                        : 'Use keyboard',
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: primaryBlueColor,
-                                      fontSize: 18.0,
+                                  child: FittedBox(
+                                    child: Text(
+                                      _useKeyBoard == true
+                                          ? 'Use hand tap'
+                                          : 'Use keyboard',
+                                      style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: primaryBlueColor,
+                                        fontSize: 18.0,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -686,8 +687,8 @@ class _SpellingGameState extends State<SpellingGame> {
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Expanded(

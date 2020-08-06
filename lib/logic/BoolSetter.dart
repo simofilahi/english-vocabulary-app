@@ -12,6 +12,28 @@ Future<void> updateSelectedLanguage(String selectedLang) async {
     lang = 'ar';
   } else if (selectedLang == 'Chinese') {
     lang = 'ch';
+  } else if (selectedLang == 'Italian') {
+    lang = 'it';
+  } else if (selectedLang == 'Hindi') {
+    lang = 'hi';
+  } else if (selectedLang == 'Urdu') {
+    lang = 'ur';
+  } else if (selectedLang == 'Filipino') {
+    lang = 'fi';
+  } else if (selectedLang == 'German') {
+    lang = 'ge';
+  } else if (selectedLang == 'Russian') {
+    lang = 'ru';
+  } else if (selectedLang == 'Turkish') {
+    lang = 'tu';
+  } else if (selectedLang == 'Bengali') {
+    lang = 'be';
+  } else if (selectedLang == 'Japanese') {
+    lang = 'ja';
+  } else if (selectedLang == 'Portuguese') {
+    lang = 'po';
+  } else if (selectedLang == 'Korean') {
+    lang = 'ko';
   }
   wordsInfo[0]['selected_lang'] = lang;
   saveChosenLang(wordsInfo);
@@ -37,6 +59,8 @@ Future<bool> verfieLangFile() async {
 String getTheSelectedLang() {}
 
 String getRightTranslate(List data, Map item, int index, lang) {
+  print("ttttttttttt");
+  print(lang);
   if (data == null) {
     if (lang == 'sp') {
       return item['sp'];
@@ -56,9 +80,66 @@ String getRightTranslate(List data, Map item, int index, lang) {
       return data[index]['ar'];
     } else if (lang == 'ch') {
       return data[index]['ch'];
+    } else if (lang == 'hi') {
+      return data[index]['hi'];
+    } else if (lang == 'ur') {
+      return data[index]['ur'];
+    } else if (lang == 'fi') {
+      return data[index]['fi'];
+    } else if (lang == 'ge') {
+      return data[index]['ge'];
+    } else if (lang == 'ru') {
+      return data[index]['ru'];
+    } else if (lang == 'tu') {
+      return data[index]['tu'];
+    } else if (lang == 'be') {
+      return data[index]['be'];
+    } else if (lang == 'ja') {
+      return data[index]['ja'];
+    } else if (lang == 'pr') {
+      return data[index]['pr'];
+    } else if (lang == 'ko') {
+      return data[index]['ko'];
+    } else if (lang == 'it') {
+      return data[index]['it'];
     }
   }
   return data[index]['en'];
+}
+
+String getNameOfLang(String lang) {
+  if (lang == 'ar') {
+    return 'Arabic';
+  } else if (lang == 'fr') {
+    return 'French';
+  } else if (lang == 'sp') {
+    return 'Spanich';
+  } else if (lang == 'ch') {
+    return 'Chinese';
+  } else if (lang == 'hi') {
+    return 'Hindi';
+  } else if (lang == 'ur') {
+    return "Urdu";
+  } else if (lang == 'fi') {
+    return "Filipino";
+  } else if (lang == 'ge') {
+    return "German";
+  } else if (lang == 'ru') {
+    return "Russian";
+  } else if (lang == 'tu') {
+    return "Turkish";
+  } else if (lang == 'be') {
+    return "Bengali";
+  } else if (lang == 'ja') {
+    return "Japanese";
+  } else if (lang == 'pr') {
+    return "Portuguese";
+  } else if (lang == 'ko') {
+    return "Korea";
+  } else if (lang == 'it') {
+    return "Italian";
+  }
+  return 'English';
 }
 
 Future<dynamic> getGlobalData() async {

@@ -41,6 +41,8 @@ class _WordsListState extends State<WordsList> {
   void initState() {
     super.initState();
     // _updateCountOfWords();
+    print("here is lang");
+    print(widget.lang);
     _updateFalshCarsWords();
     _updateFamiliarWords();
     _updateUnknownWords();

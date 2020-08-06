@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/chooseLanguage.dart';
 import 'package:lenglish/widgets/shopCard.dart';
+import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 
@@ -25,23 +26,9 @@ class _SettingState extends State<Setting> {
     super.initState();
     print("night flag");
     print(widget.nightMode);
-    if (widget.lang == 'ar') {
-      setState(() {
-        lang = 'Arabic';
-      });
-    } else if (widget.lang == 'fr') {
-      setState(() {
-        lang = 'French';
-      });
-    } else if (widget.lang == 'sp') {
-      setState(() {
-        lang = 'Spanich';
-      });
-    } else if (widget.lang == 'ch') {
-      setState(() {
-        lang = 'Chinese';
-      });
-    }
+    setState(() {
+      lang = getNameOfLang(widget.lang);
+    });
   }
 
   Widget _render(var size, String iconName, String text, String text_1,
