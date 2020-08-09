@@ -64,6 +64,7 @@ const String keyBoardIcon = 'assets/icons/hardware.svg';
 const String cubeIcon = 'assets/icons/cube.svg';
 const String abcIcon = 'assets/icons/abc.svg';
 const String handTapIcon = 'assets/icons/touch.svg';
+const String answerIcon = 'assets/icons/faq.svg';
 // radius
 
 const double radiusValue = 15.0;

@@ -5,7 +5,7 @@
 5    android:versionName="1.0.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="16"
+8        android:minSdkVersion="19"
 8-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="28" />
 9-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml
@@ -16,94 +16,274 @@
 12    <uses-permission android:name="android.permission.VIBRATE" />
 12-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:8:5-66
 12-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:8:22-63
-13    <uses-permission android:name="android.permission.WAKE_LOCK" />
+13    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
 13-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:9:5-68
 13-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:9:22-65
-14    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-14-->[com.google.android.exoplayer:exoplayer-core:2.11.4] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\9d8c9dbe692e715824041926cf291978\jetified-exoplayer-core-2.11.4\AndroidManifest.xml:24:5-79
-14-->[com.google.android.exoplayer:exoplayer-core:2.11.4] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\9d8c9dbe692e715824041926cf291978\jetified-exoplayer-core-2.11.4\AndroidManifest.xml:24:22-76
-15    <!--
-16 io.flutter.app.FlutterApplication is an android.app.Application that
-17         calls FlutterMain.startInitialization(this); in its onCreate method.
-18         In most cases you can leave this as-is, but you if you want to provide
-19         additional functionality it is fine to subclass or reimplement
-20         FlutterApplication and put your custom class here.
-21    -->
-22    <application
-22-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:8:5-29:19
-23        android:name="io.flutter.app.FlutterApplication"
-23-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:9:9-57
-24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-24-->[androidx.core:core:1.1.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\a528b13ac93e64cafa3d0480e2c93207\core-1.1.0\AndroidManifest.xml:24:18-86
-25        android:icon="@mipmap/ic_launcher"
-25-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:11:9-43
-26        android:label="lenglish" >
-26-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:10:9-33
-27        <activity
-27-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:12:9-23:20
-28            android:name="com.example.lenglish.MainActivity"
-28-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:13:13-41
-29            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-29-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:16:13-163
-30            android:hardwareAccelerated="true"
-30-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:17:13-47
-31            android:launchMode="singleTop"
-31-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:14:13-43
-32            android:theme="@style/LaunchTheme"
-32-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:15:13-47
-33            android:windowSoftInputMode="adjustResize" >
-33-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:18:13-55
-34            <intent-filter>
-34-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:19:13-22:29
-35                <action android:name="android.intent.action.MAIN" />
-35-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:20:17-68
-35-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:20:25-66
-36
-37                <category android:name="android.intent.category.LAUNCHER" />
-37-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:21:17-76
-37-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:21:27-74
-38            </intent-filter>
-39        </activity>
-40        <!--
-41             Don't delete the meta-data below.
-42             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-43        -->
-44        <meta-data
-44-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:26:9-28:33
-45            android:name="flutterEmbedding"
-45-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:27:13-44
-46            android:value="2" />
-46-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:28:13-30
-47
-48        <receiver android:name="com.github.florent37.assets_audio_player.notification.NotificationActionReceiver" />
-48-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:12:9-117
-48-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:12:19-114
-49        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
-49-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:13:9-17:20
-49-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:13:19-76
-50            <intent-filter>
-50-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:14:13-16:29
-51                <action android:name="android.intent.action.MEDIA_BUTTON" />
-51-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:15:17-77
-51-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:15:25-74
-52            </intent-filter>
-53        </receiver>
+14    <!-- <uses-sdk android:minSdkVersion="16" /> -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->[com.google.firebase:firebase-functions:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\7b26892997612afb16d2abba56fd9606\jetified-firebase-functions-17.0.0\AndroidManifest.xml:12:5-67
+15-->[com.google.firebase:firebase-functions:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\7b26892997612afb16d2abba56fd9606\jetified-firebase-functions-17.0.0\AndroidManifest.xml:12:22-64
+16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+16-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:22:5-79
+16-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:22:22-76
+17    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+17-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:26:5-82
+17-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:26:22-79
+18
+19    <uses-feature
+19-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\6b9b7fc1ad481537ed0a66d62976ec46\play-services-maps-17.0.0\AndroidManifest.xml:26:5-28:35
+20        android:glEsVersion="0x00020000"
+20-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\6b9b7fc1ad481537ed0a66d62976ec46\play-services-maps-17.0.0\AndroidManifest.xml:27:9-41
+21        android:required="true" />
+21-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\6b9b7fc1ad481537ed0a66d62976ec46\play-services-maps-17.0.0\AndroidManifest.xml:28:9-32
+22    <!--
+23 io.flutter.app.FlutterApplication is an android.app.Application that
+24         calls FlutterMain.startInitialization(this); in its onCreate method.
+25         In most cases you can leave this as-is, but you if you want to provide
+26         additional functionality it is fine to subclass or reimplement
+27         FlutterApplication and put your custom class here.
+28    -->
+29    <application
+29-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:8:5-29:19
+30        android:name="io.flutter.app.FlutterApplication"
+30-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:9:9-57
+31        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+31-->[androidx.core:core:1.1.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\a528b13ac93e64cafa3d0480e2c93207\core-1.1.0\AndroidManifest.xml:24:18-86
+32        android:icon="@mipmap/ic_launcher"
+32-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:11:9-43
+33        android:label="lenglish" >
+33-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:10:9-33
+34        <activity
+34-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:12:9-23:20
+35            android:name="com.example.lenglish.MainActivity"
+35-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:13:13-41
+36            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+36-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:16:13-163
+37            android:hardwareAccelerated="true"
+37-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:17:13-47
+38            android:launchMode="singleTop"
+38-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:14:13-43
+39            android:theme="@style/LaunchTheme"
+39-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:15:13-47
+40            android:windowSoftInputMode="adjustResize" >
+40-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:18:13-55
+41            <intent-filter>
+41-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:19:13-22:29
+42                <action android:name="android.intent.action.MAIN" />
+42-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:20:17-68
+42-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:20:25-66
+43
+44                <category android:name="android.intent.category.LAUNCHER" />
+44-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:21:17-76
+44-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:21:27-74
+45            </intent-filter>
+46        </activity>
+47        <!--
+48             Don't delete the meta-data below.
+49             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+50        -->
+51        <meta-data
+51-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:26:9-28:33
+52            android:name="flutterEmbedding"
+52-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:27:13-44
+53            android:value="2" />
+53-->C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:28:13-30
 54
-55        <service
-55-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:19:9-29:19
-56            android:name="com.github.florent37.assets_audio_player.notification.NotificationService"
-56-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:20:13-101
-57            android:enabled="true"
-57-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:21:13-35
-58            android:exported="true" >
-58-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:22:13-36
-59
-60            <!--
-61            <intent-filter>
-62                <action android:name="android.intent.action.MEDIA_BUTTON" />
-63            </intent-filter>
-64            -->
-65        </service>
-66    </application>
-67
-68</manifest>
+55        <receiver android:name="com.github.florent37.assets_audio_player.notification.NotificationActionReceiver" />
+55-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:12:9-117
+55-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:12:19-114
+56        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+56-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:13:9-17:20
+56-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:13:19-76
+57            <intent-filter>
+57-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:14:13-16:29
+58                <action android:name="android.intent.action.MEDIA_BUTTON" />
+58-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:15:17-77
+58-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:15:25-74
+59            </intent-filter>
+60        </receiver>
+61
+62        <service
+62-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:19:9-29:19
+63            android:name="com.github.florent37.assets_audio_player.notification.NotificationService"
+63-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:20:13-101
+64            android:enabled="true"
+64-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:21:13-35
+65            android:exported="true" >
+65-->[:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\release\AndroidManifest.xml:22:13-36
+66
+67            <!--
+68            <intent-filter>
+69                <action android:name="android.intent.action.MEDIA_BUTTON" />
+70            </intent-filter>
+71            -->
+72        </service>
+73
+74        <meta-data
+74-->[:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\release\AndroidManifest.xml:8:9-10:36
+75            android:name="com.google.android.gms.wallet.api.enabled"
+75-->[:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\release\AndroidManifest.xml:9:13-69
+76            android:value="true" />
+76-->[:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\release\AndroidManifest.xml:10:13-33
+77
+78        <activity
+78-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:12:9-14:57
+79            android:name="com.stripe.android.view.AddPaymentMethodActivity"
+79-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:13:13-76
+80            android:theme="@style/StripeDefaultTheme" />
+80-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:14:13-54
+81        <activity
+81-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:15:9-17:57
+82            android:name="com.stripe.android.view.PaymentMethodsActivity"
+82-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:16:13-74
+83            android:theme="@style/StripeDefaultTheme" />
+83-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:17:13-54
+84        <activity
+84-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:18:9-20:57
+85            android:name="com.stripe.android.view.PaymentFlowActivity"
+85-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:19:13-71
+86            android:theme="@style/StripeDefaultTheme" />
+86-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:20:13-54
+87        <activity
+87-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:21:9-23:57
+88            android:name="com.stripe.android.view.PaymentAuthWebViewActivity"
+88-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:22:13-78
+89            android:theme="@style/StripeDefaultTheme" />
+89-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:23:13-54
+90        <activity
+90-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:24:9-26:57
+91            android:name="com.stripe.android.view.PaymentRelayActivity"
+91-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:25:13-72
+92            android:theme="@style/StripeDefaultTheme" />
+92-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:26:13-54
+93        <activity
+93-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:27:9-29:57
+94            android:name="com.stripe.android.view.Stripe3ds2CompletionActivity"
+94-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:28:13-80
+95            android:theme="@style/StripeDefaultTheme" />
+95-->[com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:29:13-54
+96        <activity
+96-->[com.stripe:stripe-3ds2-android:2.7.8] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\3c2d1233f430cbf16a238b1ab63b884e\stripe-3ds2-android-2.7.8\AndroidManifest.xml:12:9-14:54
+97            android:name="com.stripe.android.stripe3ds2.views.ChallengeActivity"
+97-->[com.stripe:stripe-3ds2-android:2.7.8] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\3c2d1233f430cbf16a238b1ab63b884e\stripe-3ds2-android-2.7.8\AndroidManifest.xml:13:13-81
+98            android:theme="@style/Stripe3DS2Theme" />
+98-->[com.stripe:stripe-3ds2-android:2.7.8] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\3c2d1233f430cbf16a238b1ab63b884e\stripe-3ds2-android-2.7.8\AndroidManifest.xml:14:13-51
+99        <activity
+99-->[com.stripe:stripe-3ds2-android:2.7.8] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\3c2d1233f430cbf16a238b1ab63b884e\stripe-3ds2-android-2.7.8\AndroidManifest.xml:15:9-17:54
+100            android:name="com.stripe.android.stripe3ds2.views.ChallengeProgressDialogActivity"
+100-->[com.stripe:stripe-3ds2-android:2.7.8] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\3c2d1233f430cbf16a238b1ab63b884e\stripe-3ds2-android-2.7.8\AndroidManifest.xml:16:13-95
+101            android:theme="@style/Stripe3DS2Theme" />
+101-->[com.stripe:stripe-3ds2-android:2.7.8] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\3c2d1233f430cbf16a238b1ab63b884e\stripe-3ds2-android-2.7.8\AndroidManifest.xml:17:13-51
+102
+103        <service
+103-->[:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\release\AndroidManifest.xml:8:9-12:19
+104            android:name="com.google.firebase.components.ComponentDiscoveryService"
+104-->[:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\release\AndroidManifest.xml:8:18-89
+105            android:directBootAware="true"
+105-->[com.google.firebase:firebase-common:19.3.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\bd829c5085057787f8e5e3d0e5773eaa\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+106            android:exported="false" >
+106-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:35:13-37
+107            <meta-data
+107-->[:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\release\AndroidManifest.xml:9:13-11:85
+108                android:name="com.google.firebase.components:io.flutter.plugins.firebaseauth.FlutterFirebaseAppRegistrar"
+108-->[:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\release\AndroidManifest.xml:10:17-122
+109                android:value="com.google.firebase.components.ComponentRegistrar" />
+109-->[:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\release\AndroidManifest.xml:11:17-82
+110            <meta-data
+110-->[:cloud_functions] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions\intermediates\library_manifest\release\AndroidManifest.xml:9:13-11:85
+111                android:name="com.google.firebase.components:io.flutter.plugins.firebase.cloudfunctions.FlutterFirebaseAppRegistrar"
+111-->[:cloud_functions] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions\intermediates\library_manifest\release\AndroidManifest.xml:10:17-133
+112                android:value="com.google.firebase.components.ComponentRegistrar" />
+112-->[:cloud_functions] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions\intermediates\library_manifest\release\AndroidManifest.xml:11:17-82
+113            <meta-data
+113-->[:firebase_core] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_core\intermediates\library_manifest\release\AndroidManifest.xml:9:13-11:85
+114                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseAppRegistrar"
+114-->[:firebase_core] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_core\intermediates\library_manifest\release\AndroidManifest.xml:10:17-123
+115                android:value="com.google.firebase.components.ComponentRegistrar" />
+115-->[:firebase_core] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_core\intermediates\library_manifest\release\AndroidManifest.xml:11:17-82
+116            <meta-data
+116-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:36:13-38:85
+117                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+117-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:37:17-109
+118                android:value="com.google.firebase.components.ComponentRegistrar" />
+118-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:38:17-82
+119            <meta-data
+119-->[com.google.firebase:firebase-functions:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\7b26892997612afb16d2abba56fd9606\jetified-firebase-functions-17.0.0\AndroidManifest.xml:16:13-18:85
+120                android:name="com.google.firebase.components:com.google.firebase.functions.FunctionsRegistrar"
+120-->[com.google.firebase:firebase-functions:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\7b26892997612afb16d2abba56fd9606\jetified-firebase-functions-17.0.0\AndroidManifest.xml:17:17-111
+121                android:value="com.google.firebase.components.ComponentRegistrar" />
+121-->[com.google.firebase:firebase-functions:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\7b26892997612afb16d2abba56fd9606\jetified-firebase-functions-17.0.0\AndroidManifest.xml:18:17-82
+122            <meta-data
+122-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:32:13-34:85
+123                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+123-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:33:17-96
+124                android:value="com.google.firebase.components.ComponentRegistrar" />
+124-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:34:17-82
+125        </service>
+126
+127        <activity
+127-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:24:9-31:50
+128            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+128-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:25:13-85
+129            android:excludeFromRecents="true"
+129-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:26:13-46
+130            android:exported="true"
+130-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:27:13-36
+131            android:launchMode="singleTask"
+131-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:28:13-44
+132            android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
+132-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:29:13-102
+133            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+133-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\337e24a263fdd84e41b4282b5c834462\firebase-auth-19.2.0\AndroidManifest.xml:30:13-72
+134
+135        <receiver
+135-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:37:9-44:20
+136            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+136-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:38:13-78
+137            android:exported="true"
+137-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:39:13-36
+138            android:permission="com.google.android.c2dm.permission.SEND" >
+138-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:40:13-73
+139            <intent-filter>
+139-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:41:13-43:29
+140                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+140-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:42:17-81
+140-->[com.google.firebase:firebase-iid:18.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\63b02225a90a43c883a8a878171b6cba\jetified-firebase-iid-18.0.0\AndroidManifest.xml:42:25-78
+141            </intent-filter>
+142        </receiver>
+143
+144        <provider
+144-->[com.google.firebase:firebase-common:19.3.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\bd829c5085057787f8e5e3d0e5773eaa\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+145            android:name="com.google.firebase.provider.FirebaseInitProvider"
+145-->[com.google.firebase:firebase-common:19.3.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\bd829c5085057787f8e5e3d0e5773eaa\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+146            android:authorities="com.example.lenglish.firebaseinitprovider"
+146-->[com.google.firebase:firebase-common:19.3.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\bd829c5085057787f8e5e3d0e5773eaa\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+147            android:exported="false"
+147-->[com.google.firebase:firebase-common:19.3.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\bd829c5085057787f8e5e3d0e5773eaa\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+148            android:initOrder="100" /> <!-- Needs to be explicitly declared on P+ -->
+148-->[com.google.firebase:firebase-common:19.3.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\bd829c5085057787f8e5e3d0e5773eaa\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+149        <uses-library
+149-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\6b9b7fc1ad481537ed0a66d62976ec46\play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
+150            android:name="org.apache.http.legacy"
+150-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\6b9b7fc1ad481537ed0a66d62976ec46\play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
+151            android:required="false" />
+151-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\6b9b7fc1ad481537ed0a66d62976ec46\play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
+152
+153        <activity
+153-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\1cad50e824c2a91bda736a296b3e673e\play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
+154            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+154-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\1cad50e824c2a91bda736a296b3e673e\play-services-base-17.1.0\AndroidManifest.xml:24:13-79
+155            android:exported="false"
+155-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\1cad50e824c2a91bda736a296b3e673e\play-services-base-17.1.0\AndroidManifest.xml:25:13-37
+156            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+156-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\1cad50e824c2a91bda736a296b3e673e\play-services-base-17.1.0\AndroidManifest.xml:26:13-72
+157
+158        <meta-data
+158-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\95d6bc44e9f651f32ecaa736889b4a07\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+159            android:name="com.google.android.gms.version"
+159-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\95d6bc44e9f651f32ecaa736889b4a07\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+160            android:value="@integer/google_play_services_version" />
+160-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\95d6bc44e9f651f32ecaa736889b4a07\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+161    </application>
+162
+163</manifest>

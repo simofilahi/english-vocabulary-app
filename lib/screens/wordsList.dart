@@ -5,6 +5,7 @@ import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import '../constants.dart';
 import 'flashCards.dart';
 
@@ -33,6 +34,7 @@ class _WordsListState extends State<WordsList> {
   List<dynamic> _flashCardWords = [];
   List<dynamic> _familiarWords = [];
   List<dynamic> _unknowWords = [];
+  BannerAd _bannerAd;
   // int _flashCardsWordsCount = 0;
   // int _familiarWordsCount = 0;
   // int _unknowWordsCount = 0;
@@ -43,14 +45,30 @@ class _WordsListState extends State<WordsList> {
     // _updateCountOfWords();
     print("here is lang");
     print(widget.lang);
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(horizontalCenterOffset: 0, anchorOffset: 5);
     _updateFalshCarsWords();
     _updateFamiliarWords();
     _updateUnknownWords();
   }
 
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      // targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
+    _bannerAd?.dispose();
     widget.globalDataUpdate();
     widget.getTotalLearningWords();
   }
@@ -129,8 +147,8 @@ class _WordsListState extends State<WordsList> {
                     FittedBox(
                       child: SvgPicture.asset(
                         icon,
-                        height: 50.0,
-                        width: 40.0,
+                        height: 40.0,
+                        width: 30.0,
                       ),
                     ),
                     SizedBox(
@@ -259,6 +277,7 @@ class _WordsListState extends State<WordsList> {
               text: 'Words',
               size: 16.0,
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).textSelectionColor,
             ),
           ),
         ],
@@ -283,7 +302,8 @@ class _WordsListState extends State<WordsList> {
                 text: 'Words',
                 textSize: 18.0,
               ),
-              Expanded(
+              Container(
+                height: size.height * .80,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
@@ -340,6 +360,9 @@ class _WordsListState extends State<WordsList> {
                     ],
                   ),
                 ),
+              ),
+              Expanded(
+                child: Container(),
               )
             ],
           ),

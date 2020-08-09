@@ -4,6 +4,7 @@ import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/splashScreen.dart';
 import 'package:lenglish/screens/settings.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:stripe_native/stripe_native.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,10 +21,7 @@ class _MyAppState extends State<MyApp> {
   String _lang = '';
 
   _updateNightMode() {
-    print("yuuuuuuuuuup");
     langFile.getItem().then((lang) {
-      print("item ======> lang");
-      print(lang[0]['selected_lang']);
       setState(() {
         _lang = lang[0]['selected_lang'];
         _flag = true;

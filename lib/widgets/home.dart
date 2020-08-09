@@ -63,104 +63,92 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   Widget _progressCard(var size) {
-    return Expanded(
-      flex: 2,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+    return FittedBox(
+      child: Container(
+        height: 250,
+        width: size.width * .90,
+        decoration: BoxDecoration(
+            color: primaryBlueColor,
+            borderRadius: BorderRadius.circular(
+              15.0,
+            ),
+            boxShadow: [
+              shadow(
+                Theme.of(context).cardColor,
+              )
+            ]),
         child: Column(
           children: <Widget>[
-            FittedBox(
-              child: Container(
-                height: 250,
-                width: size.width * .90,
-                decoration: BoxDecoration(
-                    color: primaryBlueColor,
-                    borderRadius: BorderRadius.circular(
-                      15.0,
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 20.0,
+                left: 20.0,
+                top: 10.0,
+                bottom: 10.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FittedBox(
+                    child: RadialProgress(
+                      goalCompleted:
+                          widget.totalLearningWords.toDouble() / 2265,
+                      percent:
+                          widget.totalLearningWords.toDouble() * 100 / 2265,
+                      height: 100,
+                      width: 100,
+                      color: whiteColor,
+                      flag: true,
                     ),
-                    boxShadow: [
-                      shadow(
-                        Theme.of(context).cardColor,
-                      )
-                    ]),
-                child: Column(
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0XFF7491F0).withOpacity(
+                    0.6,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(leftRightTopValue),
+                    topRight: Radius.circular(leftRightTopValue),
+                    bottomLeft: Radius.circular(15.0),
+                    bottomRight: Radius.circular(15.0),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 20.0,
-                        left: 20.0,
-                        top: 10.0,
-                        bottom: 10.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    FittedBox(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          FittedBox(
-                            child: RadialProgress(
-                              goalCompleted:
-                                  widget.totalLearningWords.toDouble() / 2265,
-                              percent: widget.totalLearningWords.toDouble() *
-                                  100 /
-                                  2265,
-                              height: 100,
-                              width: 100,
-                              color: whiteColor,
-                              flag: true,
-                            ),
+                          _rowItem(
+                            'level',
+                            _level.toInt(),
+                            size,
                           ),
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          _rowItem('total words', 2265, size),
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          _rowItem(
+                              'Learing words', widget.totalLearningWords, size),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0XFF7491F0).withOpacity(
-                            0.6,
-                          ),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(leftRightTopValue),
-                            topRight: Radius.circular(leftRightTopValue),
-                            bottomLeft: Radius.circular(15.0),
-                            bottomRight: Radius.circular(15.0),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            FittedBox(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  _rowItem(
-                                    'level',
-                                    _level.toInt(),
-                                    size,
-                                  ),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  _rowItem('total words', 2265, size),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  _rowItem('Learing words',
-                                      widget.totalLearningWords, size),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -323,11 +311,23 @@ class _HomeWidgetState extends State<HomeWidget> {
         child: Column(
           children: <Widget>[
             _topAppBar(),
-            SizedBox(
-              height: 20.0,
-            ),
-            _progressCard(size),
-            _itemGrid(context, size),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    _progressCard(size),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _gridList(context, size),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),

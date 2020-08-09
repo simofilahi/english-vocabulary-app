@@ -24,6 +24,7 @@ class _BallonsGameState extends State<BallonsGame> {
   int _index = 0;
   int _index_2 = 0;
   int _hintPoints = 0;
+  int _answerPoints = 0;
 
   @override
   void initState() {
@@ -31,7 +32,15 @@ class _BallonsGameState extends State<BallonsGame> {
     _getIndex();
     _getIndex_2();
     _getHintPoints();
+    _getAnswerPoints();
     print(widget.globalData);
+  }
+
+  _getAnswerPoints() async {
+    int value = await getAnswerPoints();
+    setState(() {
+      _answerPoints = value;
+    });
   }
 
   _getIndex_2() {
@@ -175,8 +184,8 @@ class _BallonsGameState extends State<BallonsGame> {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                color: Colors.red[400].withOpacity(
-                  0.8,
+                gradient: LinearGradient(
+                  colors: [Color(0XFFBE5062), Color(0XFFEF4A76)],
                 ),
                 borderRadius: BorderRadius.circular(
                   15.0,
@@ -242,6 +251,9 @@ class _BallonsGameState extends State<BallonsGame> {
                         getIndex: _getIndex_2,
                         hintPoints: _hintPoints,
                         getHintPoints: _getHintPoints,
+                        answerPoints: _answerPoints,
+                        getAnswerPoints: _getAnswerPoints,
+                        height: size.height,
                       ),
                       abcIcon,
                       size,

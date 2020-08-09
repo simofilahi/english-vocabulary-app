@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
   final bool nightMode;
   Home({
     this.globalData,
-    this.lang = null,
+    this.lang = "",
     this.globalDataUpdate,
     this.updateNightMode,
     this.nightMode,
@@ -35,37 +35,33 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _getTotalLearningWords();
-    _updateData();
+    _updateLangData();
     setState(() {
       _globalData = widget.globalData;
     });
   }
 
   setNewGlobalData() {
-    allData.getItem().then((value) {
-      if (value == true) {
-        setState(() {
-          _globalData = value;
-        });
-      }
-    });
+    dynamic data = getGlobalData();
+    if (data != null) {
+      setState(() {
+        _globalData = data;
+      });
+    }
   }
 
-  _updateData() {
-    if (widget.lang == null) {
-      langFile.getItem().then((data) {
-        print(data);
-        print("holla");
-        if (data == null) {
-          setState(() {
-            _lang = "en";
-          });
-        } else {
-          setState(() {
-            _lang = data[0]['selected_lang'];
-          });
-        }
-      });
+  _updateLangData() async {
+    if (widget.lang == "") {
+      dynamic data = await langFile.getItem();
+      if (data == null) {
+        setState(() {
+          _lang = "en";
+        });
+      } else {
+        setState(() {
+          _lang = data[0]['selected_lang'];
+        });
+      }
     } else {
       setState(() {
         _lang = widget.lang;

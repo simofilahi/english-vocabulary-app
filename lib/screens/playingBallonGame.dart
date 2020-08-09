@@ -7,6 +7,7 @@ import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 class PlayingBallonGames extends StatefulWidget {
   final List<dynamic> globalData;
@@ -30,6 +31,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   int _initIndex = 0;
   int _counter = 0;
   bool spinner = false;
+  RewardedVideoAd videoAd = RewardedVideoAd.instance;
 
   @override
   void initState() {
@@ -44,6 +46,18 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     });
     _getNextItem();
     _getRandomWords();
+    videoAd.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+      print("amount $rewardAmount");
+      _getNextItem();
+      setState(() {
+        _boolean = false;
+      });
+      if (event == RewardedVideoAdEvent.rewarded) {
+        print("holllllllllla");
+      }
+    };
   }
 
   @override
@@ -128,10 +142,12 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
 
   Widget _renderButtons() {
     if (_boolean == false) {
-      return TextWidget(
-        text: _en_word,
-        color: Theme.of(context).textSelectionColor,
-        size: 24.0,
+      return Text(
+        _en_word,
+        style: TextStyle(
+          color: Theme.of(context).textSelectionColor,
+          fontSize: 24.0,
+        ),
       );
     } else {
       return Column(
@@ -175,20 +191,35 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 50.0,
-              width: 200.0,
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(
-                  15.0,
+            child: InkWell(
+              onTap: () {
+                videoAd
+                    .load(
+                  adUnitId: RewardedVideoAd.testAdUnitId,
+                )
+                    .then((value) {
+                  if (value == true) {
+                    RewardedVideoAd.instance.show();
+                  } else {
+                    print("try again");
+                  }
+                });
+              },
+              child: Container(
+                height: 50.0,
+                width: 200.0,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(
+                    15.0,
+                  ),
+                  boxShadow: [shadow(Theme.of(context).cardColor)],
                 ),
-                boxShadow: [shadow(Theme.of(context).cardColor)],
-              ),
-              child: Center(
-                child: TextWidget(
-                  text: 'Watch Ads',
-                  color: Theme.of(context).textSelectionColor,
+                child: Center(
+                  child: TextWidget(
+                    text: 'Watch Ads',
+                    color: Theme.of(context).textSelectionColor,
+                  ),
                 ),
               ),
             ),

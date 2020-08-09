@@ -1,4 +1,5 @@
 import 'package:audioplayers/audio_cache.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -47,6 +48,7 @@ class FlashCards extends StatefulWidget {
 class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   var controller;
   var _index = 0;
+  BannerAd _bannerAd;
 
   static AudioCache player = AudioCache();
   SwiperController swiperController;
@@ -54,18 +56,29 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // print(widget.item);
-    // setState(() {
-    //   widget.item = widget.item;
-    //   _index = 0;
-    // });
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(horizontalCenterOffset: 0, anchorOffset: 10);
     swiperController = SwiperController();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _bannerAd?.dispose();
     // widget._updateCountOfWords();
+  }
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      // targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
   }
 
   _updateFun() {
@@ -111,11 +124,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// send your request here
-    // final bool success= await sendRequest();
-
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
     Timer(Duration(seconds: 1), () {
       _isFavorite(0, widget.item[0]['en']);
     });
@@ -355,8 +363,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print("here is item");
-    print(widget.item);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(

@@ -7,6 +7,7 @@ import 'package:lenglish/widgets/shopCard.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:stripe_native/stripe_native.dart';
 
 class Setting extends StatefulWidget {
   final String lang;
@@ -20,11 +21,16 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   String lang = 'English';
+  double totalAmount = 0;
+  double amount = 0;
+  String currencyName = "";
+  Map receipt;
+  Receipt finalReceipt;
+  String generatedToken = "";
 
   @override
   void initState() {
     super.initState();
-    print("night flag");
     print(widget.nightMode);
     setState(() {
       lang = getNameOfLang(widget.lang);
@@ -179,6 +185,8 @@ class _SettingState extends State<Setting> {
           ChooseLanguage(
             globalDataUpdate: null,
             settingBool: true,
+            updateNightMode: widget.updateNightMode,
+            nightMode: widget.nightMode,
           ),
           1,
           1,

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
-
-import 'package:lenglish/widgets/textWidget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'chooseLanguage.dart';
 import 'home.dart';
@@ -37,21 +35,20 @@ class _SplashScreenState extends State<SplashScreen>
       controller: AnimationController(
           vsync: this, duration: const Duration(milliseconds: 1200)),
     );
-    print("before is exist");
+    _uploadData();
+  }
+
+  _uploadData() {
     langFile.isExist().then((ret) {
-      print('inside is exist');
-      print("ret ");
-      print(ret);
-      creationOfFiles().then((value) {
-        if (value) {
-          Future.delayed(const Duration(seconds: 4), () {
-            _callScreen();
-          });
-        }
-      });
       if (ret == false) {
+        creationOfFiles().then((value) {
+          if (value) {
+            Future.delayed(const Duration(seconds: 4), () {
+              _callScreen();
+            });
+          }
+        });
       } else {
-        print("else condition");
         allData.getItem().then((data) {
           langFile.getItem().then((lang) {
             Future.delayed(const Duration(seconds: 4), () {
@@ -93,13 +90,14 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  Future<bool> _globalDataUpdate() async {
+  _globalDataUpdate() async {
     if (this.mounted) {
-      getGlobalData().then((onValue) {
+      dynamic data = await getGlobalData();
+      if (data != null) {
         setState(() {
-          _globalData = onValue;
+          _globalData = data;
         });
-      });
+      }
     }
   }
 

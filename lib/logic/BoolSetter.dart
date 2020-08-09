@@ -174,10 +174,24 @@ Future<bool> creationOfFiles() async {
       ]);
     else
       return false;
+    value = await answerPointsFile.createFile();
+    if (value == true)
+      answerPointsFile.setItem('points', [
+        {"points": "3"}
+      ]);
+    else
+      return false;
     value = await langFile.createFile();
     if (value == true)
       langFile.setItem('Lang', [
         {"selected_lang": "en"}
+      ]);
+    else
+      return false;
+    value = await nextSetIndex.createFile();
+    if (value == true)
+      nextSetIndex.setItem('nextSetIndex', [
+        {"nextSetIndex": "0"}
       ]);
     else
       return false;
@@ -346,11 +360,26 @@ Future<int> updateIndexOfSpellingWords(int index) async {
   });
 }
 
+addingAnswerPoints() {
+  List<Map> newData = [];
+  int number = 0;
+  answerPointsFile.getItem().then((value) {
+    number = int.parse(value[0]['points']) + 1;
+    newData = [
+      {
+        'points': number.toString(),
+      }
+    ];
+    answerPointsFile.setItem('points', newData);
+  });
+  answerPointsFile.getItem().then((value) => print(value));
+}
+
 addinghintPoints() {
   List<Map> newData = [];
   int number = 0;
   hintPointsFile.getItem().then((value) {
-    number = int.parse(value[0]['points']) + 3;
+    number = int.parse(value[0]['points']) + 2;
     newData = [
       {
         'points': number.toString(),
@@ -358,7 +387,6 @@ addinghintPoints() {
     ];
     hintPointsFile.setItem('Index', newData);
   });
-  print("here is value down");
   hintPointsFile.getItem().then((value) => print(value));
 }
 
@@ -436,6 +464,17 @@ Future<int> getIndexOfSpellingWords() async {
   });
 }
 
+Future<int> getAnswerPoints() async {
+  return answerPointsFile.getItem().then((onValue) {
+    if (onValue != null) {
+      return int.parse(onValue[0]['points']);
+    } else
+      return 0;
+  }).catchError((onError) {
+    return 0;
+  });
+}
+
 Future<int> getHintPoints() async {
   return hintPointsFile.getItem().then((onValue) {
     if (onValue != null) {
@@ -464,4 +503,17 @@ Future<Map<dynamic, dynamic>> searchForWordByIndex(
     }
   }
   return data;
+}
+
+Future<int> getNextSetIndex() async {
+  dynamic index = "0";
+  index = await nextSetIndex.getItem();
+  print(index[0]['nextSetIndex']);
+  return int.parse(index[0]['nextSetIndex']);
+}
+
+setNextSetIndex(int index) {
+  nextSetIndex.setItem('nextSetIndex', [
+    {"nextSetIndex": index.toString()}
+  ]);
 }

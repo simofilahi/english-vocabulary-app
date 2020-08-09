@@ -6,7 +6,7 @@ import '../constants.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
-import 'dart:math';
+import 'package:firebase_admob/firebase_admob.dart';
 
 class SpellingGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -15,6 +15,9 @@ class SpellingGame extends StatefulWidget {
   final Function getIndex;
   final int hintPoints;
   final Function getHintPoints;
+  final int answerPoints;
+  final Function getAnswerPoints;
+  final dynamic height;
 
   SpellingGame({
     this.globalData,
@@ -23,6 +26,9 @@ class SpellingGame extends StatefulWidget {
     this.getIndex,
     this.hintPoints,
     this.getHintPoints,
+    this.answerPoints,
+    this.getAnswerPoints,
+    this.height,
   });
   @override
   _SpellingGameState createState() => _SpellingGameState();
@@ -42,11 +48,15 @@ class _SpellingGameState extends State<SpellingGame> {
   final double borderRadius = 10.0;
   bool _inputError = false;
   int _hintPoints = 0;
+  int _answerPoints = 0;
   FocusNode _focusNode = FocusNode();
 
   /// just  define _formkey with static final
 
   final formKey = GlobalKey<FormState>();
+
+  RewardedVideoAd videoAd = RewardedVideoAd.instance;
+  BannerAd _bannerAd;
 
   @override
   void initState() {
@@ -56,7 +66,26 @@ class _SpellingGameState extends State<SpellingGame> {
       _index = widget.index;
       _initIndex = widget.index;
       _hintPoints = widget.hintPoints;
+      _answerPoints = widget.answerPoints;
     });
+    print('height');
+    print(widget.height);
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(
+        horizontalCenterOffset: 0,
+        anchorOffset: widget.height - widget.height * 0.20,
+      );
+    videoAd.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+      print("amount $rewardAmount");
+      if (event == RewardedVideoAdEvent.rewarded) {
+        // if (rewardAmount == null) {
+        _updateHintPoints(6);
+        // }
+      }
+    };
     _getNextItem();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -68,14 +97,21 @@ class _SpellingGameState extends State<SpellingGame> {
   @override
   void dispose() {
     super.dispose();
+    _bannerAd?.dispose();
     widget.getIndex();
     widget.getHintPoints();
+    widget.getAnswerPoints();
   }
 
-  dynamic _getSetItem() {
-    for (int i = 0; i < widget.globalData.length; i++) {
-      return widget.globalData[i]['set_${_set}'];
-    }
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      // targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
   }
 
   void _getRandomWords() {
@@ -86,7 +122,7 @@ class _SpellingGameState extends State<SpellingGame> {
 
     element.runes.forEach((int rune) {
       var character = new String.fromCharCode(rune);
-      var obj = {'char': character, 'selected': false};
+      var obj = {'char': character.toLowerCase(), 'selected': false};
       arr.add(obj);
     });
     _enWord.runes.forEach((int rune) {
@@ -133,9 +169,8 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  List<String> _pushToListOfChar(var char) {
+  _pushToListOfChar(var char) {
     List<dynamic> data = List<dynamic>.from(_dataRowChar);
-    print("here is the data");
     data.add(char);
     setState(() {
       _dataRowChar = data;
@@ -152,10 +187,12 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  _updateHintPoints() {
+  _updateHintPoints(int points) {
     addinghintPoints();
+    addingAnswerPoints();
     setState(() {
-      _hintPoints += 3;
+      _hintPoints += points;
+      _answerPoints += points;
     });
   }
 
@@ -181,6 +218,7 @@ class _SpellingGameState extends State<SpellingGame> {
       else
         return false;
     }
+    return false;
   }
 
   Widget _hintAndWatchAdButton(BuildContext context, String icon, int flag) {
@@ -194,7 +232,15 @@ class _SpellingGameState extends State<SpellingGame> {
               child: InkWell(
                 onTap: () {
                   if (flag == 1) {
-                    _updateHintPoints();
+                    videoAd
+                        .load(
+                      adUnitId: RewardedVideoAd.testAdUnitId,
+                    )
+                        .then((value) {
+                      if (value == true) {
+                        RewardedVideoAd.instance.show();
+                      }
+                    });
                   } else if (flag == 1) {
                     if (_hintPoints > 0) {
                       _fillForHelp();
@@ -225,25 +271,26 @@ class _SpellingGameState extends State<SpellingGame> {
                 ),
               ),
             ),
-            icon == hintIcon
+            (icon == hintIcon || icon == answerIcon)
                 ? Align(
                     alignment: Alignment.topRight,
                     child: Container(
                       height: 16,
                       width: 16,
                       decoration: BoxDecoration(
-                          color: Color(0XFFffc107),
+                          color:
+                              flag == 2 ? Color(0XFFffc107) : Color(0XFFF64779),
                           shape: BoxShape.circle,
                           boxShadow: [
                             shadow(Theme.of(context).cardColor),
                           ]),
                       child: Center(
-                        child: FittedBox(
-                          child: TextWidget(
-                            text: _hintPoints.toString(),
-                            color: whiteColor,
-                            size: 10.0,
-                          ),
+                        child: TextWidget(
+                          text: flag == 3
+                              ? _answerPoints.toString()
+                              : _hintPoints.toString(),
+                          color: whiteColor,
+                          size: 10.0,
                         ),
                       ),
                     ),
@@ -575,16 +622,18 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
-  _nextSet() {
-    int index = (_index - 50).abs() + _index;
-    print("here index");
-    print(index);
-    updateIndexOfSpellingWords(index);
-    setState(() {
-      _index = index;
-      _initIndex = index;
-    });
-    _getNextItem();
+  _nextSet() async {
+    int index = await getNextSetIndex();
+    if (index < 2251) {
+      index += 50;
+      updateIndexOfSpellingWords(index);
+      setState(() {
+        _index = index;
+        _initIndex = index;
+      });
+      _getNextItem();
+      setNextSetIndex(index);
+    }
   }
 
   @override
@@ -607,17 +656,26 @@ class _SpellingGameState extends State<SpellingGame> {
                 textSize: 18,
                 clickHandler: _nextSet,
               ),
-              Expanded(flex: 1, child: Container()),
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
               Expanded(
                 flex: 4,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TextWidget(
-                        text: _word,
-                        size: 24.0,
-                        color: Theme.of(context).textSelectionColor,
+                      Text(
+                        _word,
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          color: Theme.of(context).textSelectionColor,
+                        ),
                       ),
                       SizedBox(
                         height: size.height * .04,
@@ -704,11 +762,16 @@ class _SpellingGameState extends State<SpellingGame> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       _hintAndWatchAdButton(context, watchIcon, 1),
-                      _hintAndWatchAdButton(context, hintIcon, 2),
+                      Row(
+                        children: <Widget>[
+                          _hintAndWatchAdButton(context, answerIcon, 3),
+                          _hintAndWatchAdButton(context, hintIcon, 2),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

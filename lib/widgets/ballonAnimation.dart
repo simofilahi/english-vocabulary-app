@@ -140,9 +140,14 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
           ],
         ),
         child: Center(
-          child: TextWidget(
-            text: widget.randomWords[index],
-            color: whiteColor,
+          child: Container(
+            height: 50,
+            width: 50,
+            child: TextWidget(
+              text: widget.randomWords[index],
+              color: whiteColor,
+              size: 18.0,
+            ),
           ),
         ),
       ),
