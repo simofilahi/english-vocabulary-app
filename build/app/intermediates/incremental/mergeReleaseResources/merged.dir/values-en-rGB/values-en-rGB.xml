@@ -85,6 +85,13 @@
     <string name="exo_track_surround_5_point_1">5.1 surround sound</string>
     <string name="exo_track_surround_7_point_1">7.1 surround sound</string>
     <string name="exo_track_unknown">Unknown</string>
+    <string msgid="368094699078615544" name="s1">"Save image"</string>
+    <string msgid="4550830452390689489" name="s2">"Allow Ad to store image in Picture gallery?"</string>
+    <string msgid="2435407834265420668" name="s3">"Accept"</string>
+    <string msgid="9167523597401839819" name="s4">"Decline"</string>
+    <string msgid="1566682516266724847" name="s5">"Create calendar event"</string>
+    <string msgid="5996672174517137271" name="s6">"Allow Ad to create a calendar event?"</string>
+    <string msgid="7163549807207034258" name="s7">"Test Ad"</string>
     <string msgid="730395136688082741" name="search_menu_title">"Search"</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
     <string name="stripe_3ds2_brand_amex">American Express</string>

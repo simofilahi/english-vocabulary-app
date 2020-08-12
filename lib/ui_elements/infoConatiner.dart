@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/ui_elements/smallCircle.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class InfoContainer extends StatelessWidget {
   final int setNumber;
@@ -10,6 +11,7 @@ class InfoContainer extends StatelessWidget {
   final Color firstColor;
   final Color secondColor;
   final Function reset;
+  final Responsive res;
 
   InfoContainer({
     this.setNumber,
@@ -18,12 +20,21 @@ class InfoContainer extends StatelessWidget {
     this.firstColor,
     this.secondColor,
     this.reset,
+    this.res,
   });
-  Widget _item(var text, int number) {
+
+  Widget _item(var text, int number, var size) {
+    Responsive res_1 = Responsive(
+      topPaddingSize: size.height * 0.009,
+      bottomPaddingSize: size.height * 0.005,
+      leftPaddingSize: size.width * 0.02,
+      sizedBoxWidthSize: size.width * 0.03,
+      textSize: size.width * 0.042,
+    );
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 5.0,
-        left: 10.0,
+      padding: EdgeInsets.only(
+        left: res_1.leftPaddingSize,
+        bottom: res_1.bottomPaddingSize,
       ),
       child: Row(
         children: <Widget>[
@@ -32,11 +43,11 @@ class InfoContainer extends StatelessWidget {
             firstColor: firstColor,
           ),
           SizedBox(
-            width: 10.0,
+            width: res_1.sizedBoxWidthSize,
           ),
           TextWidget(
             text: text,
-            size: 16.0,
+            size: res_1.textSize,
             color: whiteColor,
           ),
         ],
@@ -44,54 +55,62 @@ class InfoContainer extends StatelessWidget {
     );
   }
 
-  Widget _bottomButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            reset();
-          },
-          child: Container(
-            width: 80.0,
-            height: 25.0,
-            decoration: BoxDecoration(
-              color: firstColor,
-              borderRadius: BorderRadius.circular(
-                10.0,
+  Widget _bottomButton(var size) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: res.bottomPaddingSize,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              reset();
+            },
+            child: Container(
+              height: size.height * 0.04,
+              width: size.width * 0.3,
+              decoration: BoxDecoration(
+                color: firstColor,
+                borderRadius: BorderRadius.circular(
+                  res.borderRadiusSize * 0.5,
+                ),
+              ),
+              child: Center(
+                child: TextWidget(
+                  text: 'Reset',
+                  color: whiteColor.withOpacity(0.8),
+                  size: size.width * 0.042,
+                ),
               ),
             ),
-            child: Center(
-              child: TextWidget(
-                text: 'Reset',
-                color: whiteColor.withOpacity(0.8),
-              ),
-            ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Container(
       decoration: BoxDecoration(
         color: secondColor.withOpacity(
           0.6,
         ),
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(
-            30.0,
+            res.borderRadiusSize,
           ),
           topRight: Radius.circular(
-            30.0,
+            res.borderRadiusSize,
           ),
           bottomRight: Radius.circular(
-            15.0,
+            res.borderRadiusSize * 0.8,
           ),
           bottomLeft: Radius.circular(
-            15.0,
+            res.borderRadiusSize * 0.8,
           ),
         ),
       ),
@@ -100,24 +119,30 @@ class InfoContainer extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Padding(
-              padding: const EdgeInsets.only(
-                top: 5.0,
-                bottom: 5.0,
+              padding: EdgeInsets.only(
+                top: res.topPaddingSize,
+                bottom: res.bottomPaddingSize,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _item('set', setNumber),
-                  _item('total words', totalWords),
-                  _item('learning words', learningWords),
-                ],
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: res.topPaddingSize * 3,
+                  bottom: res.bottomPaddingSize * 1.2,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _item('set', setNumber, size),
+                    _item('total words', totalWords, size),
+                    _item('learning words', learningWords, size),
+                  ],
+                ),
               ),
             ),
           ),
           Expanded(
             flex: 1,
-            child: _bottomButton(),
+            child: _bottomButton(size),
           )
         ],
       ),

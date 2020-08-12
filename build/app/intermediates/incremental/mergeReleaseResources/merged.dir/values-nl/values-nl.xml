@@ -150,6 +150,13 @@
     <string name="no_payment_methods">Geen betalingsmethoden.</string>
     <string name="payment_method_add_new_card">Nieuwe kaart toevoegen…</string>
     <string name="price_free">Gratis</string>
+    <string msgid="368094699078615544" name="s1">"Afbeelding opslaan"</string>
+    <string msgid="4550830452390689489" name="s2">"Advertentie toestaan om afbeelding op te slaan in fotogalerij?"</string>
+    <string msgid="2435407834265420668" name="s3">"Accepteren"</string>
+    <string msgid="9167523597401839819" name="s4">"Weigeren"</string>
+    <string msgid="1566682516266724847" name="s5">"Agenda-afspraak maken"</string>
+    <string msgid="5996672174517137271" name="s6">"Advertentie toestaan om een agenda-afspraak te maken?"</string>
+    <string msgid="7163549807207034258" name="s7">"Testadvertentie"</string>
     <string msgid="730395136688082741" name="search_menu_title">"Zoeken"</string>
     <string name="secure_checkout">Beveiligde Checkout</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>

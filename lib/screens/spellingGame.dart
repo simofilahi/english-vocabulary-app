@@ -7,6 +7,7 @@ import 'package:lenglish/widgets/textWidget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class SpellingGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -69,12 +70,12 @@ class _SpellingGameState extends State<SpellingGame> {
       _answerPoints = widget.answerPoints;
     });
     print('height');
-    print(widget.height);
+    print(widget.height - (widget.height * .6));
     _bannerAd = createBannerAd()
       ..load()
       ..show(
         horizontalCenterOffset: 0,
-        anchorOffset: widget.height - widget.height * 0.20,
+        anchorOffset: widget.height,
       );
     videoAd.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
@@ -221,11 +222,11 @@ class _SpellingGameState extends State<SpellingGame> {
     return false;
   }
 
-  Widget _hintAndWatchAdButton(BuildContext context, String icon, int flag) {
-    var s = MediaQuery.of(context).size;
+  Widget _hintAndWatchAdButton(
+      BuildContext context, String icon, int flag, var size, Responsive res) {
     return Container(
-        height: 60.0,
-        width: 60.0,
+        height: size.height * 0.08,
+        width: size.height * 0.08,
         child: Stack(
           children: <Widget>[
             Center(
@@ -248,12 +249,12 @@ class _SpellingGameState extends State<SpellingGame> {
                   }
                 },
                 child: Container(
-                  height: 55.0,
-                  width: 55.0,
+                  height: size.height * 0.078,
+                  width: size.height * 0.078,
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(
-                      borderRadius,
+                      res.borderRadiusSize * 0.4,
                     ),
                     boxShadow: [
                       shadow(Theme.of(context).cardColor),
@@ -263,8 +264,8 @@ class _SpellingGameState extends State<SpellingGame> {
                     child: FittedBox(
                       child: SvgPicture.asset(
                         icon,
-                        height: 35.0,
-                        width: 35.0,
+                        height: res.iconSize * 1.5,
+                        width: res.iconSize * 1.5,
                       ),
                     ),
                   ),
@@ -275,8 +276,8 @@ class _SpellingGameState extends State<SpellingGame> {
                 ? Align(
                     alignment: Alignment.topRight,
                     child: Container(
-                      height: 16,
-                      width: 16,
+                      height: size.height * 0.025,
+                      width: size.height * 0.025,
                       decoration: BoxDecoration(
                           color:
                               flag == 2 ? Color(0XFFffc107) : Color(0XFFF64779),
@@ -290,7 +291,7 @@ class _SpellingGameState extends State<SpellingGame> {
                               ? _answerPoints.toString()
                               : _hintPoints.toString(),
                           color: whiteColor,
-                          size: 10.0,
+                          size: res.textSize * 0.6,
                         ),
                       ),
                     ),
@@ -300,12 +301,13 @@ class _SpellingGameState extends State<SpellingGame> {
         ));
   }
 
-  Widget _inputBar() {
+  Widget _inputBar(var size, Responsive res) {
     return Container(
+      width: size.width * .85,
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(
-          borderRadius,
+          res.borderRadiusSize * 0.5,
         ),
         border: Border.all(
           color: _inputError ? Colors.red : whiteColor,
@@ -313,9 +315,10 @@ class _SpellingGameState extends State<SpellingGame> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 10.0),
+        padding: EdgeInsets.only(
+          left: res.leftPaddingSize * 2,
+        ),
         child: TextField(
-          key: formKey,
           autofocus: true,
           focusNode: _focusNode,
           onSubmitted: (String value) {
@@ -336,7 +339,9 @@ class _SpellingGameState extends State<SpellingGame> {
           },
           controller: _controller,
           style: TextStyle(
-            color: primaryGreyColor,
+            fontSize: res.textSize,
+            color: Colors.grey[600],
+            height: size.height * .002,
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -382,7 +387,7 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  Widget _enterAndRemove(var size) {
+  Widget _enterAndRemove(var size, Responsive res) {
     return Column(
       children: <Widget>[
         InkWell(
@@ -401,12 +406,12 @@ class _SpellingGameState extends State<SpellingGame> {
             }
           },
           child: Container(
-            height: size.height * .09,
-            width: size.width * .15,
+            height: size.height * .072,
+            width: size.height * .072,
             decoration: BoxDecoration(
               color: Colors.green,
               borderRadius: BorderRadius.circular(
-                borderRadius,
+                res.borderRadiusSize * 0.5,
               ),
               boxShadow: [
                 shadow(Theme.of(context).cardColor),
@@ -415,23 +420,23 @@ class _SpellingGameState extends State<SpellingGame> {
             child: Center(
               child: SvgPicture.asset(
                 enterIcon,
-                height: 20.0,
-                width: 20.0,
+                height: res.iconSize,
+                width: res.iconSize,
                 color: whiteColor,
               ),
             ),
           ),
         ),
         SizedBox(
-          height: 10.0,
+          height: size.height * 0.01,
         ),
         InkWell(
           onTap: () {
             _removeButtonEventHandler();
           },
           child: Container(
-            height: size.height * .09,
-            width: size.width * .15,
+            height: size.height * .072,
+            width: size.height * .072,
             decoration: BoxDecoration(
               color: Colors.red,
               borderRadius: BorderRadius.circular(
@@ -444,8 +449,8 @@ class _SpellingGameState extends State<SpellingGame> {
             child: Center(
               child: SvgPicture.asset(
                 deleteIcon,
-                height: 20.0,
-                width: 20.0,
+                height: res.iconSize,
+                width: res.iconSize,
                 color: whiteColor,
               ),
             ),
@@ -455,11 +460,13 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
-  _listItem(int index) {
+  _listItem(int index, var size, Responsive res) {
     return ResponsiveGridCol(
       xs: 3,
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: EdgeInsets.all(
+          res.allPaddingSize * 0.4,
+        ),
         child: InkWell(
           onTap: () {
             setState(() {
@@ -468,14 +475,15 @@ class _SpellingGameState extends State<SpellingGame> {
             _setTrueSelectedChar(index);
           },
           child: Container(
-            height: 45,
+            height: size.height * 0.07,
+            width: size.height * 0.07,
             alignment: Alignment(0, 0),
             decoration: BoxDecoration(
               color: _listOfchar[index]['selected'] == true
                   ? primaryColor
                   : Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(
-                borderRadius,
+                res.borderRadiusSize * 0.4,
               ),
               boxShadow: [
                 _listOfchar[index]['selected'] == true
@@ -487,6 +495,8 @@ class _SpellingGameState extends State<SpellingGame> {
                 ? TextWidget(
                     text: _listOfchar[index]['char'],
                     color: Theme.of(context).textSelectionColor,
+                    size: res.textSize * 0.8,
+                    fontWeight: FontWeight.w400,
                   )
                 : Container(),
           ),
@@ -495,7 +505,7 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
-  Widget _keyBoard(var size) {
+  Widget _keyBoard(var size, Responsive res) {
     return ResponsiveGridRow(
       children: [
         ..._listOfchar
@@ -503,7 +513,7 @@ class _SpellingGameState extends State<SpellingGame> {
             .map(
               (index, element) => MapEntry(
                 index,
-                _listItem(index),
+                _listItem(index, size, res),
               ),
             )
             .values
@@ -552,9 +562,9 @@ class _SpellingGameState extends State<SpellingGame> {
     }
   }
 
-  Widget _inputRow() {
+  Widget _inputRow(var size, Responsive res) {
     return Container(
-      height: 50.0,
+      height: size.height * .07,
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(
@@ -562,27 +572,28 @@ class _SpellingGameState extends State<SpellingGame> {
           width: _inputError ? 1.0 : 0.0,
         ),
         color: whiteColor,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(
+          res.borderRadiusSize * 0.5,
+        ),
       ),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 10.0,
+          padding: EdgeInsets.only(
+            left: res.leftPaddingSize,
           ),
           child: _inputError
               ? Padding(
-                  padding: const EdgeInsets.only(right: 15.0),
+                  padding: EdgeInsets.only(right: res.rightPaddingSize * 2.5),
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
                         _showAnswer(1);
                       },
-                      child: Text(
-                        'Show me',
-                        style: TextStyle(
-                          color: primaryBlueColor,
-                        ),
+                      child: TextWidget(
+                        text: 'Show me',
+                        size: res.textSize,
+                        color: primaryBlueColor,
                       ),
                     ),
                   ),
@@ -592,13 +603,13 @@ class _SpellingGameState extends State<SpellingGame> {
                   itemCount: _dataRowChar.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
-                      padding: const EdgeInsets.only(
-                        left: 5.0,
-                        bottom: 5.0,
-                        top: 5.0,
+                      padding: EdgeInsets.only(
+                        left: res.leftPaddingSize,
+                        bottom: res.bottomPaddingSize * 1.5,
+                        top: res.topPaddingSize * 1.5,
                       ),
                       child: Container(
-                        width: 30.0,
+                        width: size.width * 0.1,
                         decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
                             boxShadow: [
@@ -611,6 +622,8 @@ class _SpellingGameState extends State<SpellingGame> {
                           child: TextWidget(
                             text: _dataRowChar[index],
                             color: Theme.of(context).textSelectionColor,
+                            size: res.textSize * 0.8,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
@@ -639,6 +652,24 @@ class _SpellingGameState extends State<SpellingGame> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .08,
+      containerWidthSize: size.width * .90,
+      sizedBoxHeightSize: size.height * 0.028,
+      sizedBoxWidthSize: size.width * 0.0310,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      leftPaddingSize: size.width * 0.0085,
+      textSize: size.width * 0.05,
+      iconSize: size.height * 0.032,
+      allPaddingSize: size.width * 0.02,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
@@ -661,7 +692,7 @@ class _SpellingGameState extends State<SpellingGame> {
                 child: Container(),
               ),
               SizedBox(
-                height: 20.0,
+                height: res.sizedBoxHeightSize,
               ),
               Expanded(
                 flex: 4,
@@ -673,23 +704,28 @@ class _SpellingGameState extends State<SpellingGame> {
                       Text(
                         _word,
                         style: TextStyle(
-                          fontSize: 24.0,
+                          fontSize: res.textSize * 1.5,
                           color: Theme.of(context).textSelectionColor,
                         ),
                       ),
                       SizedBox(
-                        height: size.height * .04,
+                        height: size.height * .03,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
+                          horizontal: res.horizontalPaddingSize,
+                          vertical: res.verticalPaddingSize,
                         ),
                         child: Column(
                           children: <Widget>[
-                            _useKeyBoard == true ? _inputBar() : _inputRow(),
+                            _useKeyBoard == true
+                                ? _inputBar(
+                                    size,
+                                    res,
+                                  )
+                                : _inputRow(size, res),
                             SizedBox(
-                              height: 20.0,
+                              height: res.sizedBoxHeightSize,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -709,37 +745,42 @@ class _SpellingGameState extends State<SpellingGame> {
                                       style: TextStyle(
                                         decoration: TextDecoration.underline,
                                         color: primaryBlueColor,
-                                        fontSize: 18.0,
+                                        fontSize: res.textSize,
                                       ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 10.0,
+                                  width: size.width * 0.03,
                                 ),
                                 SvgPicture.asset(
                                   _useKeyBoard ? handTapIcon : keyBoardIcon,
-                                  height: 23.0,
-                                  width: 20.0,
+                                  height: res.iconSize * 1.2,
+                                  width: res.iconSize * 1.2,
                                   color: primaryBlueColor,
                                 ),
                               ],
                             ),
                             SizedBox(
-                              height: 20.0,
+                              height: size.height * 0.02,
                             ),
                             Row(
                               children: <Widget>[
                                 Expanded(
                                   flex: 3,
                                   child: !_useKeyBoard
-                                      ? _keyBoard(size)
+                                      ? _keyBoard(size, res)
                                       : Container(),
                                 ),
                                 Expanded(
                                   flex: 1,
                                   child: !_useKeyBoard
-                                      ? _enterAndRemove(size)
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                            left: res.leftPaddingSize * 8,
+                                          ),
+                                          child: _enterAndRemove(size, res),
+                                        )
                                       : Container(),
                                 ),
                               ],
@@ -755,17 +796,22 @@ class _SpellingGameState extends State<SpellingGame> {
                 flex: 1,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 10.0,
+                    horizontal: res.horizontalPaddingSize,
+                    vertical: res.verticalPaddingSize,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      _hintAndWatchAdButton(context, watchIcon, 1),
+                      _hintAndWatchAdButton(context, watchIcon, 1, size, res),
                       Row(
                         children: <Widget>[
-                          _hintAndWatchAdButton(context, answerIcon, 3),
-                          _hintAndWatchAdButton(context, hintIcon, 2),
+                          _hintAndWatchAdButton(
+                              context, answerIcon, 3, size, res),
+                          SizedBox(
+                            width: size.width * 0.015,
+                          ),
+                          _hintAndWatchAdButton(
+                              context, hintIcon, 2, size, res),
                         ],
                       ),
                     ],

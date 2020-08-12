@@ -3,6 +3,7 @@ import 'package:lenglish/screens/wordsList.dart';
 import 'package:lenglish/ui_elements/infoConatiner.dart';
 import 'package:lenglish/widgets/radialProgress.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:lenglish/models/responsive.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
@@ -44,6 +45,8 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   Widget _rowItem(String text, int value, var size) {
+    var textSize = size.width * 0.042;
+
     return Container(
       width: size.width * .40,
       child: Row(
@@ -52,25 +55,26 @@ class _HomeWidgetState extends State<HomeWidget> {
           TextWidget(
             text: text,
             color: whiteColor,
+            size: textSize,
           ),
-          TextWidget(
-            text: value.toString(),
-            color: whiteColor,
-          ),
+          TextWidget(text: value.toString(), color: whiteColor, size: textSize),
         ],
       ),
     );
   }
 
-  Widget _progressCard(var size) {
+  Widget _progressCard(
+    var size,
+    Responsive res,
+  ) {
     return FittedBox(
       child: Container(
-        height: 250,
-        width: size.width * .90,
+        height: res.containerHeightSize,
+        width: res.containerWidthSize,
         decoration: BoxDecoration(
             color: primaryBlueColor,
             borderRadius: BorderRadius.circular(
-              15.0,
+              res.borderRadiusSize * 0.8,
             ),
             boxShadow: [
               shadow(
@@ -80,11 +84,11 @@ class _HomeWidgetState extends State<HomeWidget> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20.0,
-                left: 20.0,
-                top: 10.0,
-                bottom: 10.0,
+              padding: EdgeInsets.only(
+                right: res.rightPaddingSize,
+                left: res.leftPaddingSize,
+                top: res.topPaddingSize * 4,
+                bottom: res.bottomPaddingSize * 2,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -95,17 +99,18 @@ class _HomeWidgetState extends State<HomeWidget> {
                           widget.totalLearningWords.toDouble() / 2265,
                       percent:
                           widget.totalLearningWords.toDouble() * 100 / 2265,
-                      height: 100,
-                      width: 100,
+                      height: res.circleHeightSize * 1.6,
+                      width: res.circleWidthSize * 1.6,
                       color: whiteColor,
                       flag: true,
+                      res: res,
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(
-              height: 10.0,
+              height: res.sizedBoxHeightSize,
             ),
             Expanded(
               child: Container(
@@ -114,10 +119,18 @@ class _HomeWidgetState extends State<HomeWidget> {
                     0.6,
                   ),
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(leftRightTopValue),
-                    topRight: Radius.circular(leftRightTopValue),
-                    bottomLeft: Radius.circular(15.0),
-                    bottomRight: Radius.circular(15.0),
+                    topLeft: Radius.circular(
+                      res.borderRadiusSize,
+                    ),
+                    topRight: Radius.circular(
+                      res.borderRadiusSize,
+                    ),
+                    bottomLeft: Radius.circular(
+                      res.borderRadiusSize * 0.8,
+                    ),
+                    bottomRight: Radius.circular(
+                      res.borderRadiusSize * 0.8,
+                    ),
                   ),
                 ),
                 child: Row(
@@ -134,11 +147,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                             size,
                           ),
                           SizedBox(
-                            height: 15.0,
+                            height: size.height * 0.03,
                           ),
                           _rowItem('total words', 2265, size),
                           SizedBox(
-                            height: 15.0,
+                            height: size.height * 0.03,
                           ),
                           _rowItem(
                               'Learing words', widget.totalLearningWords, size),
@@ -165,10 +178,21 @@ class _HomeWidgetState extends State<HomeWidget> {
     });
   }
 
-  Widget _item(BuildContext context, int index, Color firstColor,
-      Color secondColor, var data, int learning_words) {
+  Widget _item(
+      BuildContext context,
+      int index,
+      Color firstColor,
+      Color secondColor,
+      var data,
+      int learning_words,
+      var size,
+      Responsive res) {
     return ResponsiveGridCol(
       xs: 6,
+      sm: 6,
+      md: 6,
+      lg: 6,
+      xl: 6,
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
@@ -186,16 +210,16 @@ class _HomeWidgetState extends State<HomeWidget> {
         },
         child: Padding(
           padding: EdgeInsets.only(
-            left: 5.0,
-            right: 5.0,
-            bottom: 10.0,
+            left: res.leftPaddingSize,
+            right: res.rightPaddingSize,
+            bottom: res.leftPaddingSize + res.rightPaddingSize,
           ),
           child: Container(
-            height: 250.0,
+            height: size.height * .38,
             decoration: BoxDecoration(
               color: firstColor,
               borderRadius: BorderRadius.circular(
-                15.0,
+                res.borderRadiusSize * 0.8,
               ),
               boxShadow: [
                 shadow(
@@ -210,17 +234,20 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Container(
                     color: Colors.transparent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: res.verticalPaddingSize,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           RadialProgress(
                             goalCompleted: learning_words.toDouble() / 50,
                             percent: learning_words.toDouble() * 100 / 50,
-                            height: 50,
-                            width: 50,
+                            height: res.circleHeightSize,
+                            width: res.circleWidthSize,
                             color: whiteColor,
                             flag: false,
+                            res: res,
                           ),
                         ],
                       ),
@@ -236,6 +263,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     firstColor: firstColor,
                     secondColor: secondColor,
                     reset: () => _resetItem(data, index),
+                    res: res,
                   ),
                 )
               ],
@@ -246,7 +274,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  Widget _gridList(BuildContext context, var size) {
+  Widget _gridList(BuildContext context, var size, Responsive res) {
     return Container(
       width: size.width * .93,
       child: ResponsiveGridRow(
@@ -257,12 +285,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                 (index, item) => MapEntry(
                   index,
                   _item(
-                      context,
-                      index,
-                      colors[index]['first_color'],
-                      colors[index]['second_color'],
-                      item['set_${index + 1}'].toList(),
-                      int.parse(item['learning_words'])),
+                    context,
+                    index,
+                    colors[index]['first_color'],
+                    colors[index]['second_color'],
+                    item['set_${index + 1}'].toList(),
+                    int.parse(item['learning_words']),
+                    size,
+                    res,
+                  ),
                 ),
               )
               .values
@@ -272,32 +303,51 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  Widget _itemGrid(BuildContext context, var size) {
-    return Expanded(
-      flex: 2,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: <Widget>[
-            FittedBox(
-              child: _gridList(context, size),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _topAppBar() {
     return TopAppBar(
       icon_1: crownIcon,
       icon_2: moreIcon,
       icon_2_flag: 1,
+      icon_1_flag: 1,
       text: 'Home',
       textSize: 18.9,
       color: blackColor,
       fontWeight: FontWeight.bold,
       clickHandler: widget.setNewGlobalData,
+    );
+  }
+
+  Widget _budyBuild(BuildContext context, var size) {
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .4,
+      borderRadiusSize: size.width * 0.0469,
+      containerWidthSize: size.width * .90,
+      sizedBoxHeightSize: size.height * 0.02,
+      textSize: size.width * 0.045,
+      iconSize: size.height * 0.038,
+      circleHeightSize: size.height * 0.09,
+      circleWidthSize: size.height * 0.09,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      leftPaddingSize: size.width * 0.0085,
+    );
+    return Expanded(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: res.sizedBoxHeightSize,
+            ),
+            _progressCard(size, res),
+            SizedBox(
+              height: res.sizedBoxHeightSize,
+            ),
+            _gridList(context, size, res),
+          ],
+        ),
+      ),
     );
   }
 
@@ -307,27 +357,12 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Container(
       height: size.height,
       width: size.width,
+      color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Column(
           children: <Widget>[
             _topAppBar(),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    _progressCard(size),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    _gridList(context, size),
-                  ],
-                ),
-              ),
-            )
+            _budyBuild(context, size),
           ],
         ),
       ),

@@ -12,6 +12,9 @@ const linearGradiantColor =
 const Color darkGreyColor = Color(0XFF808080);
 const Color greenColor = Color(0XFF03CD54);
 const Color blackGrey = Color(0XFF464646);
+const Color silverColor = Color(0XFFE5E5E5);
+const Color goldColor = Color(0XFFFEE333);
+const Color platinumColor = Color(0XFFe5e4e2);
 
 // shadow effect
 shadow(Color color) => BoxShadow(

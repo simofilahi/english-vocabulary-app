@@ -8,6 +8,7 @@ import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class PlayingBallonGames extends StatefulWidget {
   final List<dynamic> globalData;
@@ -232,6 +233,24 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .08,
+      containerWidthSize: size.width * .90,
+      sizedBoxHeightSize: size.height * 0.02,
+      sizedBoxWidthSize: size.width * 0.0310,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      leftPaddingSize: size.width * 0.0085,
+      textSize: size.width * 0.05,
+      iconSize: size.height * 0.032,
+      allPaddingSize: size.width * 0.02,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(

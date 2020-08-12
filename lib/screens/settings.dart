@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/chooseLanguage.dart';
-import 'package:lenglish/widgets/shopCard.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:stripe_native/stripe_native.dart';
+import 'package:lenglish/models/responsive.dart';
+import 'package:share/share.dart';
 
 class Setting extends StatefulWidget {
   final String lang;
@@ -31,14 +32,14 @@ class _SettingState extends State<Setting> {
   @override
   void initState() {
     super.initState();
-    print(widget.nightMode);
+    // print(widget.nightMode);
     setState(() {
       lang = getNameOfLang(widget.lang);
     });
   }
 
   Widget _render(var size, String iconName, String text, String text_1,
-      String iconName_2, var screen, int flag, int navFlag) {
+      String iconName_2, var screen, int flag, int navFlag, Responsive res) {
     if (flag == 1) {
       return Expanded(
         child: Row(
@@ -55,16 +56,19 @@ class _SettingState extends State<Setting> {
                   text != null
                       ? TextWidget(
                           text: text_1,
+                          size: size.width * 0.035,
                           color: Theme.of(context).textSelectionColor,
                         )
                       : Container(),
                   Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: EdgeInsets.only(
+                      right: res.rightPaddingSize,
+                    ),
                     child: FittedBox(
                       child: SvgPicture.asset(
                         iconName_2,
-                        height: 15.0,
-                        width: 15.0,
+                        height: size.height * 0.028,
+                        width: size.height * 0.028,
                         color: Theme.of(context).textSelectionColor,
                       ),
                     ),
@@ -77,16 +81,18 @@ class _SettingState extends State<Setting> {
       );
     } else if (flag == 2) {
       return Padding(
-        padding: const EdgeInsets.only(right: 15.0),
+        padding: EdgeInsets.only(
+          right: size.width * 0.025,
+        ),
         child: InkWell(
           onTap: () {
-            print("yoyoyyoyo");
+            // print("yoyoyyoyo");
             widget.updateNightMode();
           },
           child: SvgPicture.asset(
             iconName_2,
-            height: 40.0,
-            width: 50.0,
+            height: size.height * 0.05,
+            width: size.height * 0.05,
             color: Theme.of(context).backgroundColor == blackColor
                 ? greenColor
                 : primaryColor,
@@ -100,16 +106,35 @@ class _SettingState extends State<Setting> {
 
   Widget _item(var size, String iconName, String text, String text_1,
       String iconName_2, var screen, int flag, int navFlag) {
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .08,
+      containerWidthSize: size.width * .90,
+      sizedBoxHeightSize: size.height * 0.028,
+      sizedBoxWidthSize: size.width * 0.0310,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      leftPaddingSize: size.width * 0.0085,
+      textSize: size.width * 0.05,
+      iconSize: size.height * 0.032,
+      allPaddingSize: size.width * 0.02,
+    );
+    print("bbbbbbbb ===> ${res.sizedBoxWidthSize}");
     return FittedBox(
       child: Material(
         color: Colors.transparent,
         // shadowColor: blackColor,
         borderRadius: BorderRadius.circular(
-          15.0,
+          res.borderRadiusSize,
         ),
         child: InkWell(
           onTap: () {
-            if (navFlag != 2) {
+            if (navFlag == 4) {
+              Share.share('My is Awesome');
+            } else if (navFlag != 2) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx) {
                   return screen;
@@ -118,25 +143,27 @@ class _SettingState extends State<Setting> {
             }
           },
           child: Padding(
-            padding: const EdgeInsets.only(
-              top: 4.0,
-              bottom: 4.0,
-              left: 2.0,
-              right: 2.0,
+            padding: EdgeInsets.only(
+              top: res.topPaddingSize,
+              bottom: res.bottomPaddingSize,
+              left: res.leftPaddingSize,
+              right: res.rightPaddingSize,
             ),
             child: Container(
-              height: 60.0,
-              width: size.width * .92,
+              height: res.containerHeightSize,
+              width: res.containerWidthSize,
               decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(
-                    15.0,
+                    res.borderRadiusSize,
                   ),
                   boxShadow: [
                     shadow(Theme.of(context).cardColor),
                   ]),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(
+                  res.allPaddingSize,
+                ),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -144,16 +171,15 @@ class _SettingState extends State<Setting> {
                         children: <Widget>[
                           SvgPicture.asset(
                             iconName,
-                            height: 20.0,
-                            width: 20.0,
-                            // color: primaryGreyColor,
+                            height: res.iconSize,
+                            width: res.iconSize,
                           ),
                           SizedBox(
-                            width: 10.0,
+                            width: res.sizedBoxWidthSize,
                           ),
                           TextWidget(
                             text: text,
-                            size: 18.0,
+                            size: res.textSize,
                             color: Theme.of(context).textSelectionColor,
                             fontWeight: FontWeight.w400,
                           ),
@@ -161,7 +187,7 @@ class _SettingState extends State<Setting> {
                       ),
                     ),
                     _render(size, iconName, text, text_1, iconName_2, screen,
-                        flag, navFlag),
+                        flag, navFlag, res),
                   ],
                 ),
               ),
@@ -215,6 +241,12 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      sizedBoxHeightSize: size.height * 0.028,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+    );
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
@@ -227,26 +259,24 @@ class _SettingState extends State<Setting> {
                 icon_1: null,
                 icon_2: null,
                 text: 'Settings',
-                textSize: 18,
               ),
               SizedBox(
-                height: 10.0,
+                height: res.sizedBoxHeightSize,
               ),
+              // Expanded(
+              //   flex: 2,
+              //   child: Padding(
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: 20.0,
+              //     ),
+              //     child: FittedBox(child: ShopCard()),
+              //   ),
+              // ),
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                  ),
-                  child: FittedBox(child: ShopCard()),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 15.0,
+                    horizontal: res.horizontalPaddingSize,
                   ),
                   child: _settingItems(size),
                 ),

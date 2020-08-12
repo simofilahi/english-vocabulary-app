@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
-
+import 'package:lenglish/models/responsive.dart';
 import '../constants.dart';
 
 class CustomButton extends StatelessWidget {
@@ -12,6 +12,8 @@ class CustomButton extends StatelessWidget {
   final Color color;
   final bool navFlag;
   final String selectedLang;
+  final double textSize;
+  final Responsive res;
   // final Function saveLang;
   CustomButton({
     this.text,
@@ -21,6 +23,8 @@ class CustomButton extends StatelessWidget {
     this.color = primaryBlueColor,
     this.navFlag,
     this.selectedLang = null,
+    this.textSize = 0,
+    this.res,
   });
 
   @override
@@ -49,12 +53,12 @@ class CustomButton extends StatelessWidget {
             }
           },
           child: Container(
-            height: buttonHeightSize == 0 ? 55 : buttonHeightSize,
-            width: buttonWidthSize == 0.0 ? size.width * .80 : buttonWidthSize,
+            height: buttonHeightSize,
+            width: buttonWidthSize,
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(
-                10.0,
+                res.borderRadiusSize * 0.5,
               ),
               boxShadow: [
                 shadow(Theme.of(context).cardColor),
@@ -63,7 +67,7 @@ class CustomButton extends StatelessWidget {
             child: Center(
               child: TextWidget(
                 text: text,
-                size: 18.0,
+                size: textSize,
                 color: whiteColor,
               ),
             ),

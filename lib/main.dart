@@ -1,12 +1,19 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/splashScreen.dart';
 import 'package:lenglish/screens/settings.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:stripe_native/stripe_native.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+      // MyApp(),
+      DevicePreview(
+        enabled: true,
+        builder: (context) => MyApp(),
+      ),
+    );
 
 class MyApp extends StatefulWidget {
   MyApp({Key key}) : super(key: key);
@@ -32,11 +39,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    //   DeviceOrientation.portraitDown,
+    // ]);
     return MaterialApp(
+      locale: DevicePreview.of(context).locale, // <--- Add the locale
+      builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Roboto',

@@ -66,7 +66,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    _bannerAd?.dispose();
+    _bannerAd.dispose();
     // widget._updateCountOfWords();
   }
 
@@ -166,7 +166,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         });
                         return true;
                       },
-                      size: 30,
+                      size: size.width * .08,
                       circleColor: CircleColor(
                           start: Color(0xff00ddff), end: Color(0xff0099cc)),
                       bubblesColor: BubblesColor(
@@ -193,23 +193,17 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                   child: Center(
                     child: Column(
                       children: <Widget>[
-                        SizedBox(
-                          height: 20.0,
-                        ),
                         TextWidget(
                           text: widget.item[index]['en'],
-                          size: 24.0,
+                          size: size.width * .08,
                           color: Theme.of(context).textSelectionColor,
                           fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: 10.0,
                         ),
                         TextWidget(
                           text: getRightTranslate(
                               widget.item, null, index, widget.lang),
                           color: Theme.of(context).cursorColor,
-                          size: 20.0,
+                          size: size.width * .056,
                           fontWeight: FontWeight.w400,
                         )
                       ],
@@ -226,6 +220,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                     FittedBox(
                       child: TextWidget(
                         text: 'Examples',
+                        size: size.width * .06,
                         color: Theme.of(context).textSelectionColor,
                         fontWeight: FontWeight.bold,
                         textAlign: TextAlign.center,
@@ -245,6 +240,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           children: <Widget>[
                             TextWidget(
                               text: widget.item[index]['examples'],
+                              size: size.width * .056,
                               color: Theme.of(context).cursorColor,
                               textAlign: TextAlign.center,
                             ),
@@ -271,8 +267,8 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                         child: FittedBox(
                           child: SvgPicture.asset(
                             speakerIcon,
-                            height: 50,
-                            width: 50.0,
+                            height: size.height * .04,
+                            width: size.height * .04,
                             color: Theme.of(context).indicatorColor,
                           ),
                         ),
@@ -305,8 +301,8 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           CircleWithIcon(
                             color: Colors.red,
                             iconName: closeIcon,
-                            iconHeight: 20.0,
-                            iconWidth: 20.0,
+                            iconHeight: size.height * 0.025,
+                            iconWidth: size.height * 0.025,
                             func: _unknown,
                             wordObjIndex: index,
                             word: widget.item[index]['en'],
@@ -314,8 +310,8 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           CircleWithIcon(
                             color: Colors.blue,
                             iconName: hourIcon,
-                            iconHeight: 20.0,
-                            iconWidth: 10.0,
+                            iconHeight: size.height * 0.025,
+                            iconWidth: size.height * 0.025,
                             func: _familiar,
                             wordObjIndex: index,
                             word: widget.item[index]['en'],
@@ -323,8 +319,8 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                           CircleWithIcon(
                             color: Colors.green,
                             iconName: validateIcon,
-                            iconHeight: 20.0,
-                            iconWidth: 20.0,
+                            iconHeight: size.height * 0.025,
+                            iconWidth: size.height * 0.025,
                             func: _excellent,
                             wordObjIndex: index,
                             word: widget.item[index]['en'],
@@ -344,20 +340,38 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
 
   Widget _listItem(BuildContext context, var size, int index) {
     return itemRender(context, size, index);
-    // print("widget.flag");
-    // print(widget.flag);
-    // if (widget.item[index]['isFamiliar'] == "true" && (widget.flag == 1)) {
-    //   print("hello");
+  }
 
-    // } else if (widget.item[index]['isUnknown'] == "true" && (widget.flag == 2)) {
-    //   return widget.itemRender(size, index);
-    // } else if ((widget.item[index]['isExcellent'] == "false" &&
-    //         widget.item[index]['isFamiliar'] == "false" &&
-    //         widget.item[index]['isUnknown'] == "false" &&
-    //         widget.item[index]['isFavorite'] == "false") &&
-    //     (widget.flag == 0)) {
-    //   return widget.itemRender(size, index);
-    // }
+  Widget _swiperBuilder(var size) {
+    return Container(
+      height: size.height * .70,
+      child: Swiper(
+        duration: 1000,
+        itemHeight: size.height * .70,
+        itemWidth: size.width * .50,
+        itemCount: widget.item.length,
+        viewportFraction: 0.7,
+        scale: 0.8,
+        itemBuilder: (BuildContext ctx, int index) {
+          return _listItem(context, size, index);
+        },
+        controller: swiperController,
+        onIndexChanged: (int index) {
+          // print(_index);
+          if (widget.len == _index + 1) {
+            setState(() {
+              _index += 1;
+            });
+          } else {
+            setState(() {
+              _index = index;
+            });
+          }
+        },
+        index: _index,
+        loop: false,
+      ),
+    );
   }
 
   @override
@@ -382,41 +396,13 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                   color: primaryGreyColor,
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: size.height * .09,
                 ),
                 widget.len == _index
                     ? Container(
                         // child: TextWidget(text: 'finish'),
                         )
-                    : Container(
-                        height: size.height * .70,
-                        child: Swiper(
-                          duration: 1000,
-                          itemHeight: size.height * .70,
-                          itemWidth: size.width * .50,
-                          itemCount: widget.item.length,
-                          viewportFraction: 0.7,
-                          scale: 0.8,
-                          itemBuilder: (BuildContext ctx, int index) {
-                            return _listItem(context, size, index);
-                          },
-                          controller: swiperController,
-                          onIndexChanged: (int index) {
-                            // print(_index);
-                            if (widget.len == _index + 1) {
-                              setState(() {
-                                _index += 1;
-                              });
-                            } else {
-                              setState(() {
-                                _index = index;
-                              });
-                            }
-                          },
-                          index: _index,
-                          loop: false,
-                        ),
-                      ),
+                    : _swiperBuilder(size),
               ],
             ),
           ),

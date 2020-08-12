@@ -1,0 +1,98 @@
+[
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_diners.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_diners.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_arrow.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\14b51d06a5a4687b144b20d104018b3d\\jetified-stripe-3ds2-android-1.2.2\\res\\drawable-ldpi-v4\\ic_arrow.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_visa.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_visa.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_mastercard_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_mastercard_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_error.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_error.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_diners_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_diners_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_visa_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_visa_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_jcb_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_jcb_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_indicator.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\14b51d06a5a4687b144b20d104018b3d\\jetified-stripe-3ds2-android-1.2.2\\res\\drawable-ldpi-v4\\ic_indicator.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_cvc.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_cvc.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_cvc_amex.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_cvc_amex.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_add_black_32dp.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_add_black_32dp.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_discover.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_discover.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_checkmark_tinted.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_checkmark_tinted.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_unionpay_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_unionpay_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_jcb.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_jcb.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_error_amex.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_error_amex.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_amex.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_amex.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_unknown.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_unknown.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_mastercard.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_mastercard.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_amex_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_amex_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_bank_generic.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_bank_generic.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_discover_template_32.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_discover_template_32.png"
+    },
+    {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\stripe_payment\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_checkmark.png",
+        "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\4213bc9ed6cc3907d3b438fc4dc1b777\\jetified-stripe-android-10.4.6\\res\\drawable-ldpi-v4\\ic_checkmark.png"
+    }
+]

@@ -5,10 +5,10 @@ INJECTED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\
 INJECTED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:1:1-34:12
 INJECTED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:1:1-34:12
 MERGED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml:1:1-34:12
-MERGED from [:audioplayers] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\audioplayers\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-32:12
-MERGED from [:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-13:12
+MERGED from [:audioplayers] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\audioplayers\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:fluttertoast] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:firebase_auth_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_admob] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_admob\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -18,7 +18,9 @@ MERGED from [:firebase_core_web] C:\Users\drpbengrir\Desktop\flutter_projects\le
 MERGED from [:flutter_keyboard_visibility] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:stripe_payment] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_payment\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-37:12
 MERGED from [:path_provider] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:assets_audio_player_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:share] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\share\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:cloud_functions_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions_web\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\2b16ac6c4193835014f293427ee35afa\multidex-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.stripe:stripe-android:14.4.1] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\0c07c1b5fdea5f4ec0bf819a442b1909\stripe-android-14.4.1\AndroidManifest.xml:2:1-32:12
@@ -243,14 +245,14 @@ uses-sdk
 INJECTED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\android\app\src\main\AndroidManifest.xml
-MERGED from [:audioplayers] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\audioplayers\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-44
-MERGED from [:audioplayers] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\audioplayers\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-44
 MERGED from [:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:assets_audio_player] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:audioplayers] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\audioplayers\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-44
+MERGED from [:audioplayers] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\audioplayers\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-44
 MERGED from [:fluttertoast] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:stripe_native] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_native\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\firebase_auth_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
@@ -269,8 +271,12 @@ MERGED from [:stripe_payment] C:\Users\drpbengrir\Desktop\flutter_projects\lengl
 MERGED from [:stripe_payment] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\stripe_payment\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:path_provider] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:assets_audio_player_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:assets_audio_player_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\assets_audio_player_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:share] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\share\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:share] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\share\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:cloud_functions_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:cloud_functions_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions_web\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\2b16ac6c4193835014f293427ee35afa\multidex-2.0.0\AndroidManifest.xml:20:5-43

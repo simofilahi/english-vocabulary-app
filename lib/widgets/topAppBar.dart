@@ -4,11 +4,13 @@ import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/models/CustomPopupMenu.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class TopAppBar extends StatelessWidget {
   final String icon_1;
   final String icon_2;
   final int icon_2_flag;
+  final int icon_1_flag;
   final String text;
   final double textSize;
   final Color color;
@@ -19,6 +21,7 @@ class TopAppBar extends StatelessWidget {
     this.icon_1,
     this.icon_2,
     this.icon_2_flag = 0,
+    this.icon_1_flag = 0,
     this.text,
     this.textSize,
     this.color = primaryGreyColor,
@@ -26,31 +29,62 @@ class TopAppBar extends StatelessWidget {
     this.clickHandler = null,
   });
 
-  Widget _leading(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(
-        20.0,
-      ),
-      onTap: () {
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        height: 30.0,
-        width: 30.0,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          shape: BoxShape.circle,
-          boxShadow: [
-            shadow(Theme.of(context).cardColor),
-          ],
+  Color _colorBuild(BuildContext context) {
+    if (icon_1_flag == 1) {
+      return goldColor;
+    } else
+      return Theme.of(context).textSelectionColor;
+  }
+
+  Widget _leading(BuildContext context, var size) {
+    Responsive res = Responsive(
+      containerHeightSize: size.height * 0.05,
+      containerWidthSize: size.height * 0.05,
+      iconSize: size.height * 0.03,
+      borderRadiusSize: size.width * 0.16,
+      bottomPaddingSize: size.height * 0.0086,
+      allPaddingSize: size.width * 0.008,
+    );
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          if (icon_1_flag != 1) {
+            Navigator.of(context).pop();
+          }
+        },
+        highlightColor: Color(0XFFD3D2D5),
+        borderRadius: BorderRadius.circular(
+          res.borderRadiusSize,
         ),
-        child: Center(
-          child: FittedBox(
-            child: SvgPicture.asset(
-              icon_1,
-              height: 20.0,
-              width: 20.0,
-              color: Theme.of(context).textSelectionColor,
+        child: Container(
+          height: res.containerHeightSize,
+          width: res.containerWidthSize,
+          child: Padding(
+            padding: EdgeInsets.all(
+              res.allPaddingSize,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  shadow(Theme.of(context).cardColor),
+                ],
+              ),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: icon_1_flag == 1 ? res.bottomPaddingSize : 0.0,
+                  ),
+                  child: SvgPicture.asset(
+                    icon_1,
+                    height: res.iconSize,
+                    width: res.iconSize,
+                    color: _colorBuild(context),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -58,13 +92,22 @@ class TopAppBar extends StatelessWidget {
     );
   }
 
-  Widget _center(BuildContext context) {
+  Widget _center(BuildContext context, var size) {
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .045,
+      containerWidthSize: size.height * 0.05,
+      iconSize: size.height * 0.03,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0086,
+      allPaddingSize: size.width * 0.008,
+      textSize: size.width * 0.045,
+    );
     return Container(
-      height: 30.0,
+      height: res.containerHeightSize,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(
-          15.0,
+          res.borderRadiusSize,
         ),
       ),
       child: Padding(
@@ -75,7 +118,7 @@ class TopAppBar extends StatelessWidget {
         child: Center(
           child: TextWidget(
             text: text,
-            size: textSize,
+            size: res.textSize,
             color: Theme.of(context).textSelectionColor,
             fontWeight: FontWeight.bold,
           ),
@@ -93,26 +136,26 @@ class TopAppBar extends StatelessWidget {
     ),
   ];
 
-  Widget _child(BuildContext context) {
+  Widget _child(BuildContext context, var size, Responsive res) {
     if (icon_2_flag == 1) {
       return PopupMenuButton(
         icon: SvgPicture.asset(
           icon_2,
-          height: 20.0,
-          width: 20.0,
+          height: res.iconSize,
+          width: res.iconSize,
           color: Theme.of(context).indicatorColor,
         ),
         onSelected: (dynamic _) {
           resetAll(clickHandler);
         },
-        elevation: 3.2,
+        elevation: 1.0,
         initialValue: choices[0],
-        tooltip: 'This is tooltip',
+        // tooltip: 'This is tooltip',
         // onSelected: _select,
         itemBuilder: (BuildContext context) {
           return choices.map((choice) {
             return PopupMenuItem(
-              height: 20.0,
+              height: size.height * 0.02,
               value: choice,
               child: Text(choice.title),
             );
@@ -120,49 +163,67 @@ class TopAppBar extends StatelessWidget {
         },
       );
     } else if (icon_2_flag == 2) {
-      return InkWell(
-        onTap: () {
-          clickHandler();
-        },
-        child: FittedBox(
-          child: SvgPicture.asset(
-            icon_2,
-            height: 20.0,
-            width: 20.0,
-            color: Theme.of(context).indicatorColor,
-          ),
+      return FittedBox(
+        child: SvgPicture.asset(
+          icon_2,
+          height: res.iconSize,
+          width: res.iconSize,
+          color: Theme.of(context).indicatorColor,
         ),
       );
     } else {
       return FittedBox(
         child: SvgPicture.asset(
           icon_2,
-          height: 20.0,
-          width: 20.0,
+          height: res.iconSize,
+          width: res.iconSize,
           color: Theme.of(context).indicatorColor,
         ),
       );
     }
   }
 
-  Widget _tailing(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        print("yoyoyyoyyooyoyo");
-        if (icon_2_flag == 1) {}
-      },
-      child: Container(
-        height: 30.0,
-        width: 30.0,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          shape: BoxShape.circle,
-          boxShadow: [
-            shadow(Theme.of(context).cardColor),
-          ],
+  Widget _tailing(BuildContext context, var size) {
+    Responsive res = Responsive(
+      containerHeightSize: size.height * 0.05,
+      containerWidthSize: size.height * 0.05,
+      iconSize: size.height * 0.03,
+      borderRadiusSize: size.width * 0.16,
+      bottomPaddingSize: size.height * 0.0086,
+      allPaddingSize: size.width * 0.008,
+    );
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          if (icon_2_flag == 2) {
+            clickHandler();
+          }
+        },
+        highlightColor: Color(0XFFD3D2D5),
+        borderRadius: BorderRadius.circular(
+          res.borderRadiusSize,
         ),
-        child: Center(
-          child: _child(context),
+        child: Container(
+          height: res.containerHeightSize,
+          width: res.containerWidthSize,
+          child: Padding(
+            padding: EdgeInsets.all(
+              res.allPaddingSize,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  shadow(Theme.of(context).cardColor),
+                ],
+              ),
+              child: Center(
+                child: _child(context, size, res),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -170,12 +231,18 @@ class TopAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * 0.07,
+      horizontalPaddingSize: size.width * 0.0325,
+    );
+
     return Container(
-      height: 50.0,
+      height: res.containerHeightSize,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20.0,
+        padding: EdgeInsets.symmetric(
+          horizontal: res.horizontalPaddingSize,
         ),
         child: Row(
           children: <Widget>[
@@ -184,7 +251,7 @@ class TopAppBar extends StatelessWidget {
                     flex: 1,
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: _leading(context)),
+                        child: _leading(context, size)),
                   )
                 : Expanded(
                     flex: 1,
@@ -193,13 +260,13 @@ class TopAppBar extends StatelessWidget {
                       child: Container(),
                     ),
                   ),
-            Expanded(flex: 1, child: _center(context)),
+            Expanded(flex: 1, child: _center(context, size)),
             icon_2 != null
                 ? Expanded(
                     flex: 1,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: _tailing(context),
+                      child: _tailing(context, size),
                     ),
                   )
                 : Expanded(

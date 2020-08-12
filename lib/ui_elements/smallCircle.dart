@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class SmallCircle extends StatelessWidget {
   final int number;
@@ -12,9 +13,16 @@ class SmallCircle extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * 0.0354,
+      containerWidthSize: size.height * 0.0354,
+      textSize: size.width * 0.025,
+    );
+    print(res.textSize);
     return Container(
-      height: 20,
-      width: 20,
+      height: res.containerHeightSize,
+      width: res.containerHeightSize,
       decoration: BoxDecoration(
         color: firstColor,
         shape: BoxShape.circle,
@@ -22,7 +30,7 @@ class SmallCircle extends StatelessWidget {
       child: Center(
         child: TextWidget(
           text: number.toString(),
-          size: 8.0,
+          size: res.textSize,
           color: whiteColor,
         ),
       ),

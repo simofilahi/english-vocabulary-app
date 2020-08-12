@@ -85,6 +85,13 @@
     <string name="exo_track_surround_5_point_1">System dźwięku przestrzennego 5.1</string>
     <string name="exo_track_surround_7_point_1">System dźwięku przestrzennego 7.1</string>
     <string name="exo_track_unknown">Nieznany</string>
+    <string msgid="368094699078615544" name="s1">"Zapisz obraz"</string>
+    <string msgid="4550830452390689489" name="s2">"Zezwolić reklamie na zapisanie obrazu w galerii zdjęć?"</string>
+    <string msgid="2435407834265420668" name="s3">"Zaakceptuj"</string>
+    <string msgid="9167523597401839819" name="s4">"Odrzuć"</string>
+    <string msgid="1566682516266724847" name="s5">"Utwórz wydarzenie w kalendarzu"</string>
+    <string msgid="5996672174517137271" name="s6">"Zezwolić reklamie na utworzenie wydarzenia w kalendarzu?"</string>
+    <string msgid="7163549807207034258" name="s7">"Reklama testowa"</string>
     <string msgid="730395136688082741" name="search_menu_title">"Szukaj"</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="363496807345461806" name="wallet_buy_button_place_holder">"Kup to z Google"</string>

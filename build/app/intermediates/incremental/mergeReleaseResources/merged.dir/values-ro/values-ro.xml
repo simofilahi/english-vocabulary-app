@@ -85,6 +85,13 @@
     <string name="exo_track_surround_5_point_1">Sunet surround 5.1</string>
     <string name="exo_track_surround_7_point_1">Sunet surround 7.1</string>
     <string name="exo_track_unknown">Necunoscut</string>
+    <string msgid="368094699078615544" name="s1">"Salvați imaginea"</string>
+    <string msgid="4550830452390689489" name="s2">"Permiteți ca anunțul să stocheze imaginea în Galeria de fotografii?"</string>
+    <string msgid="2435407834265420668" name="s3">"Acceptați"</string>
+    <string msgid="9167523597401839819" name="s4">"Refuzați"</string>
+    <string msgid="1566682516266724847" name="s5">"Creați un eveniment în calendar"</string>
+    <string msgid="5996672174517137271" name="s6">"Permiteți ca anunțul să creeze un eveniment în calendar?"</string>
+    <string msgid="7163549807207034258" name="s7">"Anunț de probă"</string>
     <string msgid="730395136688082741" name="search_menu_title">"Căutați"</string>
     <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="363496807345461806" name="wallet_buy_button_place_holder">"Buy with Google"</string>

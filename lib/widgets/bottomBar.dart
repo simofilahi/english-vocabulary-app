@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:lenglish/models/responsive.dart';
 import '../constants.dart';
 
 class BottomBar extends StatefulWidget {
@@ -15,31 +15,37 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    Responsive res = Responsive(
+      containerHeightSize: size.height * 0.07,
+      iconSize: size.height * 0.04,
+    );
+    print("fofofo ==> ${res.iconSize}");
     return Container(
-      height: 50.0,
+      height: res.containerHeightSize,
       child: CurvedNavigationBar(
         initialIndex: widget.currentIndex,
         color: Theme.of(context).cardColor,
         buttonBackgroundColor: Theme.of(context).cardColor,
-        // animationCurve: Curves.easeInOut,
         backgroundColor: Theme.of(context).backgroundColor,
         items: <Widget>[
           Icon(
             Icons.home,
-            size: 30,
+            size: res.iconSize,
             color: primaryBlueColor,
             // widget.currentIndex == 0 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.games, size: 30, color: primaryBlueColor,
+            Icons.games, size: res.iconSize, color: primaryBlueColor,
             // widget.currentIndex == 1 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.menu, size: 30, color: primaryBlueColor,
+            Icons.menu, size: res.iconSize, color: primaryBlueColor,
             // widget.currentIndex == 2 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.settings, size: 30, color: primaryBlueColor,
+            Icons.settings, size: res.iconSize, color: primaryBlueColor,
             // widget.currentIndex == 3 ? primaryBlueColor : primaryGreyColor,
           ),
         ],

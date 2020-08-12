@@ -6,6 +6,7 @@ import 'package:lenglish/models/languages.dart';
 import 'package:lenglish/screens/home.dart';
 import 'package:lenglish/widgets/customButton.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:lenglish/models/responsive.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 class ChooseLanguage extends StatefulWidget {
@@ -32,7 +33,6 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     super.initState();
 
     allData.getItem().then((data) {
-      print(data);
       setState(() {
         _globalData = data;
       });
@@ -61,10 +61,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     return ret;
   }
 
-  Widget _item(LanguagesList item) {
+  Widget _item(LanguagesList item, Responsive res, var size) {
     return ResponsiveGridCol(
-      xs: 4,
-      xl: 3,
+      xs: 6,
+      sm: 6,
+      md: 6,
+      lg: 4,
+      xl: 4,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -72,18 +75,18 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
             _changeIsActive(item);
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5.0,
-              vertical: 5.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: res.horizontalPaddingSize * 0.2,
+              vertical: res.horizontalPaddingSize * 0.2,
             ),
             child: Container(
-              height: 80.0,
+              height: size.height * 0.2,
               decoration: BoxDecoration(
                 color: item.isActive
                     ? primaryBlueColor
                     : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(
-                  10.0,
+                  res.borderRadiusSize,
                 ),
               ),
               child: Column(
@@ -93,17 +96,17 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                   FittedBox(
                     child: SvgPicture.asset(
                       item.icon,
-                      height: 30.0,
-                      width: 30.0,
+                      height: res.iconSize * 2.5,
+                      width: res.iconSize * 2.5,
                     ),
                   ),
                   SizedBox(
-                    height: 10.0,
+                    height: res.sizedBoxHeightSize,
                   ),
                   FittedBox(
                     child: TextWidget(
                       text: item.name,
-                      size: 18.0,
+                      size: res.textSize,
                       color: item.isActive
                           ? whiteColor
                           : Theme.of(context).textSelectionColor,
@@ -127,6 +130,24 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     final size = MediaQuery.of(context).size;
     final double left_right_padding = size.width * .10;
     final double top_bottom_padding = size.width * .15;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .08,
+      containerWidthSize: size.width * .90,
+      sizedBoxHeightSize: size.height * 0.02,
+      sizedBoxWidthSize: size.width * 0.0310,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      leftPaddingSize: size.width * 0.0085,
+      textSize: size.width * 0.05,
+      iconSize: size.height * 0.032,
+      allPaddingSize: size.width * 0.02,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+    );
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -140,50 +161,58 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: size.height * .15,
+                    height: res.sizedBoxHeightSize * 6,
                   ),
-                  FittedBox(
-                    child: TextWidget(
-                      text: 'Choose Language',
-                      size: 30.0,
-                      color: Theme.of(context).textSelectionColor,
-                    ),
+                  TextWidget(
+                    text: 'Choose Language',
+                    size: res.textSize * 1.8,
+                    color: Theme.of(context).textSelectionColor,
                   ),
                   SizedBox(
-                    height: 40.0,
+                    height: res.sizedBoxHeightSize * 1.5,
                   ),
                   Container(
-                    height: size.height * .55,
+                    height: size.height * .64,
                     width: size.width,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 35.0,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: res.horizontalPaddingSize,
                       ),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: ResponsiveGridRow(
                           children: [
-                            ...languagesList.map((item) => _item(item)).toList()
+                            ...languagesList
+                                .map((item) => _item(item, res, size))
+                                .toList()
                           ],
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 30.0,
+                    height: res.sizedBoxHeightSize * 1.5,
                   ),
-                  CustomButton(
-                    text: widget.settingBool == true ? 'Done' : 'Continue',
-                    screen: Home(
-                      globalData: _globalData,
-                      globalDataUpdate: widget.globalDataUpdate,
-                      updateNightMode: widget.updateNightMode,
-                      nightMode: widget.nightMode,
+                  Container(
+                    height: size.height * .10,
+                    width: size.width * .90,
+                    child: Center(
+                      child: CustomButton(
+                        text: widget.settingBool == true ? 'Done' : 'Continue',
+                        screen: Home(
+                          globalData: _globalData,
+                          globalDataUpdate: widget.globalDataUpdate,
+                          updateNightMode: widget.updateNightMode,
+                          nightMode: widget.nightMode,
+                        ),
+                        buttonHeightSize: res.buttonHeightSize * 1.4,
+                        buttonWidthSize: res.buttonWidthSize * 2,
+                        textSize: res.textSize,
+                        navFlag: true,
+                        selectedLang: _getActiveLang(),
+                        res: res,
+                      ),
                     ),
-                    navFlag: true,
-                    selectedLang: _getActiveLang(),
-
-                    // saveLang: _saveLang,
                   ),
                 ],
               ),

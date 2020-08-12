@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +7,7 @@ import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:search_widget/search_widget.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class MyWords extends StatefulWidget {
   final List<dynamic> globalData;
@@ -73,6 +73,7 @@ class _MyWordsState extends State<MyWords> {
 
   _setSearchFlagToTrue(dynamic selectedItem) {
     List<dynamic> newData = [];
+
     print("Hoooooooooo");
     if (_defaultIndex == 0) {
       newData = List<dynamic>.from(_favData);
@@ -97,19 +98,21 @@ class _MyWordsState extends State<MyWords> {
     }
   }
 
-  Widget _unk(
-    Map item,
-    var size,
-  ) {
+  Widget _unk(Map item, var size, Responsive res) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: EdgeInsets.only(
+        top: res.topPaddingSize,
+        bottom: res.bottomPaddingSize,
+        left: res.leftPaddingSize,
+        right: res.rightPaddingSize,
+      ),
       child: Container(
-        height: 60.0,
+        height: size.height * .08,
         width: size.width * .90,
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(
-            15.0,
+            res.borderRadiusSize,
           ),
           boxShadow: [
             (shadow(
@@ -117,31 +120,30 @@ class _MyWordsState extends State<MyWords> {
             )),
           ],
         ),
-        child: _rowItems(item),
+        child: _rowItems(item, res),
       ),
     );
   }
 
-  Widget _rowItems(
-    Map item,
-  ) {
+  Widget _rowItems(Map item, Responsive res) {
+    print("UUUUUUUUU =>  ${res.leftPaddingSize}");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(
-            left: 15.0,
+          padding: EdgeInsets.only(
+            left: res.leftPaddingSize * 4,
           ),
           child: TextWidget(
             text: item['en'],
-            size: 18.0,
+            size: res.textSize,
             color: Theme.of(context).textSelectionColor,
             fontWeight: FontWeight.w400,
           ),
         ),
         TextWidget(
           text: getRightTranslate(null, item, 0, widget.lang),
-          size: 18.0,
+          size: res.textSize,
           color: Theme.of(context).textSelectionColor,
           fontWeight: FontWeight.w400,
         ),
@@ -151,13 +153,13 @@ class _MyWordsState extends State<MyWords> {
           },
           child: FittedBox(
             child: Padding(
-              padding: const EdgeInsets.only(
-                right: 15.0,
+              padding: EdgeInsets.only(
+                right: res.rightPaddingSize * 4,
               ),
               child: SvgPicture.asset(
                 speakerIcon,
-                height: 25.0,
-                width: 25.0,
+                height: res.iconSize,
+                width: res.iconSize,
                 color: Theme.of(context).indicatorColor,
               ),
             ),
@@ -170,47 +172,45 @@ class _MyWordsState extends State<MyWords> {
   Widget _fav(
     Map item,
     var size,
+    Responsive res,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 4.0,
-        bottom: 4.0,
-        left: 5.0,
-        right: 5.0,
+      padding: EdgeInsets.only(
+        top: res.topPaddingSize,
+        bottom: res.bottomPaddingSize,
+        left: res.leftPaddingSize,
+        right: res.rightPaddingSize,
       ),
       child: Container(
-        height: 60.0,
+        height: size.height * .08,
         width: size.width * .90,
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(
-            15.0,
+            res.borderRadiusSize,
           ),
           boxShadow: [
             shadow(Theme.of(context).cardColor),
           ],
         ),
-        child: _rowItems(item),
+        child: _rowItems(item, res),
       ),
     );
   }
 
-  Widget _listItem(
-    Map item,
-    var size,
-  ) {
+  Widget _listItem(Map item, var size, Responsive res) {
     if (item['isFavorite'] == "true" && _defaultIndex == 0) {
       if (_searchBool == true && item['flag'] == "true") {
-        return _fav(item, size);
+        return _fav(item, size, res);
       } else if (_searchBool == false) {
-        return _fav(item, size);
+        return _fav(item, size, res);
       } else
         return Container();
     } else if (item['isUnknown'] == "true" && _defaultIndex == 1) {
       if (_searchBool == true && item['flag'] == "true")
-        return _unk(item, size);
+        return _unk(item, size, res);
       else if (_searchBool == false) {
-        return _unk(item, size);
+        return _unk(item, size, res);
       } else
         return Container();
     } else
@@ -224,91 +224,238 @@ class _MyWordsState extends State<MyWords> {
     return 0;
   }
 
-  Widget _myTextField(
-    var size,
-    var controller,
-    var focusNode,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 25.0,
-      ),
-      child: Container(
-        height: 45.0,
-        width: size.width * .90,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(
-            15.0,
-          ),
+  Widget _myTextField(var size, var controller, var focusNode, Responsive res) {
+    var height_2 = size.height * 0.07;
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(
+          res.borderRadiusSize * 0.5,
         ),
-        child: TextField(
-          controller: controller,
-          focusNode: focusNode,
-          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-          decoration: InputDecoration(
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(15.0),
-              ),
-              borderSide: BorderSide(
-                color: Color(0x4437474F),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(15.0),
-              ),
-              borderSide: BorderSide(
-                color: primaryBlueColor,
+      ),
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        style: TextStyle(
+          fontSize: res.textSize,
+          color: Colors.grey[600],
+        ),
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                res.borderRadiusSize * 0.5,
               ),
             ),
-            suffixIcon: _searchBool == false
-                ? InkWell(
-                    onTap: () {
-                      setState(() {});
-                    },
-                    child: Icon(
-                      Icons.search,
-                      color: primaryBlueColor,
-                    ),
-                  )
-                : InkWell(
-                    onTap: () {
-                      setState(() {
-                        _searchBool = false;
-                        _favData = _favData.map((e) {
-                          e['flag'] = "false";
-                          return e;
-                        }).toList();
-                        _unkData = _unkData.map((e) {
-                          e['flag'] = "false";
-                          return e;
-                        }).toList();
-                      });
-                    },
-                    child: Icon(Icons.cancel),
+            borderSide: BorderSide(
+              color: Color(0x4437474F),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(res.borderRadiusSize * 0.5),
+            ),
+            borderSide: BorderSide(
+              color: primaryBlueColor,
+            ),
+          ),
+          suffixIcon: _searchBool == false
+              ? InkWell(
+                  onTap: () {
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.search,
+                    color: primaryBlueColor,
                   ),
-            border: InputBorder.none,
-            hintText: "Search here...",
-            hintStyle: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-            contentPadding: const EdgeInsets.only(
-              left: 16,
-              right: 20,
-              top: 14,
-              bottom: 14,
-            ),
+                )
+              : InkWell(
+                  onTap: () {
+                    setState(() {
+                      _searchBool = false;
+                      _favData = _favData.map((e) {
+                        e['flag'] = "false";
+                        return e;
+                      }).toList();
+                      _unkData = _unkData.map((e) {
+                        e['flag'] = "false";
+                        return e;
+                      }).toList();
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    size: res.iconSize,
+                  ),
+                ),
+          border: InputBorder.none,
+          hintText: "Search here...",
+          hintStyle: TextStyle(
+            color: Theme.of(context).textSelectionColor,
+            fontSize: res.textSize,
+          ),
+          contentPadding: EdgeInsets.only(
+            left: res.leftPaddingSize,
+            right: res.rightPaddingSize,
+            top: res.topPaddingSize,
+            bottom: res.bottomPaddingSize,
           ),
         ),
       ),
     );
   }
 
+  Widget _searchBar(var size, Responsive res) {
+    return SearchWidget(
+      dataList: _defaultIndex == 0 ? _favList : _unkList,
+      popupListItemBuilder: (dynamic item) {
+        return Container(
+          padding: const EdgeInsets.all(12),
+          color: Theme.of(context).cardColor,
+          child: Text(
+            item,
+            style: TextStyle(
+              fontSize: res.textSize,
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+        );
+      },
+      onItemSelected: (dynamic selectedItem) {
+        _setSearchFlagToTrue(selectedItem);
+      },
+      selectedItemBuilder: (selectedItem, deleteSelectedItem) {
+        return Container();
+      },
+      queryBuilder: (query, list) {
+        if (_defaultIndex == 0)
+          return _favList
+              .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+        return _unkList
+            .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      },
+      textFieldBuilder: (controller, focusNode) {
+        return _myTextField(
+          size,
+          controller,
+          focusNode,
+          res,
+        );
+      },
+    );
+  }
+
+  Widget _switcher(var size, Responsive res) {
+    return Container(
+      height: res.containerHeightSize,
+      width: size.width * .70,
+      decoration: BoxDecoration(
+        color: primaryColor,
+        border: Border.all(
+          color: Theme.of(context).cardColor,
+          width: 1.0,
+        ),
+        boxShadow: [
+          shadow(Theme.of(context).cardColor),
+        ],
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _defaultIndex = 0;
+                  _searchBool = false;
+                });
+              },
+              child: Container(
+                color: _defaultIndex == 0
+                    ? primaryBlueColor
+                    : Theme.of(context).cardColor,
+                child: Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextWidget(
+                      text: 'Favorites',
+                      size: res.textSize,
+                      color: _defaultIndex == 0 ? whiteColor : primaryGreyColor,
+                    ),
+                  ],
+                )),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _defaultIndex = 1;
+                  _searchBool = false;
+                });
+              },
+              child: Container(
+                color: _defaultIndex == 1
+                    ? primaryBlueColor
+                    : Theme.of(context).cardColor,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextWidget(
+                        text: 'Unknown',
+                        size: res.textSize,
+                        color:
+                            _defaultIndex == 1 ? whiteColor : primaryGreyColor,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _listBuilder(var size, Responsive res) {
+    return Expanded(
+      child: ListView(
+          children: _defaultIndex == 0
+              ? _favData
+                  .map(
+                    (item) => _listItem(item, size, res),
+                  )
+                  .toList()
+              : _unkData
+                  .map(
+                    (item) => _listItem(item, size, res),
+                  )
+                  .toList()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * 0.054,
+      sizedBoxHeightSize: size.height * 0.028,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+      textSize: size.width * 0.05,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      iconSize: size.height * 0.032,
+      leftPaddingSize: size.width * 0.0085,
+    );
+    print("ffffffffff => ${res.containerHeightSize}");
     if (!_searchBool) FocusScope.of(context).requestFocus(new FocusNode());
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -326,144 +473,27 @@ class _MyWordsState extends State<MyWords> {
                   text: 'MyWords',
                 ),
                 SizedBox(
-                  height: 25.0,
+                  height: res.sizedBoxHeightSize,
                 ),
-                Container(
-                  height: 40.0,
-                  width: size.width * .70,
-                  decoration: BoxDecoration(
-                    color: primaryColor,
-                    border: Border.all(
-                      color: Theme.of(context).cardColor,
-                      width: 1.0,
-                    ),
-                    boxShadow: [
-                      shadow(Theme.of(context).cardColor),
-                    ],
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _defaultIndex = 0;
-                              _searchBool = false;
-                            });
-                          },
-                          child: Container(
-                            color: _defaultIndex == 0
-                                ? primaryBlueColor
-                                : Theme.of(context).cardColor,
-                            child: Center(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                TextWidget(
-                                  text: 'Favorites',
-                                  size: 18.0,
-                                  color: _defaultIndex == 0
-                                      ? whiteColor
-                                      : primaryGreyColor,
-                                ),
-                              ],
-                            )),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _defaultIndex = 1;
-                              _searchBool = false;
-                            });
-                          },
-                          child: Container(
-                            color: _defaultIndex == 1
-                                ? primaryBlueColor
-                                : Theme.of(context).cardColor,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  TextWidget(
-                                    text: 'Unknown',
-                                    size: 18.0,
-                                    color: _defaultIndex == 1
-                                        ? whiteColor
-                                        : primaryGreyColor,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _switcher(size, res),
                 SizedBox(
-                  height: 30.0,
-                ),
-                SearchWidget(
-                  dataList: _defaultIndex == 0 ? _favList : _unkList,
-                  popupListItemBuilder: (dynamic item) {
-                    return Container(
-                      padding: const EdgeInsets.all(12),
-                      color: Theme.of(context).cardColor,
-                      child: Text(
-                        item,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Theme.of(context).textSelectionColor,
-                        ),
-                      ),
-                    );
-                  },
-                  onItemSelected: (dynamic selectedItem) {
-                    _setSearchFlagToTrue(selectedItem);
-                  },
-                  selectedItemBuilder: (selectedItem, deleteSelectedItem) {
-                    return Container();
-                  },
-                  queryBuilder: (query, list) {
-                    if (_defaultIndex == 0)
-                      return _favList
-                          .where((item) =>
-                              item.toLowerCase().contains(query.toLowerCase()))
-                          .toList();
-                    return _unkList
-                        .where((item) =>
-                            item.toLowerCase().contains(query.toLowerCase()))
-                        .toList();
-                  },
-                  textFieldBuilder: (controller, focusNode) {
-                    return _myTextField(size, controller, focusNode);
-                  },
-                ),
-                SizedBox(
-                  height: 10.0,
+                  height: size.height * 0.05,
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20.0,
-                      right: 20.0,
-                      bottom: 50.0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: res.horizontalPaddingSize,
+                      vertical: res.verticalPaddingSize,
                     ),
-                    child: ListView(
-                        children: _defaultIndex == 0
-                            ? _favData
-                                .map(
-                                  (item) => _listItem(item, size),
-                                )
-                                .toList()
-                            : _unkData
-                                .map(
-                                  (item) => _listItem(item, size),
-                                )
-                                .toList()),
+                    child: Column(
+                      children: <Widget>[
+                        _searchBar(size, res),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        _listBuilder(size, res),
+                      ],
+                    ),
                   ),
                 ),
               ],

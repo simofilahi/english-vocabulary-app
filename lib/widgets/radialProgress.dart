@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
+import 'package:lenglish/models/responsive.dart';
 
 import '../constants.dart';
 
@@ -11,14 +12,17 @@ class RadialProgress extends StatefulWidget {
   final double width;
   final Color color;
   final bool flag;
+  final Responsive res;
 
-  RadialProgress(
-      {this.goalCompleted,
-      this.percent,
-      this.height,
-      this.width,
-      this.color,
-      this.flag});
+  RadialProgress({
+    this.goalCompleted,
+    this.percent,
+    this.height,
+    this.width,
+    this.color,
+    this.flag,
+    this.res,
+  });
   @override
   _RadialProgressState createState() => _RadialProgressState();
 }
@@ -37,7 +41,6 @@ class _RadialProgressState extends State<RadialProgress>
   @override
   void initState() {
     super.initState();
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     _radialProgressAnimationController =
         AnimationController(vsync: this, duration: fillDuration);
     _progressAnimation = Tween(begin: 0.0, end: 360.0).animate(CurvedAnimation(
@@ -57,16 +60,20 @@ class _RadialProgressState extends State<RadialProgress>
     super.dispose();
   }
 
-  Widget _content() {
+  Widget _content(var size) {
+    Responsive res = Responsive(
+      iconSize: size.height * 0.045,
+      sizedBoxHeightSize: size.height * .009,
+    );
     if (widget.flag) {
       return Column(children: <Widget>[
         SvgPicture.asset(
           rocketIcon,
-          height: 30.0,
-          width: 30.0,
+          height: res.iconSize,
+          width: res.iconSize,
         ),
         SizedBox(
-          height: 10.0,
+          height: res.sizedBoxHeightSize,
         ),
       ]);
     }
@@ -75,22 +82,27 @@ class _RadialProgressState extends State<RadialProgress>
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return CustomPaint(
       child: Container(
         height: widget.height,
         width: widget.width,
-        padding: EdgeInsets.symmetric(vertical: 10.0),
+        padding: EdgeInsets.symmetric(
+          vertical: size.height * 0.01,
+        ),
         child: AnimatedOpacity(
           opacity: 1.0,
           duration: fadeInDuration,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _content(),
+              _content(size),
               Text(
                 '${widget.percent.toStringAsPrecision(3)}%',
                 style: TextStyle(
-                  fontSize: widget.flag == true ? 15.0 : 10.0,
+                  fontSize: widget.flag == false
+                      ? widget.res.textSize * 0.8
+                      : widget.res.textSize,
                   fontWeight: FontWeight.w500,
                   color: whiteColor,
                 ),
@@ -99,7 +111,7 @@ class _RadialProgressState extends State<RadialProgress>
           ),
         ),
       ),
-      painter: RadialPainter(progressDegrees, widget.color, widget.flag),
+      painter: RadialPainter(progressDegrees, widget.color, widget.flag, size),
     );
   }
 }
@@ -108,16 +120,20 @@ class RadialPainter extends CustomPainter {
   double progressInDegrees;
   final Color color;
   final bool flag;
-
-  RadialPainter(this.progressInDegrees, this.color, this.flag);
+  var size;
+  RadialPainter(this.progressInDegrees, this.color, this.flag, this.size);
 
   @override
   void paint(Canvas canvas, Size size) {
+    Responsive res = Responsive(
+      containerWidthSize: size.width * 0.07,
+    );
+    // print("yoyo ${res.containerWidthSize}");
     Paint paint = Paint()
       ..color = Colors.black12
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = flag == false ? 6.0 : 8.0;
+      ..strokeWidth = res.containerWidthSize;
 
     Offset center = Offset(size.width / 2, size.height / 2);
     canvas.drawCircle(center, size.width / 2, paint);
@@ -126,7 +142,7 @@ class RadialPainter extends CustomPainter {
       ..color = color
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = flag == false ? 6.0 : 8.0;
+      ..strokeWidth = res.containerWidthSize;
 
     canvas.drawArc(
         Rect.fromCircle(center: center, radius: size.width / 2),

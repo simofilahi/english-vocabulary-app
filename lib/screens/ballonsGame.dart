@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/screens/playingBallonGame.dart';
 import 'package:lenglish/widgets/customButton.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:lenglish/screens/spellingGame.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class BallonsGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -69,23 +69,23 @@ class _BallonsGameState extends State<BallonsGame> {
     updateIndexOfFlyingSquare(index);
   }
 
-  Widget _card(
-      String gameTitle, String gameDes, var screen, String icon, var size) {
+  Widget _card(String gameTitle, String gameDes, var screen, String icon,
+      var size, Responsive res) {
     return FittedBox(
       child: Padding(
-        padding: const EdgeInsets.only(
-          top: 4.0,
-          bottom: 4.0,
-          left: 2.0,
-          right: 2.0,
+        padding: EdgeInsets.only(
+          top: res.topPaddingSize,
+          bottom: res.bottomPaddingSize,
+          left: res.leftPaddingSize,
+          right: res.rightPaddingSize,
         ),
         child: Container(
-          height: 160,
+          height: size.height * .3,
           width: size.width * .90,
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
-              15.0,
+              res.borderRadiusSize,
             ),
             boxShadow: [
               shadow(Theme.of(context).cardColor),
@@ -98,7 +98,7 @@ class _BallonsGameState extends State<BallonsGame> {
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.all(30.0),
+                  padding: EdgeInsets.all(res.allPaddingSize * 4),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,27 +109,29 @@ class _BallonsGameState extends State<BallonsGame> {
                           FittedBox(
                             child: TextWidget(
                               text: gameTitle,
-                              size: 20.0,
+                              size: res.textSize * 1.5,
                               color: Theme.of(context).textSelectionColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(
-                            height: 2.0,
+                            height: size.height * 0.004,
                           ),
                           TextWidget(
                             text: gameDes,
                             color: Theme.of(context).indicatorColor,
-                            size: 16.0,
+                            size: res.textSize,
                           ),
                         ],
                       ),
                       CustomButton(
                         text: 'Start',
+                        textSize: res.textSize,
                         screen: screen,
-                        buttonHeightSize: 40.0,
-                        buttonWidthSize: 150.0,
+                        buttonHeightSize: res.buttonHeightSize,
+                        buttonWidthSize: res.buttonWidthSize,
                         navFlag: false,
+                        res: res,
                       ),
                     ],
                   ),
@@ -137,18 +139,17 @@ class _BallonsGameState extends State<BallonsGame> {
               ),
               Expanded(
                 flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.only(
-                    right: 30.0,
-                  ),
-                  margin: const EdgeInsets.only(
-                    bottom: 20.0,
-                  ),
-                  child: FittedBox(
-                    child: SvgPicture.asset(
-                      icon,
-                      height: 80.0,
-                      width: 80.0,
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      right: res.rightPaddingSize * 4,
+                    ),
+                    child: FittedBox(
+                      child: SvgPicture.asset(
+                        icon,
+                        height: res.iconSize * 4,
+                        width: res.iconSize * 4,
+                      ),
                     ),
                   ),
                 ),
@@ -160,21 +161,21 @@ class _BallonsGameState extends State<BallonsGame> {
     );
   }
 
-  _moreGameCard(var size) {
+  _moreGameCard(var size, Responsive res) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 4.0,
-        bottom: 4.0,
-        left: 2.0,
-        right: 2.0,
+      padding: EdgeInsets.only(
+        top: res.topPaddingSize,
+        bottom: res.bottomPaddingSize,
+        left: res.leftPaddingSize,
+        right: res.rightPaddingSize,
       ),
       child: Container(
-        height: 160,
+        height: size.height * .3,
         width: size.width * .90,
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(
-            15.0,
+            res.borderRadiusSize,
           ),
           boxShadow: [
             shadow(Theme.of(context).cardColor),
@@ -188,14 +189,14 @@ class _BallonsGameState extends State<BallonsGame> {
                   colors: [Color(0XFFBE5062), Color(0XFFEF4A76)],
                 ),
                 borderRadius: BorderRadius.circular(
-                  15.0,
+                  res.borderRadiusSize,
                 ),
               ),
               child: Center(
                 child: TextWidget(
                   text: 'More games are coming soon',
                   color: whiteColor,
-                  size: 20.0,
+                  size: res.textSize * 1.2,
                 ),
               ),
             )
@@ -208,6 +209,24 @@ class _BallonsGameState extends State<BallonsGame> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    Responsive res = Responsive(
+      containerHeightSize: size.height * .08,
+      containerWidthSize: size.width * .90,
+      sizedBoxHeightSize: size.height * 0.02,
+      sizedBoxWidthSize: size.width * 0.0310,
+      horizontalPaddingSize: size.width * 0.06,
+      verticalPaddingSize: size.height * 0.0055,
+      borderRadiusSize: size.width * 0.0469,
+      bottomPaddingSize: size.height * 0.0055,
+      topPaddingSize: size.height * 0.0055,
+      rightPaddingSize: size.width * 0.0085,
+      leftPaddingSize: size.width * 0.0085,
+      textSize: size.width * 0.05,
+      iconSize: size.height * 0.032,
+      allPaddingSize: size.width * 0.02,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
@@ -220,13 +239,14 @@ class _BallonsGameState extends State<BallonsGame> {
                 icon_1: null,
                 icon_2: null,
                 text: 'Games',
-                textSize: 18,
+              ),
+              SizedBox(
+                height: res.sizedBoxHeightSize,
               ),
               Expanded(
                   child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 15.0,
+                  horizontal: res.horizontalPaddingSize,
                 ),
                 child: ListView(
                   children: <Widget>[
@@ -240,7 +260,8 @@ class _BallonsGameState extends State<BallonsGame> {
                           getIndex: _getIndex,
                         ),
                         cubeIcon,
-                        size),
+                        size,
+                        res),
                     _card(
                       'Spelling',
                       'improves writing skill',
@@ -257,8 +278,9 @@ class _BallonsGameState extends State<BallonsGame> {
                       ),
                       abcIcon,
                       size,
+                      res,
                     ),
-                    _moreGameCard(size),
+                    _moreGameCard(size, res),
                   ],
                 ),
               )),

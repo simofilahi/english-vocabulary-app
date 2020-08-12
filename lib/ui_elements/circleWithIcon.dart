@@ -27,9 +27,10 @@ class CircleWithIcon extends StatefulWidget {
 class _CircleWithIconState extends State<CircleWithIcon> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 60.0,
-      width: 60.0,
+      height: size.height * 0.08,
+      width: size.height * 0.08,
       decoration: BoxDecoration(
         color: widget.color,
         shape: BoxShape.circle,
