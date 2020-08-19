@@ -1,11 +1,10 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/screens/splashScreen.dart';
 import 'package:lenglish/screens/settings.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:stripe_native/stripe_native.dart';
 
 void main() => runApp(
       // MyApp(),
@@ -43,9 +42,13 @@ class _MyAppState extends State<MyApp> {
     //   DeviceOrientation.portraitUp,
     //   DeviceOrientation.portraitDown,
     // ]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: !_nightMode ? primaryBlueColor : blackColor,
+    ));
     return MaterialApp(
       locale: DevicePreview.of(context).locale, // <--- Add the locale
       builder: DevicePreview.appBuilder,
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Roboto',
@@ -60,6 +63,7 @@ class _MyAppState extends State<MyApp> {
           ? SplashScreen(
               updateNightMode: _updateNightMode,
               nightMode: _nightMode,
+              flag: 0,
             )
           : Setting(
               lang: _lang,

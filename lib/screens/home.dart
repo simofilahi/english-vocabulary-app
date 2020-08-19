@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/constants.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:lenglish/screens/settings.dart';
@@ -27,28 +26,30 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currentIndex = 0;
-  String _lang;
+  String _lang = "";
   int _totalLearningWords = 0;
   List<dynamic> _globalData = [];
 
   @override
   void initState() {
     super.initState();
-    _getTotalLearningWords();
-    _updateLangData();
     setState(() {
       _globalData = widget.globalData;
     });
+    _getTotalLearningWords();
+    _updateLangData();
   }
 
-  setNewGlobalData() {
-    dynamic data = getGlobalData();
-    if (data != null) {
-      setState(() {
-        _globalData = data;
-      });
-    }
-  }
+  // setNewGlobalData() async {
+  //   if (mounted == true) {
+  //     dynamic data = await getGlobalData();
+  //     if (data != null) {
+  //       setState(() {
+  //         _globalData = data;
+  //       });
+  //     }
+  //   }
+  // }
 
   _updateLangData() async {
     if (widget.lang == "") {
@@ -69,9 +70,12 @@ class _HomeState extends State<Home> {
     }
   }
 
-  _getTotalLearningWords() {
+  _getTotalLearningWords() async {
+    print("ccccccccccccccccccccc");
+    int number = await totoalLearningWords(_globalData);
+    print("coccococ");
     setState(() {
-      _totalLearningWords = totoalLearningWords(widget.globalData);
+      _totalLearningWords = number;
     });
   }
 
@@ -91,7 +95,6 @@ class _HomeState extends State<Home> {
         globalDataUpdate: widget.globalDataUpdate,
         totalLearningWords: _totalLearningWords,
         getTotalLearningWords: _getTotalLearningWords,
-        setNewGlobalData: setNewGlobalData,
       );
     } else if (currentIndex == 1) {
       return BallonsGame(

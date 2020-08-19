@@ -21,6 +21,7 @@ MERGED from [:firebase_core_web] C:\Users\drpbengrir\Desktop\flutter_projects\le
 MERGED from [:flutter_keyboard_visibility] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\flutter_keyboard_visibility\intermediates\library_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\path_provider\intermediates\library_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:shared_preferences] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\shared_preferences\intermediates\library_manifest\release\AndroidManifest.xml:2:1-7:12
+MERGED from [:share] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\share\intermediates\library_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:cloud_functions_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions_web\intermediates\library_manifest\release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\2b16ac6c4193835014f293427ee35afa\multidex-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.exoplayer:exoplayer:2.11.4] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\a21b6552323314704003f55b78a7a0ee\exoplayer-2.11.4\AndroidManifest.xml:17:1-24:12
@@ -277,6 +278,8 @@ MERGED from [:path_provider] C:\Users\drpbengrir\Desktop\flutter_projects\lengli
 MERGED from [:path_provider] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\path_provider\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\shared_preferences\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\shared_preferences\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
+MERGED from [:share] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\share\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
+MERGED from [:share] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\share\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:cloud_functions_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions_web\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [:cloud_functions_web] C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\cloud_functions_web\intermediates\library_manifest\release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\2b16ac6c4193835014f293427ee35afa\multidex-2.0.0\AndroidManifest.xml:20:5-43

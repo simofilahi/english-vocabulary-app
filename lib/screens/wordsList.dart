@@ -17,6 +17,7 @@ class WordsList extends StatefulWidget {
   final String lang;
   final Function globalDataUpdate;
   final Function getTotalLearningWords;
+  final Function updatingData;
 
   WordsList(
     this.data,
@@ -25,6 +26,7 @@ class WordsList extends StatefulWidget {
     this.lang,
     this.globalDataUpdate,
     this.getTotalLearningWords,
+    this.updatingData,
   );
 
   @override
@@ -36,20 +38,16 @@ class _WordsListState extends State<WordsList> {
   List<dynamic> _familiarWords = [];
   List<dynamic> _unknowWords = [];
   BannerAd _bannerAd;
-  // int _flashCardsWordsCount = 0;
-  // int _familiarWordsCount = 0;
-  // int _unknowWordsCount = 0;
+  List<dynamic> _originItem = [];
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _originItem = widget.data;
+    });
     // _updateCountOfWords();
-    print("here is lang");
-    print(widget.lang);
-    // FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-    // _bannerAd = createBannerAd()
-    //   ..load()
-    //   ..show(horizontalCenterOffset: 0, anchorOffset: 5);
+    // _initialAds();
     _updateFalshCarsWords();
     _updateFamiliarWords();
     _updateUnknownWords();
@@ -58,7 +56,7 @@ class _WordsListState extends State<WordsList> {
   // BannerAd createBannerAd() {
   //   return BannerAd(
   //     adUnitId: BannerAd.testAdUnitId,
-  //     size: AdSize.banner,
+  //     size: AdSize.smartBanner,
   //     // targetingInfo: targetingInfo,
   //     listener: (MobileAdEvent event) {
   //       print("BannerAd event $event");
@@ -66,12 +64,17 @@ class _WordsListState extends State<WordsList> {
   //   );
   // }
 
+  _initialAds() {
+    // _bannerAd = createBannerAd()
+    //   ..load()
+    //   ..show(horizontalCenterOffset: 0, anchorOffset: 5);
+  }
+
   @override
   void dispose() {
     super.dispose();
     // _bannerAd?.dispose();
-    widget.globalDataUpdate();
-    widget.getTotalLearningWords();
+    widget.updatingData();
   }
 
   _updateFalshCarsWords() {
@@ -100,18 +103,25 @@ class _WordsListState extends State<WordsList> {
 
   Widget _cardItem(BuildContext context, var size, String title, String icon,
       String subtitle, List<dynamic> item, int flag, int len, Responsive res) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: res.verticalPaddingSize,
+    return Material(
+      borderRadius: BorderRadius.circular(
+        res.borderRadiusSize,
       ),
+      color: Colors.transparent,
       child: InkWell(
+        borderRadius: BorderRadius.circular(
+          res.borderRadiusSize,
+        ),
+        highlightColor: rippleColor,
         onTap: () {
+          _bannerAd?.dispose();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext ctx) => FlashCards(
                 item,
                 widget.objIndex,
                 widget.allData,
+                _originItem,
                 widget.lang,
                 _updateFalshCarsWords,
                 _updateFamiliarWords,
@@ -121,78 +131,85 @@ class _WordsListState extends State<WordsList> {
                 widget.getTotalLearningWords,
                 flag,
                 len,
+                _initialAds,
               ),
             ),
           );
         },
-        child: Container(
-          height: size.height * .10,
-          width: size.width * 90.0,
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(
-              res.borderRadiusSize,
-            ),
-            boxShadow: [
-              shadow(Theme.of(context).cardColor),
-            ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: res.verticalPaddingSize,
+            horizontal: res.horizontalPaddingSize * 0.2,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(
-                  left: res.leftPaddingSize * 4,
-                ),
-                child: Row(
-                  children: <Widget>[
-                    FittedBox(
-                      child: SvgPicture.asset(
-                        icon,
-                        height: res.iconSize * 2,
-                        width: res.iconSize * 2,
-                      ),
-                    ),
-                    SizedBox(
-                      width: res.sizedBoxWidthSize,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextWidget(
-                          text: title,
-                          size: size.width * 0.048,
-                          color: Theme.of(context).textSelectionColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: res.sizedBoxHeightSize * 0.1,
-                        ),
-                        TextWidget(
-                          text: subtitle,
-                          color: Theme.of(context).cursorColor,
-                          size: size.width * 0.045,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+          child: Container(
+            height: size.height * .10,
+            width: size.width * 90.0,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(
+                res.borderRadiusSize,
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  right: res.rightPaddingSize * 4,
-                ),
-                child: FittedBox(
-                  child: SvgPicture.asset(
-                    rightArrowtIcon,
-                    height: size.height * .02,
-                    width: size.height * .02,
-                    color: Theme.of(context).indicatorColor,
+              boxShadow: [
+                shadow(Theme.of(context).cardColor),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: res.leftPaddingSize * 4,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      FittedBox(
+                        child: SvgPicture.asset(
+                          icon,
+                          height: res.iconSize * 2,
+                          width: res.iconSize * 2,
+                        ),
+                      ),
+                      SizedBox(
+                        width: res.sizedBoxWidthSize,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          TextWidget(
+                            text: title,
+                            size: size.width * 0.048,
+                            color: Theme.of(context).textSelectionColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(
+                            height: res.sizedBoxHeightSize * 0.1,
+                          ),
+                          TextWidget(
+                            text: subtitle,
+                            color: Theme.of(context).cursorColor,
+                            size: size.width * 0.045,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: res.rightPaddingSize * 4,
+                  ),
+                  child: FittedBox(
+                    child: SvgPicture.asset(
+                      rightArrowtIcon,
+                      height: size.height * .02,
+                      width: size.height * .02,
+                      color: Theme.of(context).indicatorColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -201,21 +218,10 @@ class _WordsListState extends State<WordsList> {
 
   Widget _listItem(
       BuildContext context, var size, List data, int index, Responsive res) {
-    // var bottomPadding = size.height * 0.0055;
-    // var topPadding = size.height * 0.0055;
-    // var rightPadding = size.width * 0.0085;
-    // var leftPadding = size.width * 0.0085;
-    // var textSize = size.width * 0.045;
-    // var iconSize = size.height * 0.038;
-    // var containerHeightSize = size.height * .08;
-    // var containerwidthSize = size.width * .90;
-
     return Padding(
-      padding: EdgeInsets.only(
-        top: res.topPaddingSize,
-        bottom: res.bottomPaddingSize,
-        left: res.leftPaddingSize,
-        right: res.rightPaddingSize,
+      padding: EdgeInsets.symmetric(
+        vertical: res.verticalPaddingSize,
+        horizontal: res.horizontalPaddingSize * 0.2,
       ),
       child: Container(
         height: size.height * .08,
@@ -230,56 +236,56 @@ class _WordsListState extends State<WordsList> {
             shadow(Theme.of(context).cardColor),
           ],
         ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: res.rightPaddingSize * 4,
-                  ),
-                  child: TextWidget(
-                    text: data[index]['en'],
-                    size: res.textSize,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: res.rightPaddingSize * 4,
+                ),
+                child: Text(
+                  data[index]['en'],
+                  style: TextStyle(
+                    fontSize: res.textSize,
                     color: Theme.of(context).textSelectionColor,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                TextWidget(
-                  text: getRightTranslate(data, null, index, widget.lang),
-                  size: res.textSize,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                getRightTranslate(data, null, index, widget.lang),
+                style: TextStyle(
+                  fontSize: res.textSize,
                   color: Theme.of(context).textSelectionColor,
                   fontWeight: FontWeight.w400,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    playLocal(
-                        'assets/audio/${widget.data[index]['audioPath']}');
-                  },
-                  child: FittedBox(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        right: res.rightPaddingSize * 4,
-                        left: res.leftPaddingSize,
-                        top: res.topPaddingSize,
-                        bottom: res.bottomPaddingSize,
-                      ),
-                      child: Material(
-                        child: SvgPicture.asset(
-                          speakerIcon,
-                          height: res.iconSize,
-                          width: res.iconSize,
-                          color: Theme.of(context).indicatorColor,
-                        ),
-                      ),
-                    ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: GestureDetector(
+                onTap: () {
+                  playLocal('assets/audio/${widget.data[index]['audioPath']}');
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: res.leftPaddingSize * 6,
+                  ),
+                  child: SvgPicture.asset(
+                    speakerIcon,
+                    height: res.iconSize,
+                    width: res.iconSize,
+                    color: Theme.of(context).indicatorColor,
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -341,11 +347,15 @@ class _WordsListState extends State<WordsList> {
                 icon_2: null,
                 text: 'Words',
               ),
+              SizedBox(
+                height: res.sizedBoxHeightSize,
+              ),
               Container(
-                height: size.height * .80,
+                height: size.height * .78,
+                width: size.width * .95,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: res.horizontalPaddingSize,
+                    horizontal: res.horizontalPaddingSize * 0.5,
                   ),
                   child: ListView(
                     children: <Widget>[

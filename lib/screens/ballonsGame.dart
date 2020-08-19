@@ -9,6 +9,8 @@ import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:lenglish/screens/spellingGame.dart';
 import 'package:lenglish/models/responsive.dart';
+import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:lenglish/models/CustomPopupMenu.dart';
 
 class BallonsGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -29,11 +31,15 @@ class _BallonsGameState extends State<BallonsGame> {
   @override
   void initState() {
     super.initState();
-    _getIndex();
-    _getIndex_2();
-    _getHintPoints();
-    _getAnswerPoints();
-    print(widget.globalData);
+    indexFile_2.setItem('index', [
+      {"index": "2263"}
+    ]).then((value) {
+      _getIndex();
+      _getIndex_2();
+      _getHintPoints();
+      _getAnswerPoints();
+      // print(widget.globalData);
+    });
   }
 
   _getAnswerPoints() async {
@@ -69,15 +75,58 @@ class _BallonsGameState extends State<BallonsGame> {
     updateIndexOfFlyingSquare(index);
   }
 
+  Widget _resetButton(var size, Responsive res, String icon_2, int flag) {
+    return PopupMenuButton(
+      icon: SvgPicture.asset(
+        icon_2,
+        height: res.iconSize,
+        width: res.iconSize,
+        color: Theme.of(context).cursorColor,
+      ),
+      onSelected: (dynamic _) {
+        if (flag == 0) {
+          resetFlyingSquaresGame();
+          _getIndex();
+        } else if (flag == 1) {
+          resetSpellingGame();
+          _getIndex_2();
+        }
+      },
+      elevation: 1.0,
+      initialValue: choices[0],
+      itemBuilder: (BuildContext context) {
+        return choices.map((choice) {
+          return PopupMenuItem(
+            height: size.height * 0.02,
+            value: choice,
+            child: Text(
+              choice.title,
+              style: TextStyle(
+                fontSize: res.textSize,
+              ),
+            ),
+          );
+        }).toList();
+      },
+    );
+  }
+
+  List choices = [
+    CustomPopupMenu(
+      title: 'Reset',
+      icon: SvgPicture.asset(
+        restoreIcon,
+      ),
+    ),
+  ];
+
   Widget _card(String gameTitle, String gameDes, var screen, String icon,
-      var size, Responsive res) {
+      var size, Responsive res, int flag) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(
           top: res.topPaddingSize,
           bottom: res.bottomPaddingSize,
-          left: res.leftPaddingSize,
-          right: res.rightPaddingSize,
         ),
         child: Container(
           height: size.height * .3,
@@ -85,7 +134,7 @@ class _BallonsGameState extends State<BallonsGame> {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
-              res.borderRadiusSize,
+              res.borderRadiusSize * 0.8,
             ),
             boxShadow: [
               shadow(Theme.of(context).cardColor),
@@ -139,19 +188,42 @@ class _BallonsGameState extends State<BallonsGame> {
               ),
               Expanded(
                 flex: 1,
-                child: Center(
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      right: res.rightPaddingSize * 4,
-                    ),
-                    child: FittedBox(
-                      child: SvgPicture.asset(
-                        icon,
-                        height: res.iconSize * 4,
-                        width: res.iconSize * 4,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          bottom: res.bottomPaddingSize * 3,
+                          left: res.leftPaddingSize * 24,
+                          top: res.topPaddingSize,
+                        ),
+                        child: Container(
+                          child: _resetButton(size, res, moreIcon, flag),
+                        ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          right: res.rightPaddingSize * 4,
+                        ),
+                        child: FittedBox(
+                          child: SvgPicture.asset(
+                            icon,
+                            height: res.iconSize * 4,
+                            width: res.iconSize * 4,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -175,7 +247,7 @@ class _BallonsGameState extends State<BallonsGame> {
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(
-            res.borderRadiusSize,
+            res.borderRadiusSize * 0.8,
           ),
           boxShadow: [
             shadow(Theme.of(context).cardColor),
@@ -189,7 +261,7 @@ class _BallonsGameState extends State<BallonsGame> {
                   colors: [Color(0XFFBE5062), Color(0XFFEF4A76)],
                 ),
                 borderRadius: BorderRadius.circular(
-                  res.borderRadiusSize,
+                  res.borderRadiusSize * 0.8,
                 ),
               ),
               child: Center(
@@ -261,10 +333,11 @@ class _BallonsGameState extends State<BallonsGame> {
                         ),
                         cubeIcon,
                         size,
-                        res),
+                        res,
+                        0),
                     _card(
                       'Spelling',
-                      'improves writing skill',
+                      'Improves writing skill',
                       SpellingGame(
                         globalData: widget.globalData,
                         lang: widget.lang,
@@ -279,6 +352,7 @@ class _BallonsGameState extends State<BallonsGame> {
                       abcIcon,
                       size,
                       res,
+                      1,
                     ),
                     _moreGameCard(size, res),
                   ],

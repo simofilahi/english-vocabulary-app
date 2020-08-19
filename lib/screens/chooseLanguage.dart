@@ -39,6 +39,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     });
   }
 
+  final _scrollController = ScrollController();
   void _changeIsActive(LanguagesList item) {
     setState(() {
       languagesList.forEach((f) {
@@ -178,14 +179,19 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                       padding: EdgeInsets.symmetric(
                         horizontal: res.horizontalPaddingSize,
                       ),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: ResponsiveGridRow(
-                          children: [
-                            ...languagesList
-                                .map((item) => _item(item, res, size))
-                                .toList()
-                          ],
+                      child: Scrollbar(
+                        isAlwaysShown: true,
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.vertical,
+                          child: ResponsiveGridRow(
+                            children: [
+                              ...languagesList
+                                  .map((item) => _item(item, res, size))
+                                  .toList()
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -195,22 +201,29 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
                   ),
                   Container(
                     height: size.height * .10,
-                    width: size.width * .90,
+                    width: size.width,
                     child: Center(
-                      child: CustomButton(
-                        text: widget.settingBool == true ? 'Done' : 'Continue',
-                        screen: Home(
-                          globalData: _globalData,
-                          globalDataUpdate: widget.globalDataUpdate,
-                          updateNightMode: widget.updateNightMode,
-                          nightMode: widget.nightMode,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: res.horizontalPaddingSize +
+                              res.horizontalPaddingSize * 0.2,
                         ),
-                        buttonHeightSize: res.buttonHeightSize * 1.4,
-                        buttonWidthSize: res.buttonWidthSize * 2,
-                        textSize: res.textSize,
-                        navFlag: true,
-                        selectedLang: _getActiveLang(),
-                        res: res,
+                        child: CustomButton(
+                          text:
+                              widget.settingBool == true ? 'Done' : 'Continue',
+                          screen: Home(
+                            globalData: _globalData,
+                            globalDataUpdate: widget.globalDataUpdate,
+                            updateNightMode: widget.updateNightMode,
+                            nightMode: widget.nightMode,
+                          ),
+                          buttonHeightSize: res.buttonHeightSize * 1.5,
+                          buttonWidthSize: size.width,
+                          textSize: res.textSize,
+                          navFlag: true,
+                          selectedLang: _getActiveLang(),
+                          res: res,
+                        ),
                       ),
                     ),
                   ),

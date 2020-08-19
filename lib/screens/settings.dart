@@ -9,6 +9,8 @@ import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:stripe_native/stripe_native.dart';
 import 'package:lenglish/models/responsive.dart';
 import 'package:share/share.dart';
+import 'package:lenglish/screens/splashScreen.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class Setting extends StatefulWidget {
   final String lang;
@@ -33,6 +35,9 @@ class _SettingState extends State<Setting> {
   void initState() {
     super.initState();
     // print(widget.nightMode);
+    //  _bannerAd = createBannerAd()
+    //   ..load()
+    //   ..show(horizontalCenterOffset: 0, anchorOffset: 10);
     setState(() {
       lang = getNameOfLang(widget.lang);
     });
@@ -104,6 +109,29 @@ class _SettingState extends State<Setting> {
     }
   }
 
+  _dialogResetAll() {
+    AwesomeDialog(
+      context: context,
+      headerAnimationLoop: false,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'RESET',
+      desc: 'Are you sure, wanna reset the app',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext ctx) {
+            return SplashScreen(
+              updateNightMode: widget.updateNightMode,
+              nightMode: widget.nightMode,
+              flag: 1,
+            );
+          }),
+        );
+      },
+    )..show();
+  }
+
   Widget _item(var size, String iconName, String text, String text_1,
       String iconName_2, var screen, int flag, int navFlag) {
     Responsive res = Responsive(
@@ -126,14 +154,19 @@ class _SettingState extends State<Setting> {
     return FittedBox(
       child: Material(
         color: Colors.transparent,
-        // shadowColor: blackColor,
         borderRadius: BorderRadius.circular(
           res.borderRadiusSize,
         ),
         child: InkWell(
+          borderRadius: BorderRadius.circular(
+            res.borderRadiusSize,
+          ),
+          highlightColor: rippleColor,
           onTap: () {
-            if (navFlag == 4) {
-              Share.share('My is Awesome');
+            if (navFlag == 3) {
+              _dialogResetAll();
+            } else if (navFlag == 4) {
+              Share.share('My  app is Awesome');
             } else if (navFlag != 2) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx) {
@@ -220,7 +253,7 @@ class _SettingState extends State<Setting> {
         _item(
           size,
           sleepModesIcon,
-          'Night mode',
+          'Dark mode',
           null,
           Theme.of(context).backgroundColor == blackColor
               ? rightSwitch
@@ -229,7 +262,7 @@ class _SettingState extends State<Setting> {
           2,
           2,
         ),
-        _item(size, restoreIcon, 'Restore', null, null, null, 0, 3),
+        _item(size, restoreIcon, 'Reset app', null, null, null, 0, 3),
         _item(size, shareIcon, 'Share app', null, null, null, 0, 4),
         _item(size, starIcon, 'Rate app', null, null, null, 0, 5),
         _item(size, privacyIcon, 'Privacy', null, null, null, 0, 6),
@@ -263,15 +296,6 @@ class _SettingState extends State<Setting> {
               SizedBox(
                 height: res.sizedBoxHeightSize,
               ),
-              // Expanded(
-              //   flex: 2,
-              //   child: Padding(
-              //     padding: EdgeInsets.symmetric(
-              //       horizontal: 20.0,
-              //     ),
-              //     child: FittedBox(child: ShopCard()),
-              //   ),
-              // ),
               Expanded(
                 flex: 1,
                 child: Padding(

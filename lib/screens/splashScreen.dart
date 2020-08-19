@@ -10,10 +10,12 @@ import 'home.dart';
 class SplashScreen extends StatefulWidget {
   final Function updateNightMode;
   final bool nightMode;
+  final int flag;
 
   SplashScreen({
     this.updateNightMode,
     this.nightMode,
+    this.flag,
   });
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -35,7 +37,20 @@ class _SplashScreenState extends State<SplashScreen>
       controller: AnimationController(
           vsync: this, duration: const Duration(milliseconds: 1200)),
     );
-    _uploadData();
+    if (widget.flag == 1) {
+      _restoreApp();
+    } else
+      _uploadData();
+  }
+
+  _restoreApp() {
+    creationOfFiles().then((value) {
+      if (value) {
+        Future.delayed(const Duration(seconds: 4), () {
+          _callScreen();
+        });
+      }
+    });
   }
 
   _uploadData() {
@@ -90,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  _globalDataUpdate() async {
+  Future<bool> _globalDataUpdate() async {
     if (this.mounted) {
       dynamic data = await getGlobalData();
       if (data != null) {
@@ -104,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: GestureDetector(
           onTap: () {

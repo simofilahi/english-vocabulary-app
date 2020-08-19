@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lenglish/constants.dart';
 import 'package:lenglish/widgets/textWidget.dart';
+import 'package:lenglish/models/responsive.dart';
 
 class AnimatedBalloon extends StatefulWidget {
   final List<dynamic> globalData;
@@ -11,6 +12,7 @@ class AnimatedBalloon extends StatefulWidget {
   final Function updateIndex;
   final List randomWords;
   final Function failureHandler;
+  final Responsive res;
 
   const AnimatedBalloon({
     this.globalData,
@@ -19,6 +21,7 @@ class AnimatedBalloon extends StatefulWidget {
     this.updateIndex,
     this.randomWords,
     this.failureHandler,
+    this.res,
   });
   @override
   _AnimatedBalloonState createState() => _AnimatedBalloonState();
@@ -122,12 +125,12 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
         }
       },
       child: Container(
-        height: 150,
-        width: 150,
+        height: widget.res.buttonWidthSize,
+        width: widget.res.buttonWidthSize,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(
-            15.0,
+            widget.res.borderRadiusSize,
           ),
           boxShadow: [
             BoxShadow(
@@ -140,36 +143,14 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
           ],
         ),
         child: Center(
-          child: Container(
-            height: 50,
-            width: 50,
-            child: TextWidget(
-              text: widget.randomWords[index],
-              color: whiteColor,
-              size: 18.0,
-            ),
+          child: TextWidget(
+            text: widget.randomWords[index],
+            color: whiteColor,
+            size: widget.res.textSize * 1.2,
           ),
         ),
       ),
     );
-    // return GestureDetector(
-    //   child: SvgPicture.asset(
-    //     ballonIcon,
-    //     height: 200,
-    //     width: 200,
-    //     color: color,
-    //   ),
-    //   onTap: () {
-    //     setState(() {
-    //       flag = !flag;
-    //       marginValue = _animationFloatUp.value;
-    //     });
-    //     _controller.reset();
-    //     _controller.repeat(min: 0.0, max: 1.0);
-    //     // _controller.reverse();
-    //     // _controller.forward();
-    //   },
-    // );
   }
 
   @override
@@ -205,20 +186,20 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
               ],
             ),
             SizedBox(
-              height: 50.0,
+              height: widget.res.sizedBoxHeightSize * 3,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 20.0,
+                    left: widget.res.leftPaddingSize * 6,
                   ),
                   child: _item(Colors.red[300], _j),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    right: 20.0,
+                    right: widget.res.leftPaddingSize * 6,
                   ),
                   child: _item(Colors.blue[300], _k),
                 )

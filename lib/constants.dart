@@ -15,6 +15,7 @@ const Color blackGrey = Color(0XFF464646);
 const Color silverColor = Color(0XFFE5E5E5);
 const Color goldColor = Color(0XFFFEE333);
 const Color platinumColor = Color(0XFFe5e4e2);
+const Color rippleColor = Color(0XFFD3D2D5);
 
 // shadow effect
 shadow(Color color) => BoxShadow(
@@ -24,12 +25,14 @@ shadow(Color color) => BoxShadow(
       offset: Offset(3, 3),
     );
 
-final shadow_1 = BoxShadow(
-  blurRadius: 2.0,
-  spreadRadius: 1.0,
-  color: Colors.grey[300].withOpacity(0.8),
-  offset: Offset(3, 3),
-);
+shadow_1(Color color) => BoxShadow(
+      blurRadius: 2.0,
+      spreadRadius: 1.0,
+      color: color == null
+          ? Colors.grey[300].withOpacity(0.8)
+          : color.withOpacity(0.8),
+      offset: Offset(3, 3),
+    );
 
 // icons
 const String buyIcon = 'assets/icons/buy.svg';
@@ -47,7 +50,7 @@ const String rightArrowtIcon = 'assets/icons/next.svg';
 const String menuIcon = 'assets/icons/open-menu.svg';
 const String languagesIcon = 'assets/icons/languages.svg';
 const String sleepModesIcon = 'assets/icons/night-mode.svg';
-const String restoreIcon = 'assets/icons/restore.svg';
+const String restoreIcon = 'assets/icons/reset.svg';
 const String shareIcon = 'assets/icons/share.svg';
 const String heartIcon = 'assets/icons/heart.svg';
 const String rightSwitch = 'assets/icons/Right_switch.svg';
@@ -68,6 +71,9 @@ const String cubeIcon = 'assets/icons/cube.svg';
 const String abcIcon = 'assets/icons/abc.svg';
 const String handTapIcon = 'assets/icons/touch.svg';
 const String answerIcon = 'assets/icons/faq.svg';
+const String tryIcon = 'assets/icons/undo.svg';
+const String searchIcon = 'assets/icons/search.svg';
+const String reportIcon = 'assets/icons/report.svg';
 // radius
 
 const double radiusValue = 15.0;
@@ -316,17 +322,3 @@ final List<Map<String, Color>> colors = [
     "second_color": Colors.blue[200],
   },
 ];
-
-// 50 /
-
-// [                  ]
-
-// [][][][][][][]  []
-// [][][][][][][]  []
-// [][][][][][][]
-// [][][][][][][]
-// [][][][][][][]
-
-// []
-
-// []

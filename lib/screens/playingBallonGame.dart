@@ -9,6 +9,7 @@ import 'package:lenglish/logic/initalizeFiles.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:lenglish/models/responsive.dart';
+import 'package:flutter_svg/svg.dart';
 
 class PlayingBallonGames extends StatefulWidget {
   final List<dynamic> globalData;
@@ -32,21 +33,26 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   int _initIndex = 0;
   int _counter = 0;
   bool spinner = false;
+  bool _finish = false;
   RewardedVideoAd videoAd = RewardedVideoAd.instance;
 
   @override
   void initState() {
     super.initState();
-    print("Widget");
-    print(widget.index);
+
     setState(() {
       spinner = true;
       _index = widget.index;
       _initIndex = widget.index;
+      _finish = _index < 2264 ? false : true;
       _counter = widget.index == 1 ? 1 : widget.index - 1;
     });
-    _getNextItem();
-    _getRandomWords();
+
+    if (!_finish) {
+      _getNextItem();
+      _getRandomWords();
+    }
+    _loadAds();
     videoAd.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
       print("RewardedVideoAd event $event");
@@ -55,9 +61,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
       setState(() {
         _boolean = false;
       });
-      if (event == RewardedVideoAdEvent.rewarded) {
-        print("holllllllllla");
-      }
+      if (event == RewardedVideoAdEvent.rewarded) {}
     };
   }
 
@@ -68,7 +72,6 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   }
 
   dynamic _getSetItem() {
-    var data;
     for (int i = 0; i < widget.globalData.length; i++) {
       return widget.globalData[i]['set_${_set}'];
     }
@@ -104,15 +107,21 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   }
 
   void _getNextItem() {
-    if (_index == _initIndex + 5) {
-      print("holla");
-      updateIndexOfFlyingSquare(_index + 1);
-      setState(() {
-        _initIndex = _index + 1;
-      });
-      _getNextItemHelper();
+    if (_index <= 2264) {
+      if (_index == _initIndex + 5) {
+        updateIndexOfFlyingSquare(_index + 1);
+        setState(() {
+          _initIndex = _index + 1;
+        });
+        _getNextItemHelper();
+      } else {
+        _getNextItemHelper();
+      }
     } else {
-      _getNextItemHelper();
+      updateIndexOfFlyingSquare(_index);
+      setState(() {
+        _finish = true;
+      });
     }
   }
 
@@ -141,85 +150,139 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     );
   }
 
-  Widget _renderButtons() {
+  _loadAds() {
+    videoAd.load(
+      adUnitId: RewardedVideoAd.testAdUnitId,
+    );
+  }
+
+  Widget _renderButtons(Responsive res, var size) {
     if (_boolean == false) {
       return Text(
         _en_word,
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
-          fontSize: 24.0,
+          fontSize: res.textSize * 2,
         ),
       );
     } else {
       return Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  getIndexOfSqaureFlying().then((value) {
-                    if (value != null) {
-                      setState(() {
-                        _index = value;
-                        _initIndex = value;
-                        _counter = value == 1 ? 1 : value - 1;
-                        _boolean = false;
-                      });
-                      _getNextItem();
-                    }
-                  });
-                },
+          Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(
+              res.borderRadiusSize,
+            ),
+            child: InkWell(
+              highlightColor: rippleColor,
+              borderRadius: BorderRadius.circular(
+                res.borderRadiusSize,
+              ),
+              onTap: () {
+                getIndexOfSqaureFlying().then((value) {
+                  if (value != null) {
+                    setState(() {
+                      _index = value;
+                      _initIndex = value;
+                      _counter = value == 1 ? 1 : value - 1;
+                      _boolean = false;
+                    });
+                    _getNextItem();
+                  }
+                });
+              },
+              child: Padding(
+                padding: EdgeInsets.all(
+                  res.allPaddingSize * 0.8,
+                ),
                 child: Container(
-                  height: 50.0,
-                  width: 160.0,
+                  height: res.buttonHeightSize * 1.2,
+                  width: res.buttonWidthSize,
                   decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(
-                        15.0,
-                      ),
-                      boxShadow: [shadow(Theme.of(context).cardColor)]),
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(
+                      res.borderRadiusSize,
+                    ),
+                    boxShadow: [
+                      shadow(Theme.of(context).cardColor),
+                    ],
+                  ),
                   child: Center(
-                    child: TextWidget(
-                      text: 'Try again',
-                      color: Theme.of(context).textSelectionColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          tryIcon,
+                          height: res.iconSize * 1.2,
+                          width: res.iconSize * 1.2,
+                        ),
+                        SizedBox(
+                          width: res.containerWidthSize * 0.03,
+                        ),
+                        TextWidget(
+                          text: 'Try again',
+                          color: Theme.of(context).textSelectionColor,
+                          size: res.textSize * 0.9,
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(
+              res.borderRadiusSize,
+            ),
             child: InkWell(
+              borderRadius: BorderRadius.circular(
+                res.borderRadiusSize,
+              ),
+              highlightColor: rippleColor,
               onTap: () {
-                videoAd
-                    .load(
-                  adUnitId: RewardedVideoAd.testAdUnitId,
-                )
-                    .then((value) {
-                  if (value == true) {
-                    RewardedVideoAd.instance.show();
-                  } else {
-                    print("try again");
-                  }
+                RewardedVideoAd.instance.show().then((value) {
+                  print("***********8");
+                  print(value);
                 });
+                _loadAds();
               },
-              child: Container(
-                height: 50.0,
-                width: 200.0,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(
-                    15.0,
-                  ),
-                  boxShadow: [shadow(Theme.of(context).cardColor)],
+              child: Padding(
+                padding: EdgeInsets.all(
+                  res.allPaddingSize * 0.8,
                 ),
-                child: Center(
-                  child: TextWidget(
-                    text: 'Watch Ads',
-                    color: Theme.of(context).textSelectionColor,
+                child: Container(
+                  height: res.buttonHeightSize * 1.2,
+                  width: res.buttonWidthSize * 1.4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(
+                      res.borderRadiusSize,
+                    ),
+                    boxShadow: [shadow(Theme.of(context).cardColor)],
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FittedBox(
+                          child: SvgPicture.asset(
+                            watchIcon,
+                            height: res.iconSize * 1.3,
+                            width: res.iconSize * 1.3,
+                          ),
+                        ),
+                        SizedBox(
+                          width: size.width * 0.04,
+                        ),
+                        TextWidget(
+                          text: 'Watch Ads',
+                          color: Theme.of(context).textSelectionColor,
+                          size: res.textSize * 0.9,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -256,6 +319,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
       body: Container(
         height: size.height,
         width: size.width,
+        color: Theme.of(context).backgroundColor,
         child: Stack(
           children: <Widget>[
             SafeArea(
@@ -266,14 +330,33 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    TopAppBar(icon_1: backArrowIcon, text: '${_counter}/2265'),
-                    _renderButtons(),
+                    TopAppBar(icon_1: backArrowIcon, text: '${_counter}/2263'),
+                    !_finish
+                        ? _renderButtons(res, size)
+                        : Center(
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'Congrats',
+                                  style: TextStyle(
+                                    fontSize: res.textSize * 1.5,
+                                  ),
+                                ),
+                                Text(
+                                  'You did it',
+                                  style: TextStyle(
+                                    fontSize: res.textSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                     Container(),
                   ],
                 ),
               ),
             ),
-            _boolean == false
+            _boolean == false && _finish == false
                 ? AnimatedBalloon(
                     globalData: widget.globalData,
                     text: _word,
@@ -281,7 +364,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                     updateIndex: _updataIndexAndWord,
                     randomWords: _randomWords,
                     failureHandler: _failureHandler,
-                  )
+                    res: res)
                 : Container(),
           ],
         ),

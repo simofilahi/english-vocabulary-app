@@ -46,6 +46,7 @@ class _RadialProgressState extends State<RadialProgress>
     _progressAnimation = Tween(begin: 0.0, end: 360.0).animate(CurvedAnimation(
         parent: _radialProgressAnimationController, curve: Curves.easeIn))
       ..addListener(() {
+        print("hollllllllllllllla (((((((((((((((((((((((((((");
         setState(() {
           progressDegrees = widget.goalCompleted * _progressAnimation.value;
         });

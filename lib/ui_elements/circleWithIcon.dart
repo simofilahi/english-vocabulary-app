@@ -7,8 +7,8 @@ class CircleWithIcon extends StatefulWidget {
   final String iconName;
   final double iconHeight;
   final double iconWidth;
+  final int index;
   final Function func;
-  final int wordObjIndex;
   final String word;
 
   CircleWithIcon({
@@ -16,8 +16,8 @@ class CircleWithIcon extends StatefulWidget {
     this.iconName,
     this.iconHeight,
     this.iconWidth,
+    this.index,
     this.func,
-    this.wordObjIndex,
     this.word,
   });
   @override
@@ -28,25 +28,37 @@ class _CircleWithIconState extends State<CircleWithIcon> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.08,
-      width: size.height * 0.08,
-      decoration: BoxDecoration(
-        color: widget.color,
-        shape: BoxShape.circle,
+    return Material(
+      borderRadius: BorderRadius.circular(
+        size.width * 0.0469 * 4,
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            widget.func(widget.wordObjIndex, widget.word);
-          },
-          child: Center(
-            child: SvgPicture.asset(
-              widget.iconName,
-              height: widget.iconHeight,
-              width: widget.iconWidth,
-              color: whiteColor,
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          widget.func(widget.index, widget.word);
+        },
+        borderRadius: BorderRadius.circular(
+          size.width * 0.0469 * 4,
+        ),
+        highlightColor: rippleColor,
+        child: Padding(
+          padding: EdgeInsets.all(
+            size.width * 0.008,
+          ),
+          child: Container(
+            height: size.height * 0.08,
+            width: size.height * 0.08,
+            decoration: BoxDecoration(
+              color: widget.color,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                widget.iconName,
+                height: widget.iconHeight,
+                width: widget.iconWidth,
+                color: whiteColor,
+              ),
             ),
           ),
         ),

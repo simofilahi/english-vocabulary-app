@@ -14,10 +14,11 @@ class CustomButton extends StatelessWidget {
   final String selectedLang;
   final double textSize;
   final Responsive res;
+  final Function clickHandler;
   // final Function saveLang;
   CustomButton({
     this.text,
-    this.screen,
+    this.screen = null,
     this.buttonWidthSize = 0.0,
     this.buttonHeightSize = 0.0,
     this.color = primaryBlueColor,
@@ -25,6 +26,7 @@ class CustomButton extends StatelessWidget {
     this.selectedLang = null,
     this.textSize = 0,
     this.res,
+    this.clickHandler = null,
   });
 
   @override
@@ -34,22 +36,26 @@ class CustomButton extends StatelessWidget {
       child: Material(
         child: InkWell(
           onTap: () {
-            if (navFlag == true) {
-              updateSelectedLanguage(selectedLang).then(
-                (v) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (BuildContext ctx) => screen,
-                    ),
-                  );
-                },
-              );
+            if (screen == null) {
+              clickHandler();
             } else {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext ctx) => screen,
-                ),
-              );
+              if (navFlag == true) {
+                updateSelectedLanguage(selectedLang).then(
+                  (v) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (BuildContext ctx) => screen,
+                      ),
+                    );
+                  },
+                );
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext ctx) => screen,
+                  ),
+                );
+              }
             }
           },
           child: Container(

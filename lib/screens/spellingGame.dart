@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:lenglish/models/responsive.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SpellingGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -42,7 +43,6 @@ class _SpellingGameState extends State<SpellingGame> {
   String _enWord = "";
   int _set = 1;
   int _index = 0;
-  int _initIndex = 0;
   bool spinner = false;
   bool _useKeyBoard = false;
   List<dynamic> _dataRowChar = [];
@@ -50,6 +50,7 @@ class _SpellingGameState extends State<SpellingGame> {
   bool _inputError = false;
   int _hintPoints = 0;
   int _answerPoints = 0;
+  bool _finish = false;
   FocusNode _focusNode = FocusNode();
 
   /// just  define _formkey with static final
@@ -58,41 +59,91 @@ class _SpellingGameState extends State<SpellingGame> {
 
   RewardedVideoAd videoAd = RewardedVideoAd.instance;
   BannerAd _bannerAd;
+  FToast fToast;
 
   @override
   void initState() {
     super.initState();
+    print("ffffffffffffffffffffffffff ${widget.index}");
     setState(() {
       spinner = true;
       _index = widget.index;
-      _initIndex = widget.index;
       _hintPoints = widget.hintPoints;
       _answerPoints = widget.answerPoints;
     });
-    print('height');
-    print(widget.height - (widget.height * .6));
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show(
-        horizontalCenterOffset: 0,
-        anchorOffset: widget.height,
-      );
+    fToast = FToast(context);
+
+    // print('height');
+    // print(widget.height - (widget.height * .6));
+    // _bannerAd = createBannerAd()
+    //   ..load()
+    //   ..show(
+    //     horizontalCenterOffset: 0,
+    //     anchorOffset: widget.height,
+    //   );
+    _updateHintAnswerPoints();
     videoAd.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print("RewardedVideoAd event $event");
-      print("amount $rewardAmount");
       if (event == RewardedVideoAdEvent.rewarded) {
-        // if (rewardAmount == null) {
-        _updateHintPoints(6);
-        // }
+        print(rewardAmount);
+        if (rewardAmount == null) {
+          _updateHintAnswerPoints();
+        } else {
+          _updateHintAnswerPoints();
+        }
       }
     };
+    _loadAds();
     _getNextItem();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
         FocusScope.of(context).requestFocus(_focusNode);
       }
     });
+  }
+
+  _loadAds() {
+    videoAd.load(
+      adUnitId: RewardedVideoAd.testAdUnitId,
+    );
+  }
+
+  _showToast(String text, var size) {
+    Widget toast = Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: size.width * 0.08,
+        vertical: size.height * 0.02,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          size.width * 0.0469,
+        ),
+        color: Colors.redAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.question_answer,
+            size: size.height * 0.032,
+          ),
+          SizedBox(
+            width: size.width * 0.02,
+          ),
+          TextWidget(
+            text: text,
+            size: size.width * 0.045,
+            color: Theme.of(context).textSelectionColor,
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.TOP,
+      toastDuration: Duration(seconds: 2),
+    );
   }
 
   @override
@@ -102,15 +153,17 @@ class _SpellingGameState extends State<SpellingGame> {
     widget.getIndex();
     widget.getHintPoints();
     widget.getAnswerPoints();
+    fToast.removeCustomToast();
+    fToast.removeQueuedCustomToasts();
   }
 
   BannerAd createBannerAd() {
     return BannerAd(
       adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.banner,
+      size: AdSize.smartBanner,
       // targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
+        // print("BannerAd event $event");
       },
     );
   }
@@ -131,10 +184,6 @@ class _SpellingGameState extends State<SpellingGame> {
       var obj = {'char': character, 'selected': false};
       arr.add(obj);
     });
-    // print("here arr ===> ");
-    // print(arr);
-    print("here is en_word");
-    print(_enWord);
     arr.shuffle();
     setState(() {
       _listOfchar = arr;
@@ -150,19 +199,17 @@ class _SpellingGameState extends State<SpellingGame> {
   }
 
   void _getNextItem() {
-    if (_index == _initIndex + 5) {
+    if (_index < 2264) {
       updateIndexOfSpellingWords(_index);
-      setState(() {
-        _initIndex = _index + 1;
-      });
       _getNextHelper();
     } else {
-      _getNextHelper();
+      setState(() {
+        _finish = true;
+      });
     }
   }
 
   _updataIndexAndWord(String enWord, String word) {
-    print(_enWord);
     setState(() {
       _index = _index + 1;
       _enWord = enWord;
@@ -188,17 +235,58 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  _updateHintPoints(int points) {
+  _updateHintAnswerPoints() async {
     addinghintPoints();
     addingAnswerPoints();
+    int hintPoints = await getHintPoints();
+    int answerPoints = await getAnswerPoints();
     setState(() {
-      _hintPoints += points;
-      _answerPoints += points;
+      _hintPoints = hintPoints;
+      _answerPoints = answerPoints;
     });
   }
 
-  _fillForHelp() {
-    if (_dataRowChar.isEmpty) {}
+  _fillForHelp(int flag, var size) async {
+    bool ret = await substractHintPoints(1);
+
+    if (ret) {
+      int len = _enWord.runes.length;
+      int half = (len ~/ 2).toInt();
+      var newWord = "";
+
+      if (_dataRowChar.isEmpty && flag == 1) {
+        newWord = _enWord.substring(0, half);
+      } else if (_controller.text.isEmpty && flag == 2) {
+        newWord = _enWord.substring(0, half);
+      } else {
+        newWord = _enWord.substring(0, len);
+      }
+      if (flag == 2) {
+        _controller.text = newWord;
+      } else {
+        List<dynamic> arr = [];
+        newWord.runes.forEach((int rune) {
+          var character = String.fromCharCode(rune);
+          arr.add(character);
+        });
+        int value = await getHintPoints();
+        setState(() {
+          _dataRowChar = arr;
+          _listOfchar = _listOfchar.map((e) {
+            for (int i = 0; i < arr.length; i++) {
+              if (arr[i] == e['char']) {
+                e['selected'] = true;
+                break;
+              }
+            }
+            return e;
+          }).toList();
+          _hintPoints = value;
+        });
+      }
+    } else {
+      _showToast('You need coins, Watch an ads', size);
+    }
   }
 
   bool _verfieAnswer(int flag) {
@@ -233,19 +321,18 @@ class _SpellingGameState extends State<SpellingGame> {
               child: InkWell(
                 onTap: () {
                   if (flag == 1) {
-                    videoAd
-                        .load(
-                      adUnitId: RewardedVideoAd.testAdUnitId,
-                    )
-                        .then((value) {
-                      if (value == true) {
-                        RewardedVideoAd.instance.show();
-                      }
-                    });
-                  } else if (flag == 1) {
-                    if (_hintPoints > 0) {
-                      _fillForHelp();
-                    } else {}
+                    RewardedVideoAd.instance.show();
+                    _loadAds();
+                  } else if (flag == 2) {
+                    if (!_useKeyBoard)
+                      _fillForHelp(1, size);
+                    else
+                      _fillForHelp(2, size);
+                  } else if (flag == 3) {
+                    if (_useKeyBoard == true)
+                      _showAnswer(2, size);
+                    else
+                      _showAnswer(1, size);
                   }
                 },
                 child: Container(
@@ -303,7 +390,7 @@ class _SpellingGameState extends State<SpellingGame> {
 
   Widget _inputBar(var size, Responsive res) {
     return Container(
-      width: size.width * .85,
+      height: size.height * 0.07,
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(
@@ -311,56 +398,56 @@ class _SpellingGameState extends State<SpellingGame> {
         ),
         border: Border.all(
           color: _inputError ? Colors.red : whiteColor,
-          width: _inputError ? 1.0 : 0.0,
+          width: _inputError ? size.width * 0.003 : 0.0,
         ),
       ),
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: res.leftPaddingSize * 2,
-        ),
-        child: TextField(
-          autofocus: true,
-          focusNode: _focusNode,
-          onSubmitted: (String value) {
-            if (_verfieAnswer(2)) {
-              _controller.text = "";
-              _getNextItem();
-            } else {
-              _controller.text = "";
-              setState(() {
-                _inputError = true;
-                _dataRowChar = [];
-                _listOfchar = _listOfchar.map((e) {
-                  e['selected'] = false;
-                  return e;
-                }).toList();
-              });
-            }
-          },
-          controller: _controller,
-          style: TextStyle(
-            fontSize: res.textSize,
-            color: Colors.grey[600],
-            height: size.height * .002,
-          ),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            suffix: _inputError
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showAnswer(2);
-                      },
-                      child: Text(
-                        'Show me',
-                        style: TextStyle(
-                          color: primaryBlueColor,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.only(left: res.leftPaddingSize * 2),
+          child: TextField(
+            autofocus: true,
+            focusNode: _focusNode,
+            onSubmitted: (String value) {
+              if (_verfieAnswer(2)) {
+                _controller.text = "";
+                _getNextItem();
+              } else {
+                _controller.text = "";
+                setState(() {
+                  _inputError = true;
+                  _dataRowChar = [];
+                  _listOfchar = _listOfchar.map((e) {
+                    e['selected'] = false;
+                    return e;
+                  }).toList();
+                });
+              }
+            },
+            controller: _controller,
+            style: TextStyle(
+              fontSize: res.textSize * 1.2,
+              color: Colors.grey[600],
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              suffix: _inputError
+                  ? Padding(
+                      padding: EdgeInsets.only(right: res.rightPaddingSize * 2),
+                      child: GestureDetector(
+                        onTap: () {
+                          _showAnswer(2, size);
+                        },
+                        child: Text(
+                          'Show me',
+                          style: TextStyle(
+                            color: primaryBlueColor,
+                            fontSize: res.textSize,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                : SizedBox(),
+                    )
+                  : SizedBox(),
+            ),
           ),
         ),
       ),
@@ -370,14 +457,15 @@ class _SpellingGameState extends State<SpellingGame> {
   _removeButtonEventHandler() {
     List<dynamic> data = List<dynamic>.from(_dataRowChar);
     var char = data[data.length - 1];
-    print(char);
     List<Map<String, dynamic>> newData =
         List<Map<String, dynamic>>.from(_listOfchar);
 
     for (int i = 0; i < newData.length; i++) {
       if (newData[i]['char'] == char) {
-        newData[i]['selected'] = false;
-        // here is a bug try to fix it ;
+        if (newData[i]['selected'] != false) {
+          newData[i]['selected'] = false;
+          break;
+        }
       }
     }
     data.removeLast();
@@ -488,7 +576,9 @@ class _SpellingGameState extends State<SpellingGame> {
               boxShadow: [
                 _listOfchar[index]['selected'] == true
                     ? shadow(Theme.of(context).cardColor)
-                    : shadow_1,
+                    : shadow_1(Theme.of(context).cardColor == blackGrey
+                        ? blackGrey
+                        : null),
               ],
             ),
             child: _listOfchar[index]['selected'] == false
@@ -522,44 +612,45 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
-  _showAnwerHelper(int flag) {
-    if (flag == 2) {
-      _controller.text = _enWord;
+  _showAnwerHelper(int flag, var size) async {
+    bool ret = await substractAnswerPoints(2);
+    if (ret) {
+      if (flag == 2) {
+        _controller.text = _enWord;
+        setState(() {
+          _inputError = false;
+        });
+      } else {
+        List<dynamic> arr = [];
+        _enWord.runes.forEach((int rune) {
+          var character = String.fromCharCode(rune);
+          arr.add(character);
+        });
+        setState(() {
+          _inputError = false;
+          _dataRowChar = arr;
+          _listOfchar = _listOfchar.map((e) {
+            for (int i = 0; i < arr.length; i++) {
+              if (arr[i] == e['char']) {
+                e['selected'] = true;
+                break;
+              }
+            }
+            return e;
+          }).toList();
+        });
+      }
+      int value = await getAnswerPoints();
       setState(() {
-        _inputError = false;
+        _answerPoints = value;
       });
     } else {
-      List<dynamic> arr = [];
-      _enWord.runes.forEach((int rune) {
-        var character = String.fromCharCode(rune);
-        arr.add(character);
-      });
-      setState(() {
-        _inputError = false;
-        _dataRowChar = arr;
-        _listOfchar = _listOfchar.map((e) {
-          for (int i = 0; i < arr.length; i++) {
-            print(arr[i]);
-            if (arr[i] == e['char']) {
-              e['selected'] = true;
-              break;
-            }
-          }
-          return e;
-        }).toList();
-      });
+      _showToast('You need coins, watch an ads', size);
     }
   }
 
-  _showAnswer(int flag) {
-    if (flag > 0) {
-      _showAnwerHelper(flag);
-    } else {
-      _controller.text = _enWord;
-      setState(() {
-        _inputError = false;
-      });
-    }
+  _showAnswer(int flag, var size) {
+    _showAnwerHelper(flag, size);
   }
 
   Widget _inputRow(var size, Responsive res) {
@@ -588,12 +679,14 @@ class _SpellingGameState extends State<SpellingGame> {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        _showAnswer(1);
+                        _showAnswer(1, size);
                       },
-                      child: TextWidget(
-                        text: 'Show me',
-                        size: res.textSize,
-                        color: primaryBlueColor,
+                      child: Text(
+                        'Show me',
+                        style: TextStyle(
+                          color: primaryBlueColor,
+                          fontSize: res.textSize,
+                        ),
                       ),
                     ),
                   ),
@@ -613,7 +706,9 @@ class _SpellingGameState extends State<SpellingGame> {
                         decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
                             boxShadow: [
-                              shadow_1,
+                              shadow_1(Theme.of(context).cardColor == blackGrey
+                                  ? blackGrey
+                                  : null),
                             ],
                             borderRadius: BorderRadius.circular(
                               borderRadius,
@@ -635,18 +730,156 @@ class _SpellingGameState extends State<SpellingGame> {
     );
   }
 
-  _nextSet() async {
-    int index = await getNextSetIndex();
-    if (index < 2251) {
-      index += 50;
-      updateIndexOfSpellingWords(index);
+  _nextSet(var size) async {
+    if (_index < 2264) {
+      bool ret = await substractAnswerPoints(2);
+      if (ret) {
+        int index = await getNextSetIndex();
+        if (index < 2264) {
+          index += 1;
+          updateIndexOfSpellingWords(index);
+          int points = await getAnswerPoints();
+          setState(() {
+            _index = index;
+            _answerPoints = points;
+          });
+          _getNextItem();
+          setNextSetIndex(index);
+        }
+      } else
+        _showToast('You need coins, Watch an ads', size);
+    } else {
       setState(() {
-        _index = index;
-        _initIndex = index;
+        _finish = true;
       });
-      _getNextItem();
-      setNextSetIndex(index);
     }
+  }
+
+  Widget _bottomWidget(var size, Responsive res) {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: res.horizontalPaddingSize,
+          vertical: res.verticalPaddingSize,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _hintAndWatchAdButton(context, watchIcon, 1, size, res),
+            Row(
+              children: <Widget>[
+                _hintAndWatchAdButton(context, answerIcon, 3, size, res),
+                SizedBox(
+                  width: size.width * 0.015,
+                ),
+                _hintAndWatchAdButton(context, hintIcon, 2, size, res),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _centerWidget(var size, Responsive res) {
+    return Expanded(
+      flex: 4,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              _word,
+              style: TextStyle(
+                fontSize: res.textSize * 1.5,
+                color: Theme.of(context).textSelectionColor,
+              ),
+            ),
+            SizedBox(
+              height: size.height * .03,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: res.horizontalPaddingSize,
+                vertical: res.verticalPaddingSize,
+              ),
+              child: Column(
+                children: <Widget>[
+                  _useKeyBoard == true
+                      ? _inputBar(
+                          size,
+                          res,
+                        )
+                      : _inputRow(size, res),
+                  SizedBox(
+                    height: res.sizedBoxHeightSize,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _useKeyBoard = !_useKeyBoard;
+                            _inputError = false;
+                          });
+                        },
+                        child: FittedBox(
+                          child: Text(
+                            _useKeyBoard == true
+                                ? 'Use hand tap'
+                                : 'Use keyboard',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: primaryBlueColor,
+                              fontSize: res.textSize,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.03,
+                      ),
+                      SvgPicture.asset(
+                        _useKeyBoard ? handTapIcon : keyBoardIcon,
+                        height: res.iconSize * 1.2,
+                        width: res.iconSize * 1.2,
+                        color: primaryBlueColor,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child:
+                            !_useKeyBoard ? _keyBoard(size, res) : Container(),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: !_useKeyBoard
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                  left: res.leftPaddingSize * 8,
+                                ),
+                                child: _enterAndRemove(size, res),
+                              )
+                            : Container(),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -683,141 +916,48 @@ class _SpellingGameState extends State<SpellingGame> {
                 icon_1: backArrowIcon,
                 icon_2: forwardIcon,
                 icon_2_flag: 2,
-                text: '${_index}/2265',
+                text: '${_index}/2264',
                 textSize: 18,
                 clickHandler: _nextSet,
+                size: size,
               ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              SizedBox(
-                height: res.sizedBoxHeightSize,
-              ),
-              Expanded(
-                flex: 4,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        _word,
-                        style: TextStyle(
-                          fontSize: res.textSize * 1.5,
-                          color: Theme.of(context).textSelectionColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * .03,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: res.horizontalPaddingSize,
-                          vertical: res.verticalPaddingSize,
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            _useKeyBoard == true
-                                ? _inputBar(
-                                    size,
-                                    res,
-                                  )
-                                : _inputRow(size, res),
-                            SizedBox(
-                              height: res.sizedBoxHeightSize,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _useKeyBoard = !_useKeyBoard;
-                                      _inputError = false;
-                                    });
-                                  },
-                                  child: FittedBox(
-                                    child: Text(
-                                      _useKeyBoard == true
-                                          ? 'Use hand tap'
-                                          : 'Use keyboard',
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: primaryBlueColor,
-                                        fontSize: res.textSize,
-                                      ),
-                                    ),
-                                  ),
+              _finish
+                  ? Expanded(
+                      child: Center(
+                        child: Container(
+                          height: size.height * .10,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Congrats',
+                                style: TextStyle(
+                                  fontSize: res.textSize * 1.5,
+                                  color: Theme.of(context).textSelectionColor,
                                 ),
-                                SizedBox(
-                                  width: size.width * 0.03,
+                              ),
+                              Text(
+                                'You did it',
+                                style: TextStyle(
+                                  fontSize: res.textSize,
+                                  color: Theme.of(context).textSelectionColor,
                                 ),
-                                SvgPicture.asset(
-                                  _useKeyBoard ? handTapIcon : keyBoardIcon,
-                                  height: res.iconSize * 1.2,
-                                  width: res.iconSize * 1.2,
-                                  color: primaryBlueColor,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: size.height * 0.02,
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 3,
-                                  child: !_useKeyBoard
-                                      ? _keyBoard(size, res)
-                                      : Container(),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: !_useKeyBoard
-                                      ? Padding(
-                                          padding: EdgeInsets.only(
-                                            left: res.leftPaddingSize * 8,
-                                          ),
-                                          child: _enterAndRemove(size, res),
-                                        )
-                                      : Container(),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: res.horizontalPaddingSize,
-                    vertical: res.verticalPaddingSize,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      _hintAndWatchAdButton(context, watchIcon, 1, size, res),
-                      Row(
-                        children: <Widget>[
-                          _hintAndWatchAdButton(
-                              context, answerIcon, 3, size, res),
-                          SizedBox(
-                            width: size.width * 0.015,
+                              ),
+                            ],
                           ),
-                          _hintAndWatchAdButton(
-                              context, hintIcon, 2, size, res),
-                        ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : Expanded(
+                      flex: 1,
+                      child: Container(),
+                    ),
+              !_finish
+                  ? SizedBox(
+                      height: res.sizedBoxHeightSize,
+                    )
+                  : Container(),
+              !_finish ? _centerWidget(size, res) : Container(),
+              !_finish ? _bottomWidget(size, res) : Container(),
             ],
           ),
         ),

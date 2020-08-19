@@ -5,6 +5,7 @@ import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/widgets/textWidget.dart';
 import 'package:lenglish/models/CustomPopupMenu.dart';
 import 'package:lenglish/models/responsive.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class TopAppBar extends StatelessWidget {
   final String icon_1;
@@ -16,6 +17,7 @@ class TopAppBar extends StatelessWidget {
   final Color color;
   final FontWeight fontWeight;
   final Function clickHandler;
+  var size;
 
   TopAppBar({
     this.icon_1,
@@ -27,6 +29,7 @@ class TopAppBar extends StatelessWidget {
     this.color = primaryGreyColor,
     this.fontWeight = FontWeight.normal,
     this.clickHandler = null,
+    this.size = 0,
   });
 
   Color _colorBuild(BuildContext context) {
@@ -47,13 +50,16 @@ class TopAppBar extends StatelessWidget {
     );
     return Material(
       color: Colors.transparent,
+      borderRadius: BorderRadius.circular(
+        res.borderRadiusSize,
+      ),
       child: InkWell(
         onTap: () {
           if (icon_1_flag != 1) {
             Navigator.of(context).pop();
           }
         },
-        highlightColor: Color(0XFFD3D2D5),
+        highlightColor: rippleColor,
         borderRadius: BorderRadius.circular(
           res.borderRadiusSize,
         ),
@@ -136,6 +142,23 @@ class TopAppBar extends StatelessWidget {
     ),
   ];
 
+  _resetAllDialog(BuildContext context) {
+    AwesomeDialog(
+      context: context,
+      headerAnimationLoop: false,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'RESET',
+      desc: 'Are you sure, wanna reset all sets',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        print("hello");
+        bool ret = await resetAll();
+        if (ret) clickHandler();
+      },
+    )..show();
+  }
+
   Widget _child(BuildContext context, var size, Responsive res) {
     if (icon_2_flag == 1) {
       return PopupMenuButton(
@@ -146,7 +169,7 @@ class TopAppBar extends StatelessWidget {
           color: Theme.of(context).indicatorColor,
         ),
         onSelected: (dynamic _) {
-          resetAll(clickHandler);
+          _resetAllDialog(context);
         },
         elevation: 1.0,
         initialValue: choices[0],
@@ -157,7 +180,12 @@ class TopAppBar extends StatelessWidget {
             return PopupMenuItem(
               height: size.height * 0.02,
               value: choice,
-              child: Text(choice.title),
+              child: Text(
+                choice.title,
+                style: TextStyle(
+                  fontSize: res.textSize,
+                ),
+              ),
             );
           }).toList();
         },
@@ -175,8 +203,8 @@ class TopAppBar extends StatelessWidget {
       return FittedBox(
         child: SvgPicture.asset(
           icon_2,
-          height: res.iconSize,
-          width: res.iconSize,
+          height: res.iconSize * 0.6,
+          width: res.iconSize * 0.6,
           color: Theme.of(context).indicatorColor,
         ),
       );
@@ -191,16 +219,23 @@ class TopAppBar extends StatelessWidget {
       borderRadiusSize: size.width * 0.16,
       bottomPaddingSize: size.height * 0.0086,
       allPaddingSize: size.width * 0.008,
+      textSize: size.width * 0.05,
     );
     return Material(
       color: Colors.transparent,
+      borderRadius: BorderRadius.circular(
+        res.borderRadiusSize,
+      ),
       child: InkWell(
         onTap: () {
           if (icon_2_flag == 2) {
+            clickHandler(size);
+          } else if (icon_2_flag == 3) {
             clickHandler();
+            Navigator.popUntil(context, ModalRoute.withName('WordList'));
           }
         },
-        highlightColor: Color(0XFFD3D2D5),
+        highlightColor: rippleColor,
         borderRadius: BorderRadius.circular(
           res.borderRadiusSize,
         ),

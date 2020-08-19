@@ -648,6 +648,10 @@
         "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\0c07c1b5fdea5f4ec0bf819a442b1909\\stripe-android-14.4.1\\res\\drawable-ldpi-v4\\stripe_ic_mastercard.png"
     },
     {
+        "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\app\\intermediates\\res\\merged\\release\\drawable_corner.xml.flat",
+        "source": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\fluttertoast\\intermediates\\packaged_res\\release\\drawable\\corner.xml"
+    },
+    {
         "merged": "C:\\Users\\drpbengrir\\Desktop\\flutter_projects\\lenglish\\build\\app\\intermediates\\res\\merged\\release\\drawable-xxxhdpi-v4_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
         "source": "C:\\Users\\drpbengrir\\.gradle\\caches\\transforms-2\\files-2.1\\7def8d6c3751559765cf68c2d5a2dddd\\appcompat-1.1.0\\res\\drawable-xxxhdpi-v4\\abc_ic_menu_copy_mtrl_am_alpha.png"
     },

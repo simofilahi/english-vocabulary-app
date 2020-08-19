@@ -74,7 +74,6 @@ class _MyWordsState extends State<MyWords> {
   _setSearchFlagToTrue(dynamic selectedItem) {
     List<dynamic> newData = [];
 
-    print("Hoooooooooo");
     if (_defaultIndex == 0) {
       newData = List<dynamic>.from(_favData);
       for (int i = 0; i < newData.length; i++) {
@@ -86,11 +85,13 @@ class _MyWordsState extends State<MyWords> {
         _searchBool = true;
       });
     } else {
+      print("boboboboboobob");
       newData = List<dynamic>.from(_unkData);
       for (int i = 0; i < newData.length; i++) {
         newData[i]['flag'] = "false";
       }
       newData[_getIndexOfSelectedWord(selectedItem)]['flag'] = "true";
+      print(newData);
       setState(() {
         _unkData = newData;
         _searchBool = true;
@@ -130,31 +131,42 @@ class _MyWordsState extends State<MyWords> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            left: res.leftPaddingSize * 4,
-          ),
-          child: TextWidget(
-            text: item['en'],
-            size: res.textSize,
-            color: Theme.of(context).textSelectionColor,
-            fontWeight: FontWeight.w400,
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: res.leftPaddingSize * 4,
+            ),
+            child: Text(
+              item['en'],
+              style: TextStyle(
+                fontSize: res.textSize,
+                color: Theme.of(context).textSelectionColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
         ),
-        TextWidget(
-          text: getRightTranslate(null, item, 0, widget.lang),
-          size: res.textSize,
-          color: Theme.of(context).textSelectionColor,
-          fontWeight: FontWeight.w400,
+        Expanded(
+          flex: 2,
+          child: Text(
+            getRightTranslate(null, item, 0, widget.lang),
+            style: TextStyle(
+              fontSize: res.textSize,
+              color: Theme.of(context).textSelectionColor,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ),
-        GestureDetector(
-          onTap: () {
-            playLocal('audio/${item['en']}.mp3');
-          },
-          child: FittedBox(
+        Expanded(
+          flex: 1,
+          child: GestureDetector(
+            onTap: () {
+              playLocal('audio/${item['en']}.mp3');
+            },
             child: Padding(
               padding: EdgeInsets.only(
-                right: res.rightPaddingSize * 4,
+                left: res.leftPaddingSize * 6,
               ),
               child: SvgPicture.asset(
                 speakerIcon,
@@ -218,87 +230,111 @@ class _MyWordsState extends State<MyWords> {
   }
 
   int _getIndexOfSelectedWord(String selectedWord) {
-    for (int i = 0; i < _favData.length; i++) {
-      if (_favData[i]['en'] == selectedWord) return i;
+    if (_defaultIndex == 0) {
+      for (int i = 0; i < _favData.length; i++) {
+        if (_favData[i]['en'] == selectedWord) return i;
+      }
+    } else {
+      for (int i = 0; i < _unkData.length; i++) {
+        if (_unkData[i]['en'] == selectedWord) return i;
+      }
     }
+
     return 0;
   }
 
   Widget _myTextField(var size, var controller, var focusNode, Responsive res) {
     var height_2 = size.height * 0.07;
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(
-          res.borderRadiusSize * 0.5,
-        ),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: res.leftPaddingSize,
+        right: res.rightPaddingSize,
       ),
-      child: TextField(
-        controller: controller,
-        focusNode: focusNode,
-        style: TextStyle(
-          fontSize: res.textSize,
-          color: Colors.grey[600],
+      child: Container(
+        height: height_2,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(
+            res.borderRadiusSize * 0.8,
+          ),
         ),
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                res.borderRadiusSize * 0.5,
-              ),
+        child: Center(
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            style: TextStyle(
+              fontSize: res.textSize,
+              color: Colors.grey[600],
             ),
-            borderSide: BorderSide(
-              color: Color(0x4437474F),
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(res.borderRadiusSize * 0.5),
-            ),
-            borderSide: BorderSide(
-              color: primaryBlueColor,
-            ),
-          ),
-          suffixIcon: _searchBool == false
-              ? InkWell(
-                  onTap: () {
-                    setState(() {});
-                  },
-                  child: Icon(
-                    Icons.search,
-                    color: primaryBlueColor,
-                  ),
-                )
-              : InkWell(
-                  onTap: () {
-                    setState(() {
-                      _searchBool = false;
-                      _favData = _favData.map((e) {
-                        e['flag'] = "false";
-                        return e;
-                      }).toList();
-                      _unkData = _unkData.map((e) {
-                        e['flag'] = "false";
-                        return e;
-                      }).toList();
-                    });
-                  },
-                  child: Icon(
-                    Icons.cancel,
-                    size: res.iconSize,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    res.borderRadiusSize * 0.6,
                   ),
                 ),
-          border: InputBorder.none,
-          hintText: "Search here...",
-          hintStyle: TextStyle(
-            color: Theme.of(context).textSelectionColor,
-            fontSize: res.textSize,
-          ),
-          contentPadding: EdgeInsets.only(
-            left: res.leftPaddingSize,
-            right: res.rightPaddingSize,
-            top: res.topPaddingSize,
-            bottom: res.bottomPaddingSize,
+                borderSide: BorderSide(
+                  color: Color(0x4437474F),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    res.borderRadiusSize * 0.6,
+                  ),
+                ),
+                borderSide: BorderSide(
+                  color: primaryBlueColor,
+                ),
+              ),
+              suffixIcon: _searchBool == false
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                        right: res.rightPaddingSize * 0.6,
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          // setState(() {});
+                        },
+                        child: Icon(
+                          Icons.search,
+                          size: res.iconSize * 1.2,
+                          color: primaryBlueColor,
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                        right: res.rightPaddingSize * 0.6,
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _searchBool = false;
+                            _favData = _favData.map((e) {
+                              e['flag'] = "false";
+                              return e;
+                            }).toList();
+                            _unkData = _unkData.map((e) {
+                              e['flag'] = "false";
+                              return e;
+                            }).toList();
+                          });
+                        },
+                        child: Icon(
+                          Icons.cancel,
+                          size: res.iconSize * 1.2,
+                          color: primaryBlueColor,
+                        ),
+                      ),
+                    ),
+              border: InputBorder.none,
+              hintText: "Search here...",
+              hintStyle: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: res.textSize * 0.8,
+              ),
+            ),
           ),
         ),
       ),
@@ -310,14 +346,22 @@ class _MyWordsState extends State<MyWords> {
       dataList: _defaultIndex == 0 ? _favList : _unkList,
       popupListItemBuilder: (dynamic item) {
         return Container(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.only(
+            left: res.leftPaddingSize * 2,
+          ),
+          height: size.height * 0.06,
+          width: size.width,
           color: Theme.of(context).cardColor,
-          child: Text(
-            item,
-            style: TextStyle(
-              fontSize: res.textSize,
-              color: Theme.of(context).textSelectionColor,
-            ),
+          child: Row(
+            children: <Widget>[
+              Text(
+                item,
+                style: TextStyle(
+                  fontSize: res.textSize,
+                  color: Theme.of(context).textSelectionColor,
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -455,7 +499,6 @@ class _MyWordsState extends State<MyWords> {
       iconSize: size.height * 0.032,
       leftPaddingSize: size.width * 0.0085,
     );
-    print("ffffffffff => ${res.containerHeightSize}");
     if (!_searchBool) FocusScope.of(context).requestFocus(new FocusNode());
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -477,7 +520,7 @@ class _MyWordsState extends State<MyWords> {
                 ),
                 _switcher(size, res),
                 SizedBox(
-                  height: size.height * 0.05,
+                  height: size.height * 0.04,
                 ),
                 Expanded(
                   child: Padding(
@@ -489,7 +532,7 @@ class _MyWordsState extends State<MyWords> {
                       children: <Widget>[
                         _searchBar(size, res),
                         SizedBox(
-                          height: size.height * 0.01,
+                          height: size.height * 0.02,
                         ),
                         _listBuilder(size, res),
                       ],

@@ -227,40 +227,42 @@ Future<bool> setTrue(int objIndex, int wordObjIndex, String word,
         globalData[objIndex]['learning_words'] = number.toString();
       }
     }
-    List<dynamic> newData = localData.map((f) {
-      if (f['en'] == word) {
+    for (int i = 0; i < localData.length; i++) {
+      if (localData[i]['en'] == word) {
         if (flag == 0) {
-          if (f['isFavorite'] == "true")
-            f['isFavorite'] = "false";
-          else
-            f['isFavorite'] = "true";
+          // if (localData[i]['isFavorite'] == "true") {
+          //   print("holllla");
+          //   localData[i]['isFavorite'] = "false";
+          //   localData[i]['isFamiliar'] = "false";
+          //   localData[i]['isFavorite'] = "false";
+          //   localData[i]['isUnknown'] = "false";
+          // } else {
+          localData[i]['isFavorite'] = "true";
+          localData[i]['isFamiliar'] = "false";
+          localData[i]['isUnknown'] = "false";
         } else if (flag == 1) {
-          f['isExcellent'] = "true";
-          f['isFamiliar'] = "false";
-          f['isFavorite'] = "false";
-          f['isUnknown'] = "false";
+          localData[i]['isExcellent'] = "true";
+          localData[i]['isFamiliar'] = "false";
+          localData[i]['isFavorite'] = "false";
+          localData[i]['isUnknown'] = "false";
         } else if (flag == 2) {
-          f['isFamiliar'] = "true";
-          f['isFavorite'] = "false";
-          f['isUnknown'] = "false";
+          localData[i]['isFamiliar'] = "true";
+          localData[i]['isFavorite'] = "false";
+          localData[i]['isUnknown'] = "false";
         } else if (flag == 3) {
-          f['isUnknown'] = "true";
-          f['isFavorite'] = "false";
-          f['isFamiliar'] = "false";
+          localData[i]['isUnknown'] = "true";
+          localData[i]['isFavorite'] = "false";
+          localData[i]['isFamiliar'] = "false";
         }
       }
-      return f;
-    }).toList();
-    updateGlobalData(globalData, objIndex, wordObjIndex, word, newData)
-        .then((v) {
-      return true;
-    });
+    }
+    bool res = await updateGlobalData(
+        globalData, objIndex, wordObjIndex, word, localData);
+    if (res) return true;
+    return false;
   } catch (onError) {
-    print("onError");
-    print(onError);
     return false;
   }
-  return false;
 }
 
 List<dynamic> getWords(List<dynamic> item) {
@@ -273,8 +275,6 @@ List<dynamic> getWords(List<dynamic> item) {
       newData.add(f);
     }
   });
-  print("new Data =======>");
-  print(newData);
   return newData;
 }
 
@@ -328,9 +328,11 @@ updataUnknownFile(Map newData) {
   // allData.setItem('Favorite', data);
 }
 
-int totoalLearningWords(List<dynamic> globalData) {
+Future<int> totoalLearningWords(List<dynamic> globalData) async {
   int count = 0;
   for (int i = 0; i < globalData.length; i++) {
+    print("fff");
+    print(globalData[i]['learning_words']);
     count += int.parse(globalData[i]['learning_words']);
   }
   return count;
@@ -364,7 +366,8 @@ addingAnswerPoints() {
   List<Map> newData = [];
   int number = 0;
   answerPointsFile.getItem().then((value) {
-    number = int.parse(value[0]['points']) + 1;
+    number = int.parse(value[0]['points']) + 2;
+
     newData = [
       {
         'points': number.toString(),
@@ -372,14 +375,13 @@ addingAnswerPoints() {
     ];
     answerPointsFile.setItem('points', newData);
   });
-  answerPointsFile.getItem().then((value) => print(value));
 }
 
 addinghintPoints() {
   List<Map> newData = [];
   int number = 0;
   hintPointsFile.getItem().then((value) {
-    number = int.parse(value[0]['points']) + 2;
+    number = int.parse(value[0]['points']) + 4;
     newData = [
       {
         'points': number.toString(),
@@ -387,25 +389,16 @@ addinghintPoints() {
     ];
     hintPointsFile.setItem('Index', newData);
   });
-  hintPointsFile.getItem().then((value) => print(value));
 }
 
 Future<bool> resetItemHomeWidget(
     List<dynamic> globalData, List<dynamic> data, int index) async {
-  print("uuuuuuu");
-  print("index ======>");
-  // print(index);
-  print(data);
-  // print(data[index]);
-  data.forEach((elem) {
-    // print(elem);
-    elem['isFavorite'] = "false";
-    elem['isExcellent'] = "false";
-    elem['isExcellent'] = "false";
-    elem['isUnknown'] = "false";
-  });
-  print("new data");
-  print(data);
+  for (int j = 0; j < data.length; j++) {
+    data[j]['isFavorite'] = "false";
+    data[j]['isExcellent'] = "false";
+    data[j]['isFamiliar'] = "false";
+    data[j]['isUnknown'] = "false";
+  }
   for (int i = 0; i < globalData.length; i++) {
     if (i == index) {
       globalData[i]['learning_words'] = "0";
@@ -415,7 +408,9 @@ Future<bool> resetItemHomeWidget(
       globalData[i]['set_${index + 1}'] = data;
     }
   }
-  allData.setItem('words', globalData).then((value) => true);
+  bool ret = await allData.setItem('words', globalData);
+  if (ret) return true;
+  return false;
 }
 
 List<dynamic> _newData(List<dynamic> data) {
@@ -428,8 +423,10 @@ List<dynamic> _newData(List<dynamic> data) {
   return data;
 }
 
-resetAll(Function globalDataUpdate) {
-  allData.getItem().then((value) {
+Future<bool> resetAll() async {
+  dynamic value = await allData.getItem();
+  print("value ======> ${value}");
+  if (value != null) {
     for (int i = 0; i < value.length; i++) {
       value[i]['learning_words'] = "0";
       value[i]['Favorite'] = "0";
@@ -438,8 +435,13 @@ resetAll(Function globalDataUpdate) {
       value[i]['Unknown'] = "0";
       value[i]['set_${i + 1}'] = _newData(value[i]['set_${i + 1}']);
     }
-    allData.setItem('AllData', value).then((value) => globalDataUpdate());
-  });
+    dynamic ret = await allData.setItem('AllData', value);
+    if (ret) {
+      return true;
+    } else
+      return false;
+  }
+  return false;
 }
 
 Future<int> getIndexOfSqaureFlying() async {
@@ -486,6 +488,7 @@ Future<int> getHintPoints() async {
   });
 }
 
+// works perfect;
 Future<Map<dynamic, dynamic>> searchForWordByIndex(
     List<dynamic> globalData, int index, String lang) async {
   int j = 0;
@@ -508,7 +511,6 @@ Future<Map<dynamic, dynamic>> searchForWordByIndex(
 Future<int> getNextSetIndex() async {
   dynamic index = "0";
   index = await nextSetIndex.getItem();
-  print(index[0]['nextSetIndex']);
   return int.parse(index[0]['nextSetIndex']);
 }
 
@@ -516,4 +518,50 @@ setNextSetIndex(int index) {
   nextSetIndex.setItem('nextSetIndex', [
     {"nextSetIndex": index.toString()}
   ]);
+}
+
+resetFlyingSquaresGame() {
+  indexFile.setItem('index', [
+    {"index": "0"}
+  ]);
+}
+
+resetSpellingGame() {
+  indexFile_2.setItem('index', [
+    {"index": "0"}
+  ]);
+}
+
+Future<bool> substractAnswerPoints(int point) async {
+  int number = await getAnswerPoints();
+
+  if (number < point) {
+    return false;
+  } else {
+    int total = number - point;
+    bool ret = await answerPointsFile.setItem('points', [
+      {"points": total.toString()}
+    ]);
+    if (ret) {
+      return true;
+    }
+  }
+  return false;
+}
+
+Future<bool> substractHintPoints(int point) async {
+  int number = await getHintPoints();
+
+  if (number < point) {
+    return false;
+  } else {
+    int total = number - point;
+    bool ret = await hintPointsFile.setItem('points', [
+      {"points": total.toString()}
+    ]);
+    if (ret) {
+      return true;
+    }
+  }
+  return false;
 }

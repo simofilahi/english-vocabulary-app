@@ -7,6 +7,7 @@ import 'package:lenglish/models/responsive.dart';
 import 'package:lenglish/widgets/topAppBar.dart';
 import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
+
 import 'package:responsive_grid/responsive_grid.dart';
 import '../constants.dart';
 
@@ -15,7 +16,7 @@ class HomeWidget extends StatefulWidget {
   final String lang;
   final Function globalDataUpdate;
   final int totalLearningWords;
-  final Function getTotalLearningWords;
+  Function getTotalLearningWords;
   final Function setNewGlobalData;
 
   HomeWidget({
@@ -34,13 +35,27 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   double _level;
   List<dynamic> _globalData = [];
+  int _totalLearningWords = 0;
 
   @override
   void initState() {
     super.initState();
-    _level = widget.totalLearningWords * 20 / 2265;
     setState(() {
       _globalData = widget.globalData;
+      _level = widget.totalLearningWords * 20 / 2264;
+      _totalLearningWords = widget.totalLearningWords;
+    });
+  }
+
+  updatingData() async {
+    print("ccccccccccccccccccccccccccccccccccccc");
+    dynamic data = await getGlobalData();
+    int number = await totoalLearningWords(data);
+    print("new data =====> ${number}");
+    setState(() {
+      _globalData = data;
+      _totalLearningWords = number;
+      _level = number * 20 / 2264;
     });
   }
 
@@ -95,10 +110,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 children: <Widget>[
                   FittedBox(
                     child: RadialProgress(
-                      goalCompleted:
-                          widget.totalLearningWords.toDouble() / 2265,
-                      percent:
-                          widget.totalLearningWords.toDouble() * 100 / 2265,
+                      goalCompleted: _totalLearningWords.toDouble() / 2264,
+                      percent: _totalLearningWords.toDouble() * 100 / 2264,
                       height: res.circleHeightSize * 1.6,
                       width: res.circleWidthSize * 1.6,
                       color: whiteColor,
@@ -142,19 +155,18 @@ class _HomeWidgetState extends State<HomeWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           _rowItem(
-                            'level',
+                            'Level',
                             _level.toInt(),
                             size,
                           ),
                           SizedBox(
                             height: size.height * 0.03,
                           ),
-                          _rowItem('total words', 2265, size),
+                          _rowItem('Total words', 2264, size),
                           SizedBox(
                             height: size.height * 0.03,
                           ),
-                          _rowItem(
-                              'Learing words', widget.totalLearningWords, size),
+                          _rowItem('Learning words', _totalLearningWords, size),
                         ],
                       ),
                     ),
@@ -169,12 +181,27 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   _resetItem(var data, int index) {
-    resetItemHomeWidget(widget.globalData, data, index).then((value) {
-      setState(() {
-        _globalData:
-        allData.getItem();
-      });
-      widget.getTotalLearningWords();
+    resetItemHomeWidget(widget.globalData, data, index).then(
+      (value) async {
+        if (value) {
+          List<dynamic> data = await allData.getItem();
+          setState(() {
+            _globalData = data;
+          });
+          widget.getTotalLearningWords();
+        }
+      },
+    );
+  }
+
+  _resetAll() async {
+    await widget.setNewGlobalData();
+    await widget.globalDataUpdate();
+    await widget.getTotalLearningWords();
+    int number = await totoalLearningWords(widget.globalData);
+    setState(() {
+      _totalLearningWords = number;
+      _level = number * 20 / 2264;
     });
   }
 
@@ -204,6 +231,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                 widget.lang,
                 widget.globalDataUpdate,
                 widget.getTotalLearningWords,
+                updatingData,
+              ),
+              settings: RouteSettings(
+                name: 'WordList',
               ),
             ),
           );
@@ -313,7 +344,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       textSize: 18.9,
       color: blackColor,
       fontWeight: FontWeight.bold,
-      clickHandler: widget.setNewGlobalData,
+      clickHandler: _resetAll,
     );
   }
 
@@ -333,19 +364,27 @@ class _HomeWidgetState extends State<HomeWidget> {
       leftPaddingSize: size.width * 0.0085,
     );
     return Expanded(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: res.sizedBoxHeightSize,
+      child: Container(
+        width: size.width * .90,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: res.horizontalPaddingSize,
             ),
-            _progressCard(size, res),
-            SizedBox(
-              height: res.sizedBoxHeightSize,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: res.sizedBoxHeightSize,
+                ),
+                _progressCard(size, res),
+                SizedBox(
+                  height: res.sizedBoxHeightSize,
+                ),
+                _gridList(context, size, res),
+              ],
             ),
-            _gridList(context, size, res),
-          ],
+          ),
         ),
       ),
     );
