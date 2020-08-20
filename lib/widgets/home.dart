@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:lenglish/screens/wordsList.dart';
 import 'package:lenglish/ui_elements/infoConatiner.dart';
@@ -16,7 +17,7 @@ class HomeWidget extends StatefulWidget {
   final String lang;
   final Function globalDataUpdate;
   final int totalLearningWords;
-  Function getTotalLearningWords;
+  final Function getTotalLearningWords;
   final Function setNewGlobalData;
 
   HomeWidget({
@@ -40,6 +41,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void initState() {
     super.initState();
+
     setState(() {
       _globalData = widget.globalData;
       _level = widget.totalLearningWords * 20 / 2264;
@@ -48,10 +50,9 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   updatingData() async {
-    print("ccccccccccccccccccccccccccccccccccccc");
     dynamic data = await getGlobalData();
-    int number = await totoalLearningWords(data);
-    print("new data =====> ${number}");
+    int number = totoalLearningWords(data);
+
     setState(() {
       _globalData = data;
       _totalLearningWords = number;
@@ -162,7 +163,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                           SizedBox(
                             height: size.height * 0.03,
                           ),
-                          _rowItem('Total words', 2264, size),
+                          _rowItem('Total words', 2265, size),
                           SizedBox(
                             height: size.height * 0.03,
                           ),
@@ -180,26 +181,42 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  _resetItem(var data, int index) {
-    resetItemHomeWidget(widget.globalData, data, index).then(
-      (value) async {
-        if (value) {
-          List<dynamic> data = await allData.getItem();
-          setState(() {
-            _globalData = data;
-          });
-          widget.getTotalLearningWords();
-        }
+  _resetItem(BuildContext context, var data, int index) {
+    AwesomeDialog(
+      context: context,
+      headerAnimationLoop: false,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'RESET',
+      desc: 'Are you sure, wanna reset this set',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        resetItemHomeWidget(widget.globalData, data, index).then(
+          (value) async {
+            if (value) {
+              List<dynamic> data = await allData.getItem();
+              int number = totoalLearningWords(data);
+              setState(() {
+                _globalData = data;
+                _totalLearningWords = number;
+                _level = number * 20 / 2264;
+              });
+              widget.getTotalLearningWords();
+            }
+          },
+        );
       },
-    );
+    )..show();
   }
 
   _resetAll() async {
     await widget.setNewGlobalData();
     await widget.globalDataUpdate();
-    await widget.getTotalLearningWords();
-    int number = await totoalLearningWords(widget.globalData);
+    List<dynamic> data = await allData.getItem();
+    widget.getTotalLearningWords();
+    int number = totoalLearningWords(data);
     setState(() {
+      _globalData = data;
       _totalLearningWords = number;
       _level = number * 20 / 2264;
     });
@@ -232,6 +249,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 widget.globalDataUpdate,
                 widget.getTotalLearningWords,
                 updatingData,
+                size.height,
               ),
               settings: RouteSettings(
                 name: 'WordList',
@@ -293,7 +311,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     learningWords: learning_words,
                     firstColor: firstColor,
                     secondColor: secondColor,
-                    reset: () => _resetItem(data, index),
+                    reset: () => _resetItem(context, data, index),
                     res: res,
                   ),
                 )

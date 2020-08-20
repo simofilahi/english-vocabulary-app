@@ -450,7 +450,7 @@ class _MyWordsState extends State<MyWords> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       TextWidget(
-                        text: 'Unknown',
+                        text: 'Unknowns',
                         size: res.textSize,
                         color:
                             _defaultIndex == 1 ? whiteColor : primaryGreyColor,
@@ -513,7 +513,7 @@ class _MyWordsState extends State<MyWords> {
             child: Column(
               children: <Widget>[
                 TopAppBar(
-                  text: 'MyWords',
+                  text: 'My words',
                 ),
                 SizedBox(
                   height: res.sizedBoxHeightSize,

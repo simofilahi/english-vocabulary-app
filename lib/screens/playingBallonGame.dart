@@ -10,14 +10,23 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:lenglish/models/responsive.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lenglish/logic/checkConnection.dart';
 
 class PlayingBallonGames extends StatefulWidget {
   final List<dynamic> globalData;
   final String lang;
   final int index;
   final Function getIndex;
+  var size;
 
-  PlayingBallonGames({this.globalData, this.lang, this.index, this.getIndex});
+  PlayingBallonGames({
+    this.globalData,
+    this.lang,
+    this.index,
+    this.getIndex,
+    this.size,
+  });
   @override
   _PlayingBallonGamesState createState() => _PlayingBallonGamesState();
 }
@@ -35,11 +44,15 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   bool spinner = false;
   bool _finish = false;
   RewardedVideoAd videoAd = RewardedVideoAd.instance;
+  FToast fToast;
+  int _points = 0;
+  bool _rewardAdLoaded = false;
 
   @override
   void initState() {
     super.initState();
 
+    fToast = FToast(context);
     setState(() {
       spinner = true;
       _index = widget.index;
@@ -52,23 +65,93 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
       _getNextItem();
       _getRandomWords();
     }
-    _loadAds();
-    videoAd.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print("RewardedVideoAd event $event");
-      print("amount $rewardAmount");
-      _getNextItem();
-      setState(() {
-        _boolean = false;
-      });
-      if (event == RewardedVideoAdEvent.rewarded) {}
-    };
+    _rewardListener();
+
+    _loadRewardAd(widget.size);
   }
 
   @override
   void dispose() {
     super.dispose();
     widget.getIndex();
+    fToast.removeCustomToast();
+    fToast.removeQueuedCustomToasts();
+  }
+
+  _rewardListener() {
+    videoAd.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("event ============> ${event}");
+      if (event == RewardedVideoAdEvent.loaded) {
+        setState(() {
+          _rewardAdLoaded = true;
+        });
+      }
+      if (event == RewardedVideoAdEvent.rewarded) {
+        print("amount");
+        print(rewardAmount);
+        if (rewardAmount != null) {
+          print("momomommo");
+          setState(() {
+            _points = rewardAmount;
+          });
+        }
+      }
+      if (event == RewardedVideoAdEvent.closed) {
+        _loadRewardAd(widget.size);
+        if (_points > 0) {
+          print("fofofoofo");
+          _getNextItem();
+        }
+      }
+    };
+  }
+
+  _showToast(String text, var size) {
+    Widget toast = Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: size.width * 0.08,
+        vertical: size.height * 0.02,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          size.width * 0.0469,
+        ),
+        color: Colors.redAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.question_answer,
+            size: size.height * 0.032,
+            color: whiteColor,
+          ),
+          SizedBox(
+            width: size.width * 0.02,
+          ),
+          TextWidget(
+            text: text,
+            size: size.width * 0.045,
+            color: whiteColor,
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.TOP,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _loadRewardAd(var size) {
+    try {
+      videoAd.load(
+        adUnitId: RewardedVideoAd.testAdUnitId,
+      );
+    } catch (_) {}
   }
 
   dynamic _getSetItem() {
@@ -100,7 +183,6 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     Map<dynamic, dynamic> data = {};
 
     data = await searchForWordByIndex(widget.globalData, _index, widget.lang);
-    print(data);
     playLocal('assets/audio/${data['enWord']}.mp3');
     _updataIndexAndWord(data['enWord'], data['translatedWord']);
     _getRandomWords();
@@ -112,9 +194,15 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
         updateIndexOfFlyingSquare(_index + 1);
         setState(() {
           _initIndex = _index + 1;
+          _points = 0;
+          _boolean = false;
         });
         _getNextItemHelper();
       } else {
+        setState(() {
+          _points = 0;
+          _boolean = false;
+        });
         _getNextItemHelper();
       }
     } else {
@@ -150,10 +238,10 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     );
   }
 
-  _loadAds() {
-    videoAd.load(
-      adUnitId: RewardedVideoAd.testAdUnitId,
-    );
+  _showRewardAd(var size) {
+    try {
+      videoAd.show();
+    } catch (_) {}
   }
 
   Widget _renderButtons(Responsive res, var size) {
@@ -220,7 +308,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                           width: res.containerWidthSize * 0.03,
                         ),
                         TextWidget(
-                          text: 'Try again',
+                          text: 'Start again',
                           color: Theme.of(context).textSelectionColor,
                           size: res.textSize * 0.9,
                         ),
@@ -241,12 +329,23 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                 res.borderRadiusSize,
               ),
               highlightColor: rippleColor,
-              onTap: () {
-                RewardedVideoAd.instance.show().then((value) {
-                  print("***********8");
-                  print(value);
-                });
-                _loadAds();
+              onTap: () async {
+                bool ret = await checkConnection();
+                if (ret == true) {
+                  if (_rewardAdLoaded == true) {
+                    setState(() {
+                      _rewardAdLoaded = false;
+                    });
+                    _showRewardAd(size);
+                  } else {
+                    _showToast('No ad found, please try again', size);
+                    setState(() {
+                      _rewardAdLoaded = true;
+                    });
+                  }
+                } else {
+                  _showToast('No Internet Connection', size);
+                }
               },
               child: Padding(
                 padding: EdgeInsets.all(
@@ -254,13 +353,17 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                 ),
                 child: Container(
                   height: res.buttonHeightSize * 1.2,
-                  width: res.buttonWidthSize * 1.4,
+                  width: res.buttonWidthSize * 1.8,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+                    color: primaryBlueColor,
                     borderRadius: BorderRadius.circular(
                       res.borderRadiusSize,
                     ),
-                    boxShadow: [shadow(Theme.of(context).cardColor)],
+                    boxShadow: [
+                      shadow(
+                        Theme.of(context).cardColor,
+                      ),
+                    ],
                   ),
                   child: Center(
                     child: Row(
@@ -277,8 +380,8 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                           width: size.width * 0.04,
                         ),
                         TextWidget(
-                          text: 'Watch Ads',
-                          color: Theme.of(context).textSelectionColor,
+                          text: 'Watch an ad to continue',
+                          color: whiteColor,
                           size: res.textSize * 0.9,
                         ),
                       ],

@@ -328,11 +328,9 @@ updataUnknownFile(Map newData) {
   // allData.setItem('Favorite', data);
 }
 
-Future<int> totoalLearningWords(List<dynamic> globalData) async {
+int totoalLearningWords(List<dynamic> globalData) {
   int count = 0;
   for (int i = 0; i < globalData.length; i++) {
-    print("fff");
-    print(globalData[i]['learning_words']);
     count += int.parse(globalData[i]['learning_words']);
   }
   return count;
@@ -348,6 +346,7 @@ Future<int> updateIndexOfFlyingSquare(int index) async {
     } else
       return 0;
   });
+  return 0;
 }
 
 Future<int> updateIndexOfSpellingWords(int index) async {
@@ -360,13 +359,14 @@ Future<int> updateIndexOfSpellingWords(int index) async {
     } else
       return 0;
   });
+  return 0;
 }
 
-addingAnswerPoints() {
+addingAnswerPoints(int points) {
   List<Map> newData = [];
   int number = 0;
   answerPointsFile.getItem().then((value) {
-    number = int.parse(value[0]['points']) + 2;
+    number = int.parse(value[0]['points']) + points;
 
     newData = [
       {
@@ -377,11 +377,11 @@ addingAnswerPoints() {
   });
 }
 
-addinghintPoints() {
+addinghintPoints(int points) {
   List<Map> newData = [];
   int number = 0;
   hintPointsFile.getItem().then((value) {
-    number = int.parse(value[0]['points']) + 4;
+    number = int.parse(value[0]['points']) + points;
     newData = [
       {
         'points': number.toString(),
@@ -425,7 +425,6 @@ List<dynamic> _newData(List<dynamic> data) {
 
 Future<bool> resetAll() async {
   dynamic value = await allData.getItem();
-  print("value ======> ${value}");
   if (value != null) {
     for (int i = 0; i < value.length; i++) {
       value[i]['learning_words'] = "0";
@@ -508,17 +507,18 @@ Future<Map<dynamic, dynamic>> searchForWordByIndex(
   return data;
 }
 
-Future<int> getNextSetIndex() async {
-  dynamic index = "0";
-  index = await nextSetIndex.getItem();
-  return int.parse(index[0]['nextSetIndex']);
-}
+// Future<int> getNextSetIndex() async {
+//   dynamic index = "0";
+//   index = await nextSetIndex.getItem();
+//   print("before return ${int.parse(index[0]['nextSetIndex'])}");
+//   return int.parse(index[0]['nextSetIndex']);
+// }
 
-setNextSetIndex(int index) {
-  nextSetIndex.setItem('nextSetIndex', [
-    {"nextSetIndex": index.toString()}
-  ]);
-}
+// setNextSetIndex(int index) {
+//   nextSetIndex.setItem('nextSetIndex', [
+//     {"nextSetIndex": index.toString()}
+//   ]);
+// }
 
 resetFlyingSquaresGame() {
   indexFile.setItem('index', [

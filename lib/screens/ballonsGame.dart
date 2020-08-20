@@ -32,7 +32,7 @@ class _BallonsGameState extends State<BallonsGame> {
   void initState() {
     super.initState();
     indexFile_2.setItem('index', [
-      {"index": "2263"}
+      {"index": "2259"}
     ]).then((value) {
       _getIndex();
       _getIndex_2();
@@ -49,11 +49,10 @@ class _BallonsGameState extends State<BallonsGame> {
     });
   }
 
-  _getIndex_2() {
-    getIndexOfSpellingWords().then((value) {
-      setState(() {
-        _index_2 = value;
-      });
+  _getIndex_2() async {
+    int value = await getIndexOfSpellingWords();
+    setState(() {
+      _index_2 = value;
     });
   }
 
@@ -280,7 +279,7 @@ class _BallonsGameState extends State<BallonsGame> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
     Responsive res = Responsive(
       containerHeightSize: size.height * .08,
       containerWidthSize: size.width * .90,
@@ -323,13 +322,14 @@ class _BallonsGameState extends State<BallonsGame> {
                 child: ListView(
                   children: <Widget>[
                     _card(
-                        'Flying squares',
+                        'Flying Squares',
                         'Helps for memorizing',
                         PlayingBallonGames(
                           globalData: widget.globalData,
                           lang: widget.lang,
                           index: _index,
                           getIndex: _getIndex,
+                          size: size,
                         ),
                         cubeIcon,
                         size,
@@ -347,7 +347,7 @@ class _BallonsGameState extends State<BallonsGame> {
                         getHintPoints: _getHintPoints,
                         answerPoints: _answerPoints,
                         getAnswerPoints: _getAnswerPoints,
-                        height: size.height,
+                        size: size,
                       ),
                       abcIcon,
                       size,

@@ -28,6 +28,7 @@ class FlashCards extends StatefulWidget {
   final int flag;
   final int len;
   final Function initialAds;
+  final double height;
 
   FlashCards(
     this.item,
@@ -43,6 +44,7 @@ class FlashCards extends StatefulWidget {
     this.flag,
     this.len,
     this.initialAds,
+    this.height,
   );
   @override
   _FlashCardsState createState() => _FlashCardsState();
@@ -60,58 +62,122 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   dynamic _dataCpy = [];
   int _initIndex = 0;
   int _counter = 0;
-  bool _dimissed = false;
-  bool _interstitial = false;
+  int adcounter = 0;
+  InterstitialAd _myInterstitial;
 
   @override
   void initState() {
     super.initState();
     _getTeenNextWords();
 
-    // FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-    // _loadBannerAds();
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    _initialBannerAds();
+    _initialIntAds();
     swiperController = SwiperController();
   }
 
-  // _loadBannerAds() {
-  //   _bannerAd = createBannerAd()
-  //     ..load()
-  //     ..show(horizontalCenterOffset: 0, anchorOffset: 10);
-  // }
+  _loadInte() {
+    _myInterstitial.load();
+  }
 
-  // InterstitialAd myInterstitial = InterstitialAd(
-  //   // Replace the testAdUnitId with an ad unit id from the AdMob dash.
-  //   // https://developers.google.com/admob/android/test-ads
-  //   // https://developers.google.com/admob/ios/test-ads
-  //   adUnitId: InterstitialAd.testAdUnitId,
-  //   listener: (MobileAdEvent event) {
-  //     print("InterstitialAd event is $event");
-  //   },
-  // );
+  _showInte() {
+    _myInterstitial.show(
+      anchorType: AnchorType.bottom,
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+    );
+  }
+
+  _loadBannerAd() {
+    _bannerAd.load();
+  }
+
+  _showBannerAd() {
+    _bannerAd.show(
+        horizontalCenterOffset: 0, anchorOffset: widget.height * 0.01);
+  }
+
+  _initialIntAds() {
+    _myInterstitial = null;
+    _myInterstitial = createInterstitialAd();
+  }
+
+  _initialBannerAds() async {
+    try {
+      await _bannerAd.dispose();
+    } catch (_) {}
+    _bannerAd = null;
+    _bannerAd = createBannerAd();
+    _loadBannerAd();
+  }
+
+  _dismissModal() {
+    Navigator.pop(context);
+    _initialBannerAds();
+    if (adcounter == 0 || adcounter == 2 || adcounter == 4) {
+      _loadInte();
+    }
+    setState(() {
+      adcounter += 1;
+    });
+    _getTeenNextWords();
+  }
+
+  dismssAllAds() async {
+    try {
+      await _bannerAd.dispose();
+    } catch (_) {}
+    try {
+      await _myInterstitial.dispose();
+    } catch (_) {}
+    widget.initialAds();
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+      // https://developers.google.com/admob/android/test-ads
+      // https://developers.google.com/admob/ios/test-ads
+      adUnitId: InterstitialAd.testAdUnitId,
+      listener: (MobileAdEvent event) async {
+        if (event == MobileAdEvent.loaded) {
+          _showInte();
+        }
+        if (event == MobileAdEvent.closed) {
+          await _myInterstitial.dispose();
+          _initialIntAds();
+        }
+        print("InterstitialAd event is $event");
+      },
+    );
+  }
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.smartBanner,
+      // targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+        if (event == MobileAdEvent.loaded) {
+          _showBannerAd();
+        }
+      },
+    );
+  }
 
   @override
   void dispose() async {
     super.dispose();
-    // if (_dimissed == false) {
-    //   if (_interstitial == true) {
-    //     myInterstitial?.dispose();
-    //   }
-    //   _bannerAd?.dispose();
-    //   widget.initialAds();
-    // }
+    try {
+      await _bannerAd.dispose();
+    } catch (_) {}
+    try {
+      await _myInterstitial.dispose();
+    } catch (_) {}
+    widget.initialAds();
     swiperController.dispose();
   }
-
-  // BannerAd createBannerAd() {
-  //   return BannerAd(
-  //     adUnitId: BannerAd.testAdUnitId,
-  //     size: AdSize.smartBanner,
-  //     // targetingInfo: targetingInfo,
-  //     listener: (MobileAdEvent event) {
-  //       print("BannerAd event $event");
-  //     },
-  //   );
-  // }
 
   _getTeenNextWords() {
     List<dynamic> newArr = [];
@@ -127,29 +193,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
       _initIndex += j + 1;
       _index = 0;
     });
-  }
-
-  _dismissModal() {
-    Navigator.pop(context);
-    // _loadBannerAds();
-    // myInterstitial
-    //   ..load()
-    //   ..show(
-    //     anchorType: AnchorType.bottom,
-    //     anchorOffset: 0.0,
-    //     horizontalCenterOffset: 0.0,
-    //   );
-    setState(() {
-      _interstitial = true;
-    });
-    _getTeenNextWords();
-  }
-
-  dismssAllAds() {
-    setState(() {
-      _dimissed = true;
-    });
-    widget.initialAds();
   }
 
   _updateFun(int index) {
@@ -562,8 +605,8 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     return itemRender(context, size, index);
   }
 
-  _showModal(BuildContext context) {
-    _bannerAd?.dispose();
+  _showModal(BuildContext context) async {
+    await _bannerAd?.dispose();
     showGeneralDialog(
       barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 200),
@@ -605,11 +648,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     );
   }
 
-  setDismissedToFalse() {
-    setState(() {
-      _dimissed = false;
-    });
-  }
+  setDismissedToFalse() {}
 
   @override
   Widget build(BuildContext context) {

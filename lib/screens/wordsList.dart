@@ -18,6 +18,7 @@ class WordsList extends StatefulWidget {
   final Function globalDataUpdate;
   final Function getTotalLearningWords;
   final Function updatingData;
+  final double height;
 
   WordsList(
     this.data,
@@ -27,6 +28,7 @@ class WordsList extends StatefulWidget {
     this.globalDataUpdate,
     this.getTotalLearningWords,
     this.updatingData,
+    this.height,
   );
 
   @override
@@ -47,34 +49,51 @@ class _WordsListState extends State<WordsList> {
       _originItem = widget.data;
     });
     // _updateCountOfWords();
-    // _initialAds();
+    _initialAds();
     _updateFalshCarsWords();
     _updateFamiliarWords();
     _updateUnknownWords();
   }
 
-  // BannerAd createBannerAd() {
-  //   return BannerAd(
-  //     adUnitId: BannerAd.testAdUnitId,
-  //     size: AdSize.smartBanner,
-  //     // targetingInfo: targetingInfo,
-  //     listener: (MobileAdEvent event) {
-  //       print("BannerAd event $event");
-  //     },
-  //   );
-  // }
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.smartBanner,
+      // targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+        if (event == MobileAdEvent.loaded) {
+          _showBannerAd();
+        }
+      },
+    );
+  }
 
-  _initialAds() {
-    // _bannerAd = createBannerAd()
-    //   ..load()
-    //   ..show(horizontalCenterOffset: 0, anchorOffset: 5);
+  _loadBannerAd() {
+    _bannerAd.load();
+  }
+
+  _showBannerAd() {
+    _bannerAd.show(
+        horizontalCenterOffset: 0, anchorOffset: widget.height * 0.01);
+  }
+
+  _initialAds() async {
+    try {
+      await _bannerAd.dispose();
+    } catch (_) {}
+    _bannerAd = null;
+    _bannerAd = createBannerAd();
+    _loadBannerAd();
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
-    // _bannerAd?.dispose();
-    widget.updatingData();
+    try {
+      bool ret = await _bannerAd.dispose();
+      widget.updatingData();
+    } catch (_) {}
   }
 
   _updateFalshCarsWords() {
@@ -114,7 +133,9 @@ class _WordsListState extends State<WordsList> {
         ),
         highlightColor: rippleColor,
         onTap: () {
-          _bannerAd?.dispose();
+          try {
+            _bannerAd.dispose();
+          } catch (_) {}
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext ctx) => FlashCards(
@@ -132,6 +153,7 @@ class _WordsListState extends State<WordsList> {
                 flag,
                 len,
                 _initialAds,
+                size.height,
               ),
             ),
           );

@@ -1,4 +1,4 @@
-import 'package:device_preview/device_preview.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lenglish/constants.dart';
@@ -7,11 +7,11 @@ import 'package:lenglish/screens/settings.dart';
 import 'package:lenglish/logic/initalizeFiles.dart';
 
 void main() => runApp(
-      // MyApp(),
-      DevicePreview(
-        enabled: true,
-        builder: (context) => MyApp(),
-      ),
+      MyApp(),
+      // DevicePreview(
+      //   enabled: true,
+      //   builder: (context) => MyApp(),
+      // ),
     );
 
 class MyApp extends StatefulWidget {
@@ -38,16 +38,16 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    //   DeviceOrientation.portraitDown,
-    // ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: !_nightMode ? primaryBlueColor : blackColor,
     ));
     return MaterialApp(
-      locale: DevicePreview.of(context).locale, // <--- Add the locale
-      builder: DevicePreview.appBuilder,
+      // locale: DevicePreview.of(context).locale, // <--- Add the locale
+      // builder: DevicePreview.appBuilder,
 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

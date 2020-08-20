@@ -40,16 +40,16 @@ class _HomeState extends State<Home> {
     _updateLangData();
   }
 
-  // setNewGlobalData() async {
-  //   if (mounted == true) {
-  //     dynamic data = await getGlobalData();
-  //     if (data != null) {
-  //       setState(() {
-  //         _globalData = data;
-  //       });
-  //     }
-  //   }
-  // }
+  setNewGlobalData() async {
+    if (mounted == true) {
+      dynamic data = await getGlobalData();
+      if (data != null) {
+        setState(() {
+          _globalData = data;
+        });
+      }
+    }
+  }
 
   _updateLangData() async {
     if (widget.lang == "") {
@@ -70,10 +70,9 @@ class _HomeState extends State<Home> {
     }
   }
 
-  _getTotalLearningWords() async {
-    print("ccccccccccccccccccccc");
-    int number = await totoalLearningWords(_globalData);
-    print("coccococ");
+  _getTotalLearningWords() {
+    int number = totoalLearningWords(_globalData);
+
     setState(() {
       _totalLearningWords = number;
     });
@@ -95,6 +94,7 @@ class _HomeState extends State<Home> {
         globalDataUpdate: widget.globalDataUpdate,
         totalLearningWords: _totalLearningWords,
         getTotalLearningWords: _getTotalLearningWords,
+        setNewGlobalData: setNewGlobalData,
       );
     } else if (currentIndex == 1) {
       return BallonsGame(

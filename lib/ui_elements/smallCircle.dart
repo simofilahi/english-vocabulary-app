@@ -19,7 +19,7 @@ class SmallCircle extends StatelessWidget {
       containerWidthSize: size.height * 0.0354,
       textSize: size.width * 0.025,
     );
-    print(res.textSize);
+
     return Container(
       height: res.containerHeightSize,
       width: res.containerHeightSize,

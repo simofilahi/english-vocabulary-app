@@ -9,6 +9,7 @@ import 'package:lenglish/logic/BoolSetter.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:lenglish/models/responsive.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lenglish/logic/checkConnection.dart';
 
 class SpellingGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -19,7 +20,7 @@ class SpellingGame extends StatefulWidget {
   final Function getHintPoints;
   final int answerPoints;
   final Function getAnswerPoints;
-  final dynamic height;
+  final dynamic size;
 
   SpellingGame({
     this.globalData,
@@ -30,7 +31,7 @@ class SpellingGame extends StatefulWidget {
     this.getHintPoints,
     this.answerPoints,
     this.getAnswerPoints,
-    this.height,
+    this.size,
   });
   @override
   _SpellingGameState createState() => _SpellingGameState();
@@ -52,11 +53,8 @@ class _SpellingGameState extends State<SpellingGame> {
   int _answerPoints = 0;
   bool _finish = false;
   FocusNode _focusNode = FocusNode();
-
-  /// just  define _formkey with static final
-
+  bool _rewardAdLoaded = false;
   final formKey = GlobalKey<FormState>();
-
   RewardedVideoAd videoAd = RewardedVideoAd.instance;
   BannerAd _bannerAd;
   FToast fToast;
@@ -64,7 +62,6 @@ class _SpellingGameState extends State<SpellingGame> {
   @override
   void initState() {
     super.initState();
-    print("ffffffffffffffffffffffffff ${widget.index}");
     setState(() {
       spinner = true;
       _index = widget.index;
@@ -72,28 +69,10 @@ class _SpellingGameState extends State<SpellingGame> {
       _answerPoints = widget.answerPoints;
     });
     fToast = FToast(context);
-
-    // print('height');
-    // print(widget.height - (widget.height * .6));
-    // _bannerAd = createBannerAd()
-    //   ..load()
-    //   ..show(
-    //     horizontalCenterOffset: 0,
-    //     anchorOffset: widget.height,
-    //   );
-    _updateHintAnswerPoints();
-    videoAd.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      if (event == RewardedVideoAdEvent.rewarded) {
-        print(rewardAmount);
-        if (rewardAmount == null) {
-          _updateHintAnswerPoints();
-        } else {
-          _updateHintAnswerPoints();
-        }
-      }
-    };
-    _loadAds();
+    _bannerAd = createBannerAd();
+    _loadBannerAd();
+    _rewardListener();
+    _loadRewardAd(widget.size);
     _getNextItem();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -102,10 +81,50 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  _loadAds() {
-    videoAd.load(
-      adUnitId: RewardedVideoAd.testAdUnitId,
+  _loadBannerAd() {
+    _bannerAd.load();
+  }
+
+  _showBannerAd() {
+    _bannerAd.show(
+      horizontalCenterOffset: 0,
+      anchorOffset: widget.size.height * 0.01,
     );
+  }
+
+  _rewardListener() {
+    videoAd.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      if (event == RewardedVideoAdEvent.loaded) {
+        setState(() {
+          _rewardAdLoaded = true;
+        });
+      }
+      if (event == RewardedVideoAdEvent.rewarded) {
+        if (rewardAmount != null) _updateHintAnswerPoints(rewardAmount);
+      }
+      if (event == RewardedVideoAdEvent.closed) _loadRewardAd(widget.size);
+    };
+  }
+
+  _loadRewardAd(var size) {
+    try {
+      videoAd
+          .load(
+            adUnitId: RewardedVideoAd.testAdUnitId,
+          )
+          .then((value) {});
+    } catch (_) {
+      _showToast('Ad doesn\'t loaded please try again', size);
+    }
+  }
+
+  _showRewardAd(var size) {
+    try {
+      videoAd.show();
+    } catch (_) {
+      _showToast('Ad doesn\'t loaded please try again', size);
+    }
   }
 
   _showToast(String text, var size) {
@@ -126,6 +145,7 @@ class _SpellingGameState extends State<SpellingGame> {
           Icon(
             Icons.question_answer,
             size: size.height * 0.032,
+            color: whiteColor,
           ),
           SizedBox(
             width: size.width * 0.02,
@@ -133,7 +153,7 @@ class _SpellingGameState extends State<SpellingGame> {
           TextWidget(
             text: text,
             size: size.width * 0.045,
-            color: Theme.of(context).textSelectionColor,
+            color: whiteColor,
           ),
         ],
       ),
@@ -142,19 +162,36 @@ class _SpellingGameState extends State<SpellingGame> {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: Duration(seconds: 4),
     );
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
-    _bannerAd?.dispose();
-    widget.getIndex();
-    widget.getHintPoints();
-    widget.getAnswerPoints();
-    fToast.removeCustomToast();
-    fToast.removeQueuedCustomToasts();
+    try {
+      // Future.delayed(const Duration(seconds: 2), () async {
+      //   print("Holla ____________________________________________________");
+      //   await _bannerAd.dispose();
+      // });
+      print("befooooooooooooooooooooooooooooore ===> ");
+      bool ret = await _bannerAd.dispose();
+      print("Afterrrrrrrrr ===> ${ret}");
+      widget.getIndex();
+      widget.getHintPoints();
+      widget.getAnswerPoints();
+      fToast.removeCustomToast();
+      fToast.removeQueuedCustomToasts();
+    } catch (error) {
+      print("catch Error");
+      print(error);
+    }
+  }
+
+  Future<bool> _hideAds() async {
+    bool ret = await _bannerAd.dispose();
+    print("ret ===============================> &&&&&&&&&&&&&&&&&&&&& ${ret}");
+    return true;
   }
 
   BannerAd createBannerAd() {
@@ -163,7 +200,10 @@ class _SpellingGameState extends State<SpellingGame> {
       size: AdSize.smartBanner,
       // targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        // print("BannerAd event $event");
+        print("BannerAd event $event");
+        if (event == MobileAdEvent.loaded) {
+          _showBannerAd();
+        }
       },
     );
   }
@@ -203,6 +243,9 @@ class _SpellingGameState extends State<SpellingGame> {
       updateIndexOfSpellingWords(_index);
       _getNextHelper();
     } else {
+      if (_index == 2264) {
+        updateIndexOfSpellingWords(2264);
+      }
       setState(() {
         _finish = true;
       });
@@ -235,57 +278,71 @@ class _SpellingGameState extends State<SpellingGame> {
     });
   }
 
-  _updateHintAnswerPoints() async {
-    addinghintPoints();
-    addingAnswerPoints();
-    int hintPoints = await getHintPoints();
-    int answerPoints = await getAnswerPoints();
+  _updateHintAnswerPoints(int points) async {
+    await addinghintPoints(points);
+    await addingAnswerPoints(points);
     setState(() {
-      _hintPoints = hintPoints;
-      _answerPoints = answerPoints;
+      _hintPoints += points;
+      _answerPoints += points;
     });
   }
 
+  bool _wordMatch() {
+    List<dynamic> arr = [];
+    _enWord.runes.forEach((int rune) {
+      var character = String.fromCharCode(rune);
+      arr.add(character);
+    });
+    if (arr.length == _dataRowChar.length) return true;
+    return false;
+  }
+
   _fillForHelp(int flag, var size) async {
-    bool ret = await substractHintPoints(1);
+    if (!_wordMatch() && !(_controller.text == _enWord)) {
+      bool ret = await substractHintPoints(2);
 
-    if (ret) {
-      int len = _enWord.runes.length;
-      int half = (len ~/ 2).toInt();
-      var newWord = "";
+      if (ret) {
+        int len = _enWord.runes.length;
+        int half = (len ~/ 2).toInt();
+        var newWord = "";
 
-      if (_dataRowChar.isEmpty && flag == 1) {
-        newWord = _enWord.substring(0, half);
-      } else if (_controller.text.isEmpty && flag == 2) {
-        newWord = _enWord.substring(0, half);
-      } else {
-        newWord = _enWord.substring(0, len);
-      }
-      if (flag == 2) {
-        _controller.text = newWord;
-      } else {
-        List<dynamic> arr = [];
-        newWord.runes.forEach((int rune) {
-          var character = String.fromCharCode(rune);
-          arr.add(character);
-        });
+        if (_dataRowChar.isEmpty && flag == 1) {
+          newWord = _enWord.substring(0, half);
+        } else if (_controller.text.isEmpty && flag == 2) {
+          newWord = _enWord.substring(0, half);
+        } else {
+          newWord = _enWord.substring(0, len);
+        }
+
         int value = await getHintPoints();
-        setState(() {
-          _dataRowChar = arr;
-          _listOfchar = _listOfchar.map((e) {
-            for (int i = 0; i < arr.length; i++) {
-              if (arr[i] == e['char']) {
-                e['selected'] = true;
-                break;
+        if (flag == 2) {
+          _controller.text = newWord;
+          setState(() {
+            _hintPoints = value;
+          });
+        } else {
+          List<dynamic> arr = [];
+          newWord.runes.forEach((int rune) {
+            var character = String.fromCharCode(rune);
+            arr.add(character);
+          });
+          setState(() {
+            _dataRowChar = arr;
+            _listOfchar = _listOfchar.map((e) {
+              for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == e['char']) {
+                  e['selected'] = true;
+                  break;
+                }
               }
-            }
-            return e;
-          }).toList();
-          _hintPoints = value;
-        });
+              return e;
+            }).toList();
+            _hintPoints = value;
+          });
+        }
+      } else {
+        _showToast('You need coins, Please Watch an ads', size);
       }
-    } else {
-      _showToast('You need coins, Watch an ads', size);
     }
   }
 
@@ -319,10 +376,24 @@ class _SpellingGameState extends State<SpellingGame> {
           children: <Widget>[
             Center(
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   if (flag == 1) {
-                    RewardedVideoAd.instance.show();
-                    _loadAds();
+                    bool ret = await checkConnection();
+                    if (ret == true) {
+                      if (_rewardAdLoaded == true) {
+                        setState(() {
+                          _rewardAdLoaded = false;
+                        });
+                        _showRewardAd(size);
+                      } else {
+                        _showToast('No ad found, please try again', size);
+                        setState(() {
+                          _rewardAdLoaded = true;
+                        });
+                      }
+                    } else {
+                      _showToast('No Internet Connection', size);
+                    }
                   } else if (flag == 2) {
                     if (!_useKeyBoard)
                       _fillForHelp(1, size);
@@ -613,39 +684,42 @@ class _SpellingGameState extends State<SpellingGame> {
   }
 
   _showAnwerHelper(int flag, var size) async {
-    bool ret = await substractAnswerPoints(2);
-    if (ret) {
-      if (flag == 2) {
-        _controller.text = _enWord;
+    if (_dataRowChar.isEmpty && _controller.text != _enWord) {
+      bool ret = await substractAnswerPoints(2);
+
+      if (ret) {
+        if (flag == 2) {
+          _controller.text = _enWord;
+          setState(() {
+            _inputError = false;
+          });
+        } else {
+          List<dynamic> arr = [];
+          _enWord.runes.forEach((int rune) {
+            var character = String.fromCharCode(rune);
+            arr.add(character);
+          });
+          setState(() {
+            _inputError = false;
+            _dataRowChar = arr;
+            _listOfchar = _listOfchar.map((e) {
+              for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == e['char']) {
+                  e['selected'] = true;
+                  break;
+                }
+              }
+              return e;
+            }).toList();
+          });
+        }
+        int value = await getAnswerPoints();
         setState(() {
-          _inputError = false;
+          _answerPoints = value;
         });
       } else {
-        List<dynamic> arr = [];
-        _enWord.runes.forEach((int rune) {
-          var character = String.fromCharCode(rune);
-          arr.add(character);
-        });
-        setState(() {
-          _inputError = false;
-          _dataRowChar = arr;
-          _listOfchar = _listOfchar.map((e) {
-            for (int i = 0; i < arr.length; i++) {
-              if (arr[i] == e['char']) {
-                e['selected'] = true;
-                break;
-              }
-            }
-            return e;
-          }).toList();
-        });
+        _showToast('You need coins, watch an ads', size);
       }
-      int value = await getAnswerPoints();
-      setState(() {
-        _answerPoints = value;
-      });
-    } else {
-      _showToast('You need coins, watch an ads', size);
     }
   }
 
@@ -734,7 +808,7 @@ class _SpellingGameState extends State<SpellingGame> {
     if (_index < 2264) {
       bool ret = await substractAnswerPoints(2);
       if (ret) {
-        int index = await getNextSetIndex();
+        int index = await getIndexOfSpellingWords();
         if (index < 2264) {
           index += 1;
           updateIndexOfSpellingWords(index);
@@ -744,11 +818,14 @@ class _SpellingGameState extends State<SpellingGame> {
             _answerPoints = points;
           });
           _getNextItem();
-          setNextSetIndex(index);
+          // setNextSetIndex(index);
         }
       } else
         _showToast('You need coins, Watch an ads', size);
     } else {
+      if (_index == 2264) {
+        updateIndexOfSpellingWords(2264);
+      }
       setState(() {
         _finish = true;
       });
@@ -947,17 +1024,20 @@ class _SpellingGameState extends State<SpellingGame> {
                         ),
                       ),
                     )
-                  : Expanded(
-                      flex: 1,
-                      child: Container(),
+                  : SizedBox(
+                      height: res.sizedBoxHeightSize * 4.2,
                     ),
-              !_finish
-                  ? SizedBox(
-                      height: res.sizedBoxHeightSize,
-                    )
-                  : Container(),
+              // !_finish
+              //     ? SizedBox(
+              //         height: res.sizedBoxHeightSize * 0.1,
+              //       )
+              //     : Container(),
               !_finish ? _centerWidget(size, res) : Container(),
               !_finish ? _bottomWidget(size, res) : Container(),
+              Container(
+                height: size.height * .10,
+                width: size.width,
+              ),
             ],
           ),
         ),

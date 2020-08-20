@@ -253,7 +253,7 @@ class _SettingState extends State<Setting> {
         _item(
           size,
           sleepModesIcon,
-          'Dark mode',
+          'Dark Mode',
           null,
           Theme.of(context).backgroundColor == blackColor
               ? rightSwitch
@@ -262,11 +262,11 @@ class _SettingState extends State<Setting> {
           2,
           2,
         ),
-        _item(size, restoreIcon, 'Reset app', null, null, null, 0, 3),
-        _item(size, shareIcon, 'Share app', null, null, null, 0, 4),
-        _item(size, starIcon, 'Rate app', null, null, null, 0, 5),
-        _item(size, privacyIcon, 'Privacy', null, null, null, 0, 6),
-        _item(size, aboutIcon, 'About', null, null, null, 0, 7),
+        _item(size, restoreIcon, 'Reset', null, null, null, 0, 3),
+        _item(size, shareIcon, 'Share With Friends', null, null, null, 0, 4),
+        _item(size, starIcon, 'Rate Us', null, null, null, 0, 5),
+        _item(size, privacyIcon, 'Privacy Policy', null, null, null, 0, 6),
+        _item(size, aboutIcon, 'v1.1', null, null, null, 0, 7),
       ],
     );
   }
