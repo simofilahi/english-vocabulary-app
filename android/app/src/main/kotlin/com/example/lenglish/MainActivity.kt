@@ -1,4 +1,4 @@
-package com.example.lenglish
+package com.forudevapp.steria
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

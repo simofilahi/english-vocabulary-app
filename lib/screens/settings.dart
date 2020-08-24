@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/screens/chooseLanguage.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
-import 'package:stripe_native/stripe_native.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/screens/chooseLanguage.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/widgets/topAppBar.dart';
+import 'package:Steria/models/responsive.dart';
 import 'package:share/share.dart';
-import 'package:lenglish/screens/splashScreen.dart';
+import 'package:Steria/screens/splashScreen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Setting extends StatefulWidget {
   final String lang;
@@ -27,17 +27,12 @@ class _SettingState extends State<Setting> {
   double totalAmount = 0;
   double amount = 0;
   String currencyName = "";
-  Map receipt;
-  Receipt finalReceipt;
   String generatedToken = "";
 
   @override
   void initState() {
     super.initState();
-    // print(widget.nightMode);
-    //  _bannerAd = createBannerAd()
-    //   ..load()
-    //   ..show(horizontalCenterOffset: 0, anchorOffset: 10);
+
     setState(() {
       lang = getNameOfLang(widget.lang);
     });
@@ -91,7 +86,6 @@ class _SettingState extends State<Setting> {
         ),
         child: InkWell(
           onTap: () {
-            // print("yoyoyyoyo");
             widget.updateNightMode();
           },
           child: SvgPicture.asset(
@@ -109,7 +103,7 @@ class _SettingState extends State<Setting> {
     }
   }
 
-  _dialogResetAll() {
+  _dialogResetAll(Responsive res) {
     AwesomeDialog(
       context: context,
       headerAnimationLoop: false,
@@ -129,7 +123,14 @@ class _SettingState extends State<Setting> {
           }),
         );
       },
+      res: res,
     )..show();
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {}
   }
 
   Widget _item(var size, String iconName, String text, String text_1,
@@ -149,6 +150,10 @@ class _SettingState extends State<Setting> {
       textSize: size.width * 0.05,
       iconSize: size.height * 0.032,
       allPaddingSize: size.width * 0.02,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+      height: size.height,
+      width: size.width,
     );
     print("bbbbbbbb ===> ${res.sizedBoxWidthSize}");
     return FittedBox(
@@ -164,10 +169,16 @@ class _SettingState extends State<Setting> {
           highlightColor: rippleColor,
           onTap: () {
             if (navFlag == 3) {
-              _dialogResetAll();
+              _dialogResetAll(res);
             } else if (navFlag == 4) {
-              Share.share('My  app is Awesome');
-            } else if (navFlag != 2) {
+              Share.share(
+                  'Hey! check out this Awesome Learning English Vocabulary app https://play.google.com/store/apps/details?id=com.forudevapp.wallpapers');
+            } else if (navFlag == 6) {
+              _launchURL('https://steriapp.herokuapp.com/');
+            } else if (navFlag == 5) {
+              _launchURL(
+                  'https://play.google.com/store/apps/details?id=com.forudevapp.steria');
+            } else if (navFlag == 1) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx) {
                   return screen;

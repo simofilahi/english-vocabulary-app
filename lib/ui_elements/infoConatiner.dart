@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/ui_elements/smallCircle.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/ui_elements/smallCircle.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/models/responsive.dart';
 
 class InfoContainer extends StatelessWidget {
   final int setNumber;

@@ -1,18 +1,17 @@
-import 'package:audioplayers/audio_cache.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/ui_elements/circleWithIcon.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/ui_elements/circleWithIcon.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/widgets/topAppBar.dart';
 import 'package:like_button/like_button.dart';
 import '../constants.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'dart:async';
-import 'package:lenglish/screens/resultModal.dart';
+import 'package:Steria/screens/resultModal.dart';
 
 class FlashCards extends StatefulWidget {
   final List<dynamic> item;
@@ -54,16 +53,15 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   var controller;
   var _index = 0;
   BannerAd _bannerAd;
-  int _realIndex = 0;
-  static AudioCache player = AudioCache();
   SwiperController swiperController;
-
   List<dynamic> _teenWords = [];
   dynamic _dataCpy = [];
   int _initIndex = 0;
   int _counter = 0;
   int adcounter = 0;
   InterstitialAd _myInterstitial;
+  String bannerId = 'ca-app-pub-2078580912080341/5613665085';
+  String interId = 'ca-app-pub-2078580912080341/7285839403';
 
   @override
   void initState() {
@@ -114,12 +112,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   _dismissModal() {
     Navigator.pop(context);
     _initialBannerAds();
-    if (adcounter == 0 || adcounter == 2 || adcounter == 4) {
-      _loadInte();
-    }
-    setState(() {
-      adcounter += 1;
-    });
     _getTeenNextWords();
   }
 
@@ -135,16 +127,22 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
 
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
-      // Replace the testAdUnitId with an ad unit id from the AdMob dash.
-      // https://developers.google.com/admob/android/test-ads
-      // https://developers.google.com/admob/ios/test-ads
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: interId,
       listener: (MobileAdEvent event) async {
         if (event == MobileAdEvent.loaded) {
           _showInte();
         }
         if (event == MobileAdEvent.closed) {
-          await _myInterstitial.dispose();
+          try {
+            await _myInterstitial.dispose();
+          } catch (_) {}
+          _initialIntAds();
+        }
+        if (event == MobileAdEvent.failedToLoad) {
+          try {
+            await _myInterstitial.dispose();
+          } catch (_) {}
+
           _initialIntAds();
         }
         print("InterstitialAd event is $event");
@@ -154,13 +152,18 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: bannerId,
       size: AdSize.smartBanner,
-      // targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
+      listener: (MobileAdEvent event) async {
         print("BannerAd event $event");
         if (event == MobileAdEvent.loaded) {
           _showBannerAd();
+        }
+        if (event == MobileAdEvent.failedToLoad) {
+          try {
+            await _bannerAd.dispose();
+          } catch (_) {}
+          _initialBannerAds();
         }
       },
     );
@@ -195,7 +198,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     });
   }
 
-  _updateFun(int index) {
+  _updateFun(int index) async {
     _dropItemFromList(index);
     setState(() {
       _counter += 1;
@@ -204,6 +207,15 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
       setState(() {
         _index = 0;
       });
+      if (adcounter == 0 || adcounter == 2 || adcounter == 4) {
+        _loadInte();
+      }
+      setState(() {
+        adcounter += 1;
+      });
+      try {
+        await _bannerAd?.dispose();
+      } catch (_) {}
       _showModal(context);
       widget.updateFalshCarsWords();
       widget.updateFamiliarWords();
@@ -228,7 +240,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
       if (_teenWords[j]['en'] == word) return index;
       index++;
     }
-
     return -1;
   }
 
@@ -238,7 +249,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
       if (widget.originItem[j]['en'] == word) return index;
       index++;
     }
-
     return -1;
   }
 
@@ -328,7 +338,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
   }
 
   playLocal(path) async {
-    assetsAudioPlayer.open(
+    await assetsAudioPlayer.open(
       Audio(path),
     );
   }
@@ -363,7 +373,6 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                   size: size.height * 0.038,
                 );
               }
-              // // timer.cancel();
             },
           ),
         ),
@@ -605,8 +614,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     return itemRender(context, size, index);
   }
 
-  _showModal(BuildContext context) async {
-    await _bannerAd?.dispose();
+  _showModal(BuildContext context) {
     showGeneralDialog(
       barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 200),
@@ -627,7 +635,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
     return Container(
       height: size.height * .70,
       child: Swiper(
-        duration: 500,
+        duration: 100,
         itemHeight: size.height * .70,
         itemWidth: size.width * .50,
         itemCount: _dataCpy.length,
@@ -675,11 +683,7 @@ class _FlashCardsState extends State<FlashCards> with TickerProviderStateMixin {
                 SizedBox(
                   height: size.height * .09,
                 ),
-                widget.len == _index
-                    ? Container(
-                        // child: TextWidget(text: 'finish'),
-                        )
-                    : _swiperBuilder(size),
+                widget.len == _index ? Container() : _swiperBuilder(size),
               ],
             ),
           ),

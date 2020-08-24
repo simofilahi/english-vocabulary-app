@@ -1,0 +1,40 @@
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:28
+-keep class androidx.core.app.CoreComponentFactory { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:55
+-keep class androidx.media.session.MediaButtonReceiver { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:33
+-keep class com.forudevapp.steria.MainActivity { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:54
+-keep class com.github.florent37.assets_audio_player.notification.NotificationActionReceiver { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:61
+-keep class com.github.florent37.assets_audio_player.notification.NotificationService { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:91
+-keep class com.google.android.gms.ads.AdActivity { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:97
+-keep class com.google.android.gms.ads.MobileAdsInitProvider { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:113
+-keep class com.google.android.gms.measurement.AppMeasurementJobService { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:103
+-keep class com.google.android.gms.measurement.AppMeasurementReceiver { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:109
+-keep class com.google.android.gms.measurement.AppMeasurementService { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:72
+-keep class com.google.firebase.components.ComponentDiscoveryService { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:119
+-keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:28
+-keep class io.flutter.app.FlutterApplication { <init>(); }
+# Referenced at C:\Users\drpbengrir\Desktop\flutter_projects\lenglish\build\app\intermediates\merged_manifests\release\arm64-v8a\AndroidManifest.xml:87
+-keep class io.flutter.plugins.urllauncher.WebViewActivity { <init>(); }
+# Referenced at C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\33e5ae0b4711709cb339233c513b94a7\browser-1.0.0\res\layout\browser_actions_context_menu_page.xml:5
+-keep class androidx.browser.browseractions.BrowserActionsFallbackMenuView { <init>(...); }
+
+# Referenced at C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\e2abb3fe03595bb99de67863b98d6a1c\exoplayer-ui-2.11.4\res\layout\exo_simple_player_view.xml:18
+-keep class com.google.android.exoplayer2.ui.AspectRatioFrameLayout { <init>(...); }
+
+# Referenced at C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\e2abb3fe03595bb99de67863b98d6a1c\exoplayer-ui-2.11.4\res\layout\exo_simple_player_view.xml:35
+-keep class com.google.android.exoplayer2.ui.SubtitleView { <init>(...); }
+
+# Referenced at C:\Users\drpbengrir\.gradle\caches\transforms-2\files-2.1\e2abb3fe03595bb99de67863b98d6a1c\exoplayer-ui-2.11.4\res\layout\exo_track_selection_dialog.xml:20
+-keep class com.google.android.exoplayer2.ui.TrackSelectionView { <init>(...); }
+

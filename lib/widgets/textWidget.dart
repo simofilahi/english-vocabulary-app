@@ -6,6 +6,7 @@ class TextWidget extends StatelessWidget {
   final Color color;
   final FontWeight fontWeight;
   final TextAlign textAlign;
+  final double letterSpacing;
 
   TextWidget({
     this.text,
@@ -13,6 +14,7 @@ class TextWidget extends StatelessWidget {
     this.color,
     this.fontWeight = FontWeight.normal,
     this.textAlign = TextAlign.left,
+    this.letterSpacing = 0.5,
   });
 
   @override
@@ -25,6 +27,7 @@ class TextWidget extends StatelessWidget {
           fontSize: size,
           color: color,
           fontWeight: fontWeight,
+          letterSpacing: letterSpacing,
         ),
       ),
     );

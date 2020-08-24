@@ -1,14 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:lenglish/screens/wordsList.dart';
-import 'package:lenglish/ui_elements/infoConatiner.dart';
-import 'package:lenglish/widgets/radialProgress.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/responsive.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
-
+import 'package:Steria/screens/wordsList.dart';
+import 'package:Steria/ui_elements/infoConatiner.dart';
+import 'package:Steria/widgets/radialProgress.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/models/responsive.dart';
+import 'package:Steria/widgets/topAppBar.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import '../constants.dart';
 
@@ -34,17 +33,16 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  double _level;
+  int _level;
   List<dynamic> _globalData = [];
   int _totalLearningWords = 0;
 
   @override
   void initState() {
     super.initState();
-
     setState(() {
       _globalData = widget.globalData;
-      _level = widget.totalLearningWords * 20 / 2264;
+      _level = (widget.totalLearningWords * 20 ~/ 2264).toInt();
       _totalLearningWords = widget.totalLearningWords;
     });
   }
@@ -56,7 +54,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     setState(() {
       _globalData = data;
       _totalLearningWords = number;
-      _level = number * 20 / 2264;
+      _level = (number * 20 ~/ 2264).toInt();
     });
   }
 
@@ -181,7 +179,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  _resetItem(BuildContext context, var data, int index) {
+  _resetItem(BuildContext context, var data, int index, Responsive res) {
     AwesomeDialog(
       context: context,
       headerAnimationLoop: false,
@@ -199,13 +197,14 @@ class _HomeWidgetState extends State<HomeWidget> {
               setState(() {
                 _globalData = data;
                 _totalLearningWords = number;
-                _level = number * 20 / 2264;
+                _level = (number * 20 ~/ 2264).toInt();
               });
               widget.getTotalLearningWords();
             }
           },
         );
       },
+      res: res,
     )..show();
   }
 
@@ -218,7 +217,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     setState(() {
       _globalData = data;
       _totalLearningWords = number;
-      _level = number * 20 / 2264;
+      _level = (number * 20 ~/ 2264).toInt();
     });
   }
 
@@ -228,7 +227,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       Color firstColor,
       Color secondColor,
       var data,
-      int learning_words,
+      int learningWords,
       var size,
       Responsive res) {
     return ResponsiveGridCol(
@@ -290,8 +289,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           RadialProgress(
-                            goalCompleted: learning_words.toDouble() / 50,
-                            percent: learning_words.toDouble() * 100 / 50,
+                            goalCompleted: learningWords.toDouble() / 50,
+                            percent: learningWords.toDouble() * 100 / 50,
                             height: res.circleHeightSize,
                             width: res.circleWidthSize,
                             color: whiteColor,
@@ -308,10 +307,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: InfoContainer(
                     setNumber: index + 1,
                     totalWords: 50,
-                    learningWords: learning_words,
+                    learningWords: learningWords,
                     firstColor: firstColor,
                     secondColor: secondColor,
-                    reset: () => _resetItem(context, data, index),
+                    reset: () => _resetItem(context, data, index, res),
                     res: res,
                   ),
                 )
@@ -363,6 +362,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       color: blackColor,
       fontWeight: FontWeight.bold,
       clickHandler: _resetAll,
+      level: _level,
     );
   }
 
@@ -380,6 +380,10 @@ class _HomeWidgetState extends State<HomeWidget> {
       topPaddingSize: size.height * 0.0055,
       rightPaddingSize: size.width * 0.0085,
       leftPaddingSize: size.width * 0.0085,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+      height: size.height,
+      width: size.width,
     );
     return Expanded(
       child: Container(

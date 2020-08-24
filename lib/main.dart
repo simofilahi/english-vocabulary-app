@@ -1,17 +1,13 @@
-// import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/screens/splashScreen.dart';
-import 'package:lenglish/screens/settings.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/screens/splashScreen.dart';
+import 'package:Steria/screens/settings.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
+import 'package:Steria/logic/BoolSetter.dart';
 
 void main() => runApp(
       MyApp(),
-      // DevicePreview(
-      //   enabled: true,
-      //   builder: (context) => MyApp(),
-      // ),
     );
 
 class MyApp extends StatefulWidget {
@@ -26,7 +22,30 @@ class _MyAppState extends State<MyApp> {
   bool _flag = false;
   String _lang = '';
 
-  _updateNightMode() {
+  @override
+  void initState() {
+    super.initState();
+    _darkModeStatus();
+  }
+
+  _darkModeStatus() async {
+    bool check = await darkMode.isExist();
+    if (check) {
+      bool ret = await getDarkModeStatus();
+      if (ret == false) {
+        setState(() {
+          _nightMode = false;
+        });
+      } else {
+        setState(() {
+          _nightMode = true;
+        });
+      }
+    }
+  }
+
+  _updateNightMode() async {
+    await setDarkModeStatus(!_nightMode);
     langFile.getItem().then((lang) {
       setState(() {
         _lang = lang[0]['selected_lang'];
@@ -46,10 +65,8 @@ class _MyAppState extends State<MyApp> {
       statusBarColor: !_nightMode ? primaryBlueColor : blackColor,
     ));
     return MaterialApp(
-      // locale: DevicePreview.of(context).locale, // <--- Add the locale
-      // builder: DevicePreview.appBuilder,
-
       debugShowCheckedModeBanner: false,
+      title: 'Steria',
       theme: ThemeData(
         fontFamily: 'Roboto',
         backgroundColor: !_nightMode ? primaryColor : blackColor,

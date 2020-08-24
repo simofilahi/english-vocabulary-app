@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/screens/playingBallonGame.dart';
-import 'package:lenglish/widgets/customButton.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
-import 'package:lenglish/screens/spellingGame.dart';
-import 'package:lenglish/models/responsive.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:lenglish/models/CustomPopupMenu.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/screens/playingBallonGame.dart';
+import 'package:Steria/widgets/customButton.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/widgets/topAppBar.dart';
+import 'package:Steria/screens/spellingGame.dart';
+import 'package:Steria/models/responsive.dart';
+import 'package:Steria/models/CustomPopupMenu.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class BallonsGame extends StatefulWidget {
   final List<dynamic> globalData;
@@ -31,15 +31,10 @@ class _BallonsGameState extends State<BallonsGame> {
   @override
   void initState() {
     super.initState();
-    indexFile_2.setItem('index', [
-      {"index": "2259"}
-    ]).then((value) {
-      _getIndex();
-      _getIndex_2();
-      _getHintPoints();
-      _getAnswerPoints();
-      // print(widget.globalData);
-    });
+    _getIndex();
+    _getIndex_2();
+    _getHintPoints();
+    _getAnswerPoints();
   }
 
   _getAnswerPoints() async {
@@ -84,11 +79,9 @@ class _BallonsGameState extends State<BallonsGame> {
       ),
       onSelected: (dynamic _) {
         if (flag == 0) {
-          resetFlyingSquaresGame();
-          _getIndex();
+          _dialogReset(1, res);
         } else if (flag == 1) {
-          resetSpellingGame();
-          _getIndex_2();
+          _dialogReset(2, res);
         }
       },
       elevation: 1.0,
@@ -102,12 +95,35 @@ class _BallonsGameState extends State<BallonsGame> {
               choice.title,
               style: TextStyle(
                 fontSize: res.textSize,
+                color: Theme.of(context).textSelectionColor,
               ),
             ),
           );
         }).toList();
       },
     );
+  }
+
+  _dialogReset(int flag, Responsive res) {
+    AwesomeDialog(
+      context: context,
+      headerAnimationLoop: false,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'RESET',
+      desc: 'Are you sure, wanna reset this game',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        if (flag == 1) {
+          resetFlyingSquaresGame();
+          _getIndex();
+        } else if (flag == 2) {
+          resetSpellingGame();
+          _getIndex_2();
+        }
+      },
+      res: res,
+    )..show();
   }
 
   List choices = [
@@ -297,6 +313,8 @@ class _BallonsGameState extends State<BallonsGame> {
       allPaddingSize: size.width * 0.02,
       buttonHeightSize: size.height * 0.06,
       buttonWidthSize: size.width * 0.4,
+      height: size.height,
+      width: size.width,
     );
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,

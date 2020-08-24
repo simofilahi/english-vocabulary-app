@@ -9,5 +9,6 @@ LocalStorage langFile = new LocalStorage('LangData');
 LocalStorage hintPointsFile = new LocalStorage('hintPoints');
 LocalStorage answerPointsFile = new LocalStorage('answerPointsFile');
 LocalStorage nextSetIndex = new LocalStorage('nextSetIndex');
+LocalStorage darkMode = new LocalStorage('darkMode');
 
 final assetsAudioPlayer = AssetsAudioPlayer();

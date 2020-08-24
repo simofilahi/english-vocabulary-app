@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/models/responsive.dart';
 
 class AnimatedBalloon extends StatefulWidget {
   final List<dynamic> globalData;
@@ -31,14 +29,12 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
     with TickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _animationFloatUp;
-  Animation<double> _animationFloatDown;
-  Animation<double> _animationGrowSize;
   final bool bottom = true;
   bool flag = false;
   double marginValue = 0;
-  double _balloonHeight;
-  double _balloonWidth;
-  double _balloonBottomLocation;
+  double _balloonHeight = 0;
+  double _balloonWidth = 0;
+  double _balloonBottomLocation = 0;
   List _arrayNum = [0, 1, 2];
   final _random = new Random();
   int _i = 0;
@@ -57,7 +53,6 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
               widget.failureHandler();
             }
           });
-    ;
   }
 
   _generateRandomIndex() {
@@ -111,12 +106,12 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
     super.dispose();
   }
 
-  _item(Color color, int index) {
+  Widget _item(Color color, int index) {
     return GestureDetector(
       onTap: () {
         if (widget.text == widget.randomWords[index]) {
           _controller.reset();
-          widget.getNextItem();
+          widget.getNextItem(0);
           _generateRandomIndex();
           _controller.forward();
         } else {
@@ -143,10 +138,12 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
           ],
         ),
         child: Center(
-          child: TextWidget(
-            text: widget.randomWords[index],
-            color: whiteColor,
-            size: widget.res.textSize * 1.2,
+          child: Text(
+            widget.randomWords[index],
+            style: TextStyle(
+              color: whiteColor,
+              fontSize: widget.res.textSize * 1.2,
+            ),
           ),
         ),
       ),
@@ -155,34 +152,26 @@ class _AnimatedBalloonState extends State<AnimatedBalloon>
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: AnimatedBuilder(
-        animation: _animationFloatUp,
-        builder: (context, child) {
-          return Container(
-            child: child,
-            color: Colors.transparent,
-            margin: EdgeInsets.only(
-              top: _animationFloatUp.value,
-              bottom: 0,
-              // left: _animationGrowSize.value * 0.25,
-            ),
-            // width: _animationGrowSize.value,
-          );
-        },
+    return AnimatedBuilder(
+      animation: _animationFloatUp,
+      builder: (context, child) {
+        return Container(
+          child: child,
+          color: Colors.transparent,
+          margin: EdgeInsets.only(
+            top: _animationFloatUp.value,
+            bottom: 0,
+          ),
+        );
+      },
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      _item(Colors.pink[300], _i),
-                    ],
-                  ),
-                ),
+                _item(Colors.pink[300], _i),
               ],
             ),
             SizedBox(

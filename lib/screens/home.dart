@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:lenglish/screens/settings.dart';
-import 'package:lenglish/widgets/bottomBar.dart';
-import 'package:lenglish/widgets/home.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
+import 'package:Steria/screens/settings.dart';
+import 'package:Steria/widgets/bottomBar.dart';
+import 'package:Steria/widgets/home.dart';
 import 'ballonsGame.dart';
 import 'myWords.dart';
 

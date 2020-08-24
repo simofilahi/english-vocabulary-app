@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lenglish/constants.dart';
+import 'package:Steria/constants.dart';
 
 class CircleWithIcon extends StatefulWidget {
   final Color color;

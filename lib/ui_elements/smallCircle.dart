@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/models/responsive.dart';
 
 class SmallCircle extends StatelessWidget {
   final int number;

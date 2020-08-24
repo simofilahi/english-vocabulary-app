@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/CustomPopupMenu.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/models/CustomPopupMenu.dart';
+import 'package:Steria/models/responsive.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class TopAppBar extends StatelessWidget {
@@ -17,6 +17,7 @@ class TopAppBar extends StatelessWidget {
   final Color color;
   final FontWeight fontWeight;
   final Function clickHandler;
+  final int level;
   var size;
 
   TopAppBar({
@@ -30,11 +31,14 @@ class TopAppBar extends StatelessWidget {
     this.fontWeight = FontWeight.normal,
     this.clickHandler = null,
     this.size = 0,
+    this.level = 0,
   });
 
   Color _colorBuild(BuildContext context) {
-    if (icon_1_flag == 1) {
+    if (icon_1_flag == 1 && level > 5) {
       return goldColor;
+    } else if (icon_1_flag == 1 && level < 5) {
+      return silverColor;
     } else
       return Theme.of(context).textSelectionColor;
   }
@@ -142,7 +146,7 @@ class TopAppBar extends StatelessWidget {
     ),
   ];
 
-  _resetAllDialog(BuildContext context) {
+  _resetAllDialog(BuildContext context, Responsive res) {
     AwesomeDialog(
       context: context,
       headerAnimationLoop: false,
@@ -156,6 +160,7 @@ class TopAppBar extends StatelessWidget {
         bool ret = await resetAll();
         if (ret) clickHandler();
       },
+      res: res,
     )..show();
   }
 
@@ -169,7 +174,7 @@ class TopAppBar extends StatelessWidget {
           color: Theme.of(context).indicatorColor,
         ),
         onSelected: (dynamic _) {
-          _resetAllDialog(context);
+          _resetAllDialog(context, res);
         },
         elevation: 1.0,
         initialValue: choices[0],
@@ -184,6 +189,7 @@ class TopAppBar extends StatelessWidget {
                 choice.title,
                 style: TextStyle(
                   fontSize: res.textSize,
+                  color: Theme.of(context).textSelectionColor,
                 ),
               ),
             );
@@ -220,6 +226,10 @@ class TopAppBar extends StatelessWidget {
       bottomPaddingSize: size.height * 0.0086,
       allPaddingSize: size.width * 0.008,
       textSize: size.width * 0.05,
+      buttonHeightSize: size.height * 0.06,
+      buttonWidthSize: size.width * 0.4,
+      height: size.height,
+      width: size.width,
     );
     return Material(
       color: Colors.transparent,

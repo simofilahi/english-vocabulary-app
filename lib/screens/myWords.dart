@@ -1,13 +1,14 @@
 import 'dart:ui';
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/widgets/topAppBar.dart';
 import 'package:search_widget/search_widget.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:Steria/models/responsive.dart';
 
 class MyWords extends StatefulWidget {
   final List<dynamic> globalData;
@@ -20,7 +21,6 @@ class MyWords extends StatefulWidget {
 }
 
 class _MyWordsState extends State<MyWords> {
-  static AudioCache player = AudioCache();
   List<dynamic> _favList = [];
   List<dynamic> _unkList = [];
   List<dynamic> _favData = [];
@@ -34,10 +34,9 @@ class _MyWordsState extends State<MyWords> {
   }
 
   playLocal(path) async {
-    final player = AudioCache();
-
-    // call this method when desired
-    player.play(path);
+    assetsAudioPlayer.open(
+      Audio(path),
+    );
   }
 
   int _defaultIndex = 0;
@@ -162,7 +161,7 @@ class _MyWordsState extends State<MyWords> {
           flex: 1,
           child: GestureDetector(
             onTap: () {
-              playLocal('audio/${item['en']}.mp3');
+              playLocal('assets/audio/${item['en']}.mp3');
             },
             child: Padding(
               padding: EdgeInsets.only(
@@ -293,9 +292,7 @@ class _MyWordsState extends State<MyWords> {
                         right: res.rightPaddingSize * 0.6,
                       ),
                       child: InkWell(
-                        onTap: () {
-                          // setState(() {});
-                        },
+                        onTap: () {},
                         child: Icon(
                           Icons.search,
                           size: res.iconSize * 1.2,

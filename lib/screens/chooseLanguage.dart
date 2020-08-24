@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:lenglish/models/languages.dart';
-import 'package:lenglish/screens/home.dart';
-import 'package:lenglish/widgets/customButton.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
+import 'package:Steria/models/languages.dart';
+import 'package:Steria/screens/home.dart';
+import 'package:Steria/widgets/customButton.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/models/responsive.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 class ChooseLanguage extends StatefulWidget {
@@ -122,15 +122,9 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
     );
   }
 
-  // _saveLang(langData) {
-  //   saveChosenLang(langData);
-  // }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final double left_right_padding = size.width * .10;
-    final double top_bottom_padding = size.width * .15;
     Responsive res = Responsive(
       containerHeightSize: size.height * .08,
       containerWidthSize: size.width * .90,
@@ -148,6 +142,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
       allPaddingSize: size.width * 0.02,
       buttonHeightSize: size.height * 0.06,
       buttonWidthSize: size.width * 0.4,
+      height: size.height,
+      width: size.width,
     );
 
     return Scaffold(

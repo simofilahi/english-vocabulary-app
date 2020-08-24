@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/models/responsive.dart';
 import '../constants.dart';
 
 class CustomButton extends StatelessWidget {
@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
   final double textSize;
   final Responsive res;
   final Function clickHandler;
-  // final Function saveLang;
+
   CustomButton({
     this.text,
     this.screen = null,
@@ -64,7 +64,7 @@ class CustomButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(
-                res.borderRadiusSize * 0.5,
+                res.width * 0.0469 * 0.5,
               ),
               boxShadow: [
                 shadow(Theme.of(context).cardColor),

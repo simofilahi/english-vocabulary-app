@@ -1,5 +1,5 @@
 import 'initalizeFiles.dart';
-import 'package:lenglish/models/data.dart';
+import 'package:Steria/models/data.dart';
 
 Future<void> updateSelectedLanguage(String selectedLang) async {
   String lang;
@@ -42,22 +42,32 @@ Future<void> updateSelectedLanguage(String selectedLang) async {
 }
 
 Future<bool> saveChosenLang(langData) async {
-  langFile.setItem('Lang', langData).then((v) {
-    if (v == true)
-      return true;
-    else
-      return false;
-  });
+  bool ret = await langFile.setItem('Lang', langData);
+  if (ret == true)
+    return true;
+  else
+    return false;
 }
 
-Future<bool> verfieLangFile() async {
-  // if (allData.getItem('Lang') == null) {
-  //   return false;
-  // }
+Future<bool> getDarkModeStatus() async {
+  dynamic ret = await darkMode.getItem();
+  if (ret == null) return false;
+  if (ret[0]['darkMode'] == 'false') return false;
   return true;
 }
 
-String getTheSelectedLang() {}
+Future<bool> setDarkModeStatus(bool status) async {
+  dynamic ret = await darkMode.setItem(
+    'DarkMode',
+    [
+      {
+        "darkMode": status.toString(),
+      }
+    ],
+  );
+  if (!ret) return false;
+  return true;
+}
 
 String getRightTranslateHelper(String lang, Map item) {
   if (lang == 'sp') {
@@ -195,19 +205,20 @@ Future<bool> creationOfFiles() async {
       ]);
     else
       return false;
+    value = await darkMode.createFile();
+    if (value == true)
+      darkMode.setItem(
+        'DarkMode',
+        [
+          {"darkMode": "false"}
+        ],
+      );
+    else
+      return false;
     return true;
   } catch (onError) {
     return false;
   }
-}
-
-Future<dynamic> storeGlobalData() async {
-  // allData.setItem('words', words);
-  // List<dynamic> data = allData.getItem('words');
-  // if (data == null) {
-  //   return null;
-  // }
-  // return data;
 }
 
 Future<bool> updateGlobalData(List<dynamic> globalData, int objIndex,
@@ -230,13 +241,6 @@ Future<bool> setTrue(int objIndex, int wordObjIndex, String word,
     for (int i = 0; i < localData.length; i++) {
       if (localData[i]['en'] == word) {
         if (flag == 0) {
-          // if (localData[i]['isFavorite'] == "true") {
-          //   print("holllla");
-          //   localData[i]['isFavorite'] = "false";
-          //   localData[i]['isFamiliar'] = "false";
-          //   localData[i]['isFavorite'] = "false";
-          //   localData[i]['isUnknown'] = "false";
-          // } else {
           localData[i]['isFavorite'] = "true";
           localData[i]['isFamiliar'] = "false";
           localData[i]['isUnknown'] = "false";
@@ -302,30 +306,8 @@ createFavoriteFile(List<Map> initialData) {
   allData.setItem('Favorite', initialData);
 }
 
-List<Map> getFavoriteFile() {
-  // List<Map> data = allData.getItem('Favorite');
-  // return data;
-}
-
-updataFavoriteFile(Map newData) {
-  // List<Map> data = allData.getItem('Favorite');
-  // data.add(newData);
-  // allData.setItem('Favorite', data);
-}
-
 createUnknownFile(List<Map> initialData) {
   allData.setItem('Favorite', initialData);
-}
-
-List<Map> getUnknownFile() {
-  // List<Map> data = allData.getItem('Favorite');
-  // return data;
-}
-
-updataUnknownFile(Map newData) {
-  // List<Map> data = allData.getItem('Favorite');
-  // data.add(newData);
-  // allData.setItem('Favorite', data);
 }
 
 int totoalLearningWords(List<dynamic> globalData) {
@@ -507,19 +489,6 @@ Future<Map<dynamic, dynamic>> searchForWordByIndex(
   return data;
 }
 
-// Future<int> getNextSetIndex() async {
-//   dynamic index = "0";
-//   index = await nextSetIndex.getItem();
-//   print("before return ${int.parse(index[0]['nextSetIndex'])}");
-//   return int.parse(index[0]['nextSetIndex']);
-// }
-
-// setNextSetIndex(int index) {
-//   nextSetIndex.setItem('nextSetIndex', [
-//     {"nextSetIndex": index.toString()}
-//   ]);
-// }
-
 resetFlyingSquaresGame() {
   indexFile.setItem('index', [
     {"index": "0"}
@@ -564,4 +533,20 @@ Future<bool> substractHintPoints(int point) async {
     }
   }
   return false;
+}
+
+Future<int> searchForSetByIndex(int index, List<dynamic> globalData) async {
+  int j = 0;
+  List<dynamic> tmp = [];
+
+  for (int i = 0; i < globalData.length; i++) {
+    tmp = globalData[i]['set_${i + 1}'];
+    for (int f = 0; f < tmp.length; f++) {
+      if (j == index) {
+        return i + 1;
+      }
+      j++;
+    }
+  }
+  return 1;
 }

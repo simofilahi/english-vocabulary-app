@@ -1,17 +1,17 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:lenglish/constants.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/widgets/ballonAnimation.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
+import 'package:Steria/constants.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/widgets/ballonAnimation.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/widgets/topAppBar.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/models/responsive.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lenglish/logic/checkConnection.dart';
+import 'package:Steria/logic/checkConnection.dart';
 
 class PlayingBallonGames extends StatefulWidget {
   final List<dynamic> globalData;
@@ -35,7 +35,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   final _random = new Random();
   bool _boolean = false;
   String _word = "";
-  String _en_word = "";
+  String _enWord = "";
   List _randomWords = [];
   int _set = 1;
   int _index = 0;
@@ -47,6 +47,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   FToast fToast;
   int _points = 0;
   bool _rewardAdLoaded = false;
+  String videoRewa = 'ca-app-pub-2078580912080341/9497726311';
 
   @override
   void initState() {
@@ -57,16 +58,15 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
       spinner = true;
       _index = widget.index;
       _initIndex = widget.index;
-      _finish = _index < 2264 ? false : true;
+      _finish = _index < 2265 ? false : true;
       _counter = widget.index == 1 ? 1 : widget.index - 1;
     });
 
     if (!_finish) {
-      _getNextItem();
+      _getNextItem(0);
       _getRandomWords();
     }
     _rewardListener();
-
     _loadRewardAd(widget.size);
   }
 
@@ -81,17 +81,14 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   _rewardListener() {
     videoAd.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print("event ============> ${event}");
       if (event == RewardedVideoAdEvent.loaded) {
         setState(() {
           _rewardAdLoaded = true;
         });
       }
       if (event == RewardedVideoAdEvent.rewarded) {
-        print("amount");
-        print(rewardAmount);
+        print("here is amount ========> ${rewardAmount}");
         if (rewardAmount != null) {
-          print("momomommo");
           setState(() {
             _points = rewardAmount;
           });
@@ -100,9 +97,11 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
       if (event == RewardedVideoAdEvent.closed) {
         _loadRewardAd(widget.size);
         if (_points > 0) {
-          print("fofofoofo");
-          _getNextItem();
+          _getNextItem(1);
         }
+      }
+      if (event == RewardedVideoAdEvent.failedToLoad) {
+        _loadRewardAd(widget.size);
       }
     };
   }
@@ -130,11 +129,13 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
           SizedBox(
             width: size.width * 0.02,
           ),
-          TextWidget(
-            text: text,
-            size: size.width * 0.045,
-            color: whiteColor,
-          ),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: size.width * 0.045,
+              color: whiteColor,
+            ),
+          )
         ],
       ),
     );
@@ -149,15 +150,20 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
   _loadRewardAd(var size) {
     try {
       videoAd.load(
-        adUnitId: RewardedVideoAd.testAdUnitId,
+        adUnitId: videoRewa,
       );
     } catch (_) {}
   }
 
+  _showRewardAd(var size) {
+    try {
+      videoAd.show();
+    } catch (_) {}
+  }
+
   dynamic _getSetItem() {
-    for (int i = 0; i < widget.globalData.length; i++) {
-      return widget.globalData[i]['set_${_set}'];
-    }
+    print("set ${_set}");
+    return widget.globalData[_set == 0 ? _set : _set - 1]['set_${_set}'];
   }
 
   void _getRandomWords() {
@@ -188,35 +194,63 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     _getRandomWords();
   }
 
-  void _getNextItem() {
-    if (_index <= 2264) {
-      if (_index == _initIndex + 5) {
-        updateIndexOfFlyingSquare(_index + 1);
-        setState(() {
-          _initIndex = _index + 1;
-          _points = 0;
-          _boolean = false;
-        });
-        _getNextItemHelper();
-      } else {
-        setState(() {
-          _points = 0;
-          _boolean = false;
-        });
-        _getNextItemHelper();
-      }
-    } else {
-      updateIndexOfFlyingSquare(_index);
+  void _getNextItem(int flag) async {
+    print(flag);
+    int setNumber = await searchForSetByIndex(widget.index, widget.globalData);
+    setState(() {
+      _set = setNumber;
+    });
+    print("set_************************** ${_set}");
+    print(_points);
+    print(_points);
+    print(_points);
+    if (_index > 2265) {
       setState(() {
         _finish = true;
       });
+    } else {
+      if (_index < 2265) {
+        if (_index == _initIndex + 49) {
+          updateIndexOfFlyingSquare(_index + 1);
+          if (flag == 1) {
+            setState(() {
+              _initIndex = _index + 1;
+              _points = _points == 2 || _points == 4 ? _points - 2 : 0;
+              _boolean = false;
+            });
+          } else {
+            setState(() {
+              _initIndex = _index + 1;
+              _boolean = false;
+            });
+          }
+          _getNextItemHelper();
+        } else {
+          if (flag == 1) {
+            setState(() {
+              _points = _points == 2 || _points == 4 ? _points - 2 : 0;
+              _boolean = false;
+            });
+          } else {
+            setState(() {
+              _boolean = false;
+            });
+          }
+          _getNextItemHelper();
+        }
+      } else {
+        updateIndexOfFlyingSquare(_index);
+        setState(() {
+          _finish = true;
+        });
+      }
     }
   }
 
   _updataIndexAndWord(String enWord, String word) {
     setState(() {
       _index = _index + 1;
-      _en_word = enWord;
+      _enWord = enWord;
       _word = word;
       _counter = _counter + 1;
     });
@@ -238,16 +272,10 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
     );
   }
 
-  _showRewardAd(var size) {
-    try {
-      videoAd.show();
-    } catch (_) {}
-  }
-
   Widget _renderButtons(Responsive res, var size) {
     if (_boolean == false) {
       return Text(
-        _en_word,
+        _enWord,
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
           fontSize: res.textSize * 2,
@@ -275,7 +303,7 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                       _counter = value == 1 ? 1 : value - 1;
                       _boolean = false;
                     });
-                    _getNextItem();
+                    _getNextItem(0);
                   }
                 });
               },
@@ -330,21 +358,25 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
               ),
               highlightColor: rippleColor,
               onTap: () async {
-                bool ret = await checkConnection();
-                if (ret == true) {
-                  if (_rewardAdLoaded == true) {
-                    setState(() {
-                      _rewardAdLoaded = false;
-                    });
-                    _showRewardAd(size);
-                  } else {
-                    _showToast('No ad found, please try again', size);
-                    setState(() {
-                      _rewardAdLoaded = true;
-                    });
-                  }
+                if (_points > 0) {
+                  _getNextItem(1);
                 } else {
-                  _showToast('No Internet Connection', size);
+                  bool ret = await checkConnection();
+                  if (ret == true) {
+                    if (_rewardAdLoaded == true) {
+                      setState(() {
+                        _rewardAdLoaded = false;
+                      });
+                      _showRewardAd(size);
+                    } else {
+                      _showToast('No ad found, please try again', size);
+                      setState(() {
+                        _rewardAdLoaded = true;
+                      });
+                    }
+                  } else {
+                    _showToast('No Internet Connection', size);
+                  }
                 }
               },
               child: Padding(
@@ -369,18 +401,22 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        FittedBox(
-                          child: SvgPicture.asset(
-                            watchIcon,
-                            height: res.iconSize * 1.3,
-                            width: res.iconSize * 1.3,
-                          ),
-                        ),
+                        _points == 0
+                            ? FittedBox(
+                                child: SvgPicture.asset(
+                                  watchIcon,
+                                  height: res.iconSize * 1.3,
+                                  width: res.iconSize * 1.3,
+                                ),
+                              )
+                            : Container(),
                         SizedBox(
                           width: size.width * 0.04,
                         ),
                         TextWidget(
-                          text: 'Watch an ad to continue',
+                          text: _points == 0
+                              ? 'Watch an ad to continue'
+                              : 'Continue',
                           color: whiteColor,
                           size: res.textSize * 0.9,
                         ),
@@ -423,17 +459,20 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
         height: size.height,
         width: size.width,
         color: Theme.of(context).backgroundColor,
-        child: Stack(
-          children: <Widget>[
-            SafeArea(
-              child: Container(
+        child: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              Container(
                 height: size.height,
                 width: size.width,
                 color: Theme.of(context).backgroundColor,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    TopAppBar(icon_1: backArrowIcon, text: '${_counter}/2263'),
+                    TopAppBar(
+                      icon_1: backArrowIcon,
+                      text: '${_counter + 1}/2265',
+                    ),
                     !_finish
                         ? _renderButtons(res, size)
                         : Center(
@@ -458,18 +497,23 @@ class _PlayingBallonGamesState extends State<PlayingBallonGames> {
                   ],
                 ),
               ),
-            ),
-            _boolean == false && _finish == false
-                ? AnimatedBalloon(
-                    globalData: widget.globalData,
-                    text: _word,
-                    getNextItem: _getNextItem,
-                    updateIndex: _updataIndexAndWord,
-                    randomWords: _randomWords,
-                    failureHandler: _failureHandler,
-                    res: res)
-                : Container(),
-          ],
+              _boolean == false && _finish == false
+                  ? Container(
+                      height: size.height,
+                      width: size.width,
+                      color: Colors.transparent,
+                      child: AnimatedBalloon(
+                          globalData: widget.globalData,
+                          text: _word,
+                          getNextItem: _getNextItem,
+                          updateIndex: _updataIndexAndWord,
+                          randomWords: _randomWords,
+                          failureHandler: _failureHandler,
+                          res: res),
+                    )
+                  : Container(),
+            ],
+          ),
         ),
       ),
     );

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
-import 'package:lenglish/models/responsive.dart';
-
+import 'package:Steria/constants.dart';
+import 'package:Steria/models/responsive.dart';
 import '../constants.dart';
 
 class RadialProgress extends StatefulWidget {
-  final double goalCompleted;
+  double goalCompleted;
   final double percent;
   final double height;
   final double width;
@@ -112,7 +112,8 @@ class _RadialProgressState extends State<RadialProgress>
           ),
         ),
       ),
-      painter: RadialPainter(progressDegrees, widget.color, widget.flag, size),
+      painter: RadialPainter(widget.goalCompleted * _progressAnimation.value,
+          widget.color, widget.flag, size),
     );
   }
 }
@@ -129,7 +130,6 @@ class RadialPainter extends CustomPainter {
     Responsive res = Responsive(
       containerWidthSize: size.width * 0.07,
     );
-    // print("yoyo ${res.containerWidthSize}");
     Paint paint = Paint()
       ..color = Colors.black12
       ..strokeCap = StrokeCap.round

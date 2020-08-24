@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "460145739319",
+    "firebase_url": "https://english-vocabulary-app.firebaseio.com",
+    "project_id": "english-vocabulary-app",
+    "storage_bucket": "english-vocabulary-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460145739319:android:eccebc5f3ad665c57021b2",
+        "android_client_info": {
+          "package_name": "com.forudevapp.steria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460145739319-dr6p7uh0botisehs0b08hdo9f2pqgk1p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgnkX9plz3OZ10hbTFEjmi_2ykZ5tci6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460145739319-dr6p7uh0botisehs0b08hdo9f2pqgk1p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

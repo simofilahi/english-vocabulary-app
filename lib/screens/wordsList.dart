@@ -1,13 +1,13 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/logic/initalizeFiles.dart';
-import 'package:lenglish/widgets/textWidget.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
+import 'package:Steria/widgets/textWidget.dart';
+import 'package:Steria/widgets/topAppBar.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import '../constants.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/models/responsive.dart';
 import 'flashCards.dart';
 
 class WordsList extends StatefulWidget {
@@ -41,6 +41,7 @@ class _WordsListState extends State<WordsList> {
   List<dynamic> _unknowWords = [];
   BannerAd _bannerAd;
   List<dynamic> _originItem = [];
+  String bannerId = 'ca-app-pub-2078580912080341/6114178796';
 
   @override
   void initState() {
@@ -48,7 +49,6 @@ class _WordsListState extends State<WordsList> {
     setState(() {
       _originItem = widget.data;
     });
-    // _updateCountOfWords();
     _initialAds();
     _updateFalshCarsWords();
     _updateFamiliarWords();
@@ -57,13 +57,15 @@ class _WordsListState extends State<WordsList> {
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: bannerId,
       size: AdSize.smartBanner,
-      // targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("BannerAd event $event");
         if (event == MobileAdEvent.loaded) {
           _showBannerAd();
+        }
+        if (event == MobileAdEvent.failedToLoad) {
+          _initialAds();
         }
       },
     );
@@ -91,7 +93,7 @@ class _WordsListState extends State<WordsList> {
   void dispose() async {
     super.dispose();
     try {
-      bool ret = await _bannerAd.dispose();
+      await _bannerAd.dispose();
       widget.updatingData();
     } catch (_) {}
   }
@@ -147,7 +149,6 @@ class _WordsListState extends State<WordsList> {
                 _updateFalshCarsWords,
                 _updateFamiliarWords,
                 _updateUnknownWords,
-                // _updateCountOfWords,
                 widget.globalDataUpdate,
                 widget.getTotalLearningWords,
                 flag,

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lenglish/models/responsive.dart';
-import 'package:lenglish/widgets/linearProgress.dart';
-import 'package:lenglish/logic/BoolSetter.dart';
-import 'package:lenglish/widgets/topAppBar.dart';
+import 'package:Steria/models/responsive.dart';
+import 'package:Steria/widgets/linearProgress.dart';
+import 'package:Steria/logic/BoolSetter.dart';
+import 'package:Steria/widgets/topAppBar.dart';
 import '../constants.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:lenglish/widgets/textWidget.dart';
+import 'package:Steria/widgets/textWidget.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lenglish/widgets/customButton.dart';
+import 'package:Steria/widgets/customButton.dart';
+import 'package:Steria/logic/initalizeFiles.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 class ResultModal extends StatefulWidget {
   final List<dynamic> data;
@@ -46,10 +47,9 @@ class _ResultModalState extends State<ResultModal> {
   }
 
   playLocal(path) async {
-    final player = AudioCache();
-
-    // call this method when desired
-    player.play(path);
+    assetsAudioPlayer.open(
+      Audio(path),
+    );
   }
 
   Widget _listItems(
@@ -117,7 +117,7 @@ class _ResultModalState extends State<ResultModal> {
           flex: 1,
           child: GestureDetector(
             onTap: () {
-              playLocal('audio/${item['en']}.mp3');
+              playLocal('assets/audio/${item['en']}.mp3');
             },
             child: Padding(
               padding: EdgeInsets.only(
@@ -289,6 +289,8 @@ class _ResultModalState extends State<ResultModal> {
       allPaddingSize: size.width * 0.02,
       buttonHeightSize: size.height * 0.06,
       buttonWidthSize: size.width * 0.4,
+      height: size.height,
+      width: size.width,
     );
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,

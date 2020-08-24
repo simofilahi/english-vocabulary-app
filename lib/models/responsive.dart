@@ -17,6 +17,8 @@ class Responsive {
   final double allPaddingSize;
   final double buttonHeightSize;
   final double buttonWidthSize;
+  final double height;
+  final double width;
 
   const Responsive({
     this.textSize = 0.0,
@@ -37,5 +39,7 @@ class Responsive {
     this.allPaddingSize = 0.0,
     this.buttonHeightSize = 0.0,
     this.buttonWidthSize = 0.0,
+    this.height = 0.0,
+    this.width = 0.0,
   });
 }

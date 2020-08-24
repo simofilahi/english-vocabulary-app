@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:lenglish/models/responsive.dart';
+import 'package:Steria/models/responsive.dart';
 import '../constants.dart';
 
 class BottomBar extends StatefulWidget {
@@ -34,23 +34,24 @@ class _BottomBarState extends State<BottomBar> {
             Icons.home,
             size: res.iconSize,
             color: primaryBlueColor,
-            // widget.currentIndex == 0 ? primaryBlueColor : primaryGreyColor,
           ),
           Icon(
-            Icons.games, size: res.iconSize, color: primaryBlueColor,
-            // widget.currentIndex == 1 ? primaryBlueColor : primaryGreyColor,
+            Icons.games,
+            size: res.iconSize,
+            color: primaryBlueColor,
           ),
           Icon(
-            Icons.menu, size: res.iconSize, color: primaryBlueColor,
-            // widget.currentIndex == 2 ? primaryBlueColor : primaryGreyColor,
+            Icons.menu,
+            size: res.iconSize,
+            color: primaryBlueColor,
           ),
           Icon(
-            Icons.settings, size: res.iconSize, color: primaryBlueColor,
-            // widget.currentIndex == 3 ? primaryBlueColor : primaryGreyColor,
+            Icons.settings,
+            size: res.iconSize,
+            color: primaryBlueColor,
           ),
         ],
         onTap: (index) {
-          //Handle button tap
           if (widget.currentIndex != index) {
             widget.updateIndex(index);
           }
